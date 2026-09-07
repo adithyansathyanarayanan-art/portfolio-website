@@ -4,8 +4,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Your Name — Portfolio</title>
-  <meta name="description" content="Portfolio of [Your Name] — selected projects and contact details.">
+  <title>Adithyan S. — Portfolio</title>
+  <meta name="description" content="Portfolio of Adithyan S. — selected projects and contact details.">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -18,223 +18,465 @@
 
 <body>
 
-  <header class="site-header">
-    <a class="wordmark" href="#top">Your Name</a>
-    <nav class="site-nav" aria-label="Primary">
-      <a href="#work">Work</a>
-      <a href="#contact">Say hello</a>
-    </nav>
-  </header>
+  <!-- Custom cursor dot (animation #6) — purely decorative, hidden on touch devices -->
+  <div class="cursor-dot" id="cursorDot" aria-hidden="true"></div>
 
-  <main id="top">
+  <!-- Everything the visitor sees on the landing page lives in here, so it can
+     be marked inert / aria-hidden while a project is open full-screen. -->
+  <div id="siteContent">
 
-    <!-- ============ LANDING / HERO ============ -->
-    <section class="hero">
-      <h1>Hi, I'm [Your Name].<br>I design and build [what you do].</h1>
-      <p class="hero-lede">
-        This is your intro paragraph — replace it with two or three sentences about who you are,
-        the kind of work you make, and what you're looking for next. Keep it in your own voice;
-        this text is just here to hold the shape of the page.
+    <header class="site-header">
+      <a class="wordmark" href="#top">Adithyan S.</a>
+      <nav class="site-nav" aria-label="Primary">
+        <a href="#work">Work</a>
+        <a href="#contact">Say hello</a>
+      </nav>
+    </header>
+
+    <main id="top">
+
+      <!-- ============ LANDING / HERO ============ -->
+      <section class="hero">
+        <h1><span id="scramble">Hi, I'm Adithyan!</span><br>I am an Illustrator and a Graphic Designer.</h1>
+        <p class="hero-lede">
+          I love working on creative projects that combine art and design. I specialize in creating visually compelling
+          illustrations and graphics that tell a story and engage audiences.
+        </p>
+        <a class="hero-cta" href="#work">See the work</a>
+      </section>
+
+      <!-- ============ PROJECT PREVIEWS ============ -->
+      <!-- These buttons open the matching project full-screen — see #projectView below. -->
+      <section class="work" id="work">
+        <div class="work-heading">
+          <h2>Selected work</h2>
+          <p>Five projects, previewed below. Click any of them to open the full story.</p>
+        </div>
+
+        <div class="tabs" aria-label="Projects">
+          <button class="tab" data-index="1" aria-haspopup="dialog" aria-controls="panel-1">
+            <span class="tab-index">01</span>
+            <span class="tab-title">Project Title One</span>
+            <span class="tab-tag">One-line placeholder summary of the project.</span>
+          </button>
+          <button class="tab" data-index="2" aria-haspopup="dialog" aria-controls="panel-2">
+            <span class="tab-index">02</span>
+            <span class="tab-title">Project Title Two</span>
+            <span class="tab-tag">One-line placeholder summary of the project.</span>
+          </button>
+          <button class="tab" data-index="3" aria-haspopup="dialog" aria-controls="panel-3">
+            <span class="tab-index">03</span>
+            <span class="tab-title">Project Title Three</span>
+            <span class="tab-tag">One-line placeholder summary of the project.</span>
+          </button>
+          <button class="tab" data-index="4" aria-haspopup="dialog" aria-controls="panel-4">
+            <span class="tab-index">04</span>
+            <span class="tab-title">Project Title Four</span>
+            <span class="tab-tag">One-line placeholder summary of the project.</span>
+          </button>
+          <button class="tab" data-index="5" aria-haspopup="dialog" aria-controls="panel-5">
+            <span class="tab-index">05</span>
+            <span class="tab-title">Project Title Five</span>
+            <span class="tab-tag">One-line placeholder summary of the project.</span>
+          </button>
+        </div>
+      </section>
+
+    </main>
+
+    <footer id="contact">
+      <h2>Say hello</h2>
+      <p>[Placeholder — invite people to reach out.] Find me at
+        <a href="mailto:you@example.com">you@example.com</a> or on
+        <a href="#">[LinkedIn]</a>, <a href="#">[GitHub]</a>, <a href="#">[Other]</a>.
       </p>
-      <a class="hero-cta" href="#work">See the work</a>
-    </section>
+      <p class="footer-note">&copy; <span id="year"></span> Your Name. Built from scratch.</p>
+    </footer>
 
-    <!-- ============ PROJECT TABS ============ -->
-    <section class="work" id="work">
-      <div class="work-heading">
-        <h2>Selected work</h2>
-        <p>Five projects, previewed below. Click any of them to read the full story.</p>
-      </div>
+  </div>
+  <!-- /#siteContent -->
 
-      <div class="tabs" role="tablist" aria-label="Projects">
-        <button class="tab" role="tab" id="tab-1" aria-controls="panel-1" aria-selected="true" tabindex="0"
+  <!-- ============ FULL-SCREEN PROJECT VIEW ============ -->
+  <!-- Hidden by default. Opening a project preview above fills the whole
+     viewport with this, with a top bar listing all five titles (so you can
+     jump between projects without closing) and a Close button that returns
+     you to the landing page. -->
+  <div class="project-view" id="projectView" role="dialog" aria-modal="true" aria-label="Project details" hidden>
+
+    <div class="project-view-bar">
+      <div class="project-view-tabs" role="tablist" aria-label="Projects">
+        <button class="pv-tab" role="tab" id="pv-tab-1" aria-controls="panel-1" aria-selected="true" tabindex="0"
           data-index="1">
-          <span class="tab-index">01</span>
-          <span class="tab-title">Project Title One</span>
-          <span class="tab-tag">One-line placeholder summary of the project.</span>
+          <span class="pv-tab-index">01</span> Project Title One
         </button>
-        <button class="tab" role="tab" id="tab-2" aria-controls="panel-2" aria-selected="false" tabindex="-1"
+        <button class="pv-tab" role="tab" id="pv-tab-2" aria-controls="panel-2" aria-selected="false" tabindex="-1"
           data-index="2">
-          <span class="tab-index">02</span>
-          <span class="tab-title">Project Title Two</span>
-          <span class="tab-tag">One-line placeholder summary of the project.</span>
+          <span class="pv-tab-index">02</span> Project Title Two
         </button>
-        <button class="tab" role="tab" id="tab-3" aria-controls="panel-3" aria-selected="false" tabindex="-1"
+        <button class="pv-tab" role="tab" id="pv-tab-3" aria-controls="panel-3" aria-selected="false" tabindex="-1"
           data-index="3">
-          <span class="tab-index">03</span>
-          <span class="tab-title">Project Title Three</span>
-          <span class="tab-tag">One-line placeholder summary of the project.</span>
+          <span class="pv-tab-index">03</span> Project Title Three
         </button>
-        <button class="tab" role="tab" id="tab-4" aria-controls="panel-4" aria-selected="false" tabindex="-1"
+        <button class="pv-tab" role="tab" id="pv-tab-4" aria-controls="panel-4" aria-selected="false" tabindex="-1"
           data-index="4">
-          <span class="tab-index">04</span>
-          <span class="tab-title">Project Title Four</span>
-          <span class="tab-tag">One-line placeholder summary of the project.</span>
+          <span class="pv-tab-index">04</span> Project Title Four
         </button>
-        <button class="tab" role="tab" id="tab-5" aria-controls="panel-5" aria-selected="false" tabindex="-1"
+        <button class="pv-tab" role="tab" id="pv-tab-5" aria-controls="panel-5" aria-selected="false" tabindex="-1"
           data-index="5">
-          <span class="tab-index">05</span>
-          <span class="tab-title">Project Title Five</span>
-          <span class="tab-tag">One-line placeholder summary of the project.</span>
+          <span class="pv-tab-index">05</span> Project Title Five
         </button>
       </div>
 
-      <div class="panels">
+      <button class="project-view-close" id="closeProjectView" type="button">
+        <span class="close-x" aria-hidden="true">&times;</span> Close
+      </button>
+    </div>
 
-        <article class="panel" id="panel-1" role="tabpanel" aria-labelledby="tab-1" tabindex="0">
-          <div class="panel-media" aria-hidden="true"><span>Project image placeholder</span></div>
-          <div class="panel-body">
-            <div class="panel-meta">
-              <span>Role — [Your role]</span>
-              <span>Year — [20XX]</span>
-              <span>Tools — [Tool, Tool, Tool]</span>
-            </div>
-            <h3>Project Title One</h3>
-            <p>[Overview — describe the project in two or three sentences: what it is, who it's for, and why it exists.]
-            </p>
-            <h4>The problem</h4>
-            <p>[Placeholder — what challenge or need prompted this project?]</p>
-            <h4>The approach</h4>
-            <p>[Placeholder — what did you do, and why did you make the choices you made?]</p>
-            <h4>The outcome</h4>
-            <p>[Placeholder — what happened as a result? Metrics, feedback, or what you learned.]</p>
-            <a class="panel-link" href="#">View live project</a>
+    <div class="project-view-content">
+
+      <article class="panel" id="panel-1" role="tabpanel" aria-labelledby="pv-tab-1" data-index="1" tabindex="0">
+        <div class="panel-media" aria-hidden="true"><span>Project image placeholder</span></div>
+        <div class="panel-body">
+          <div class="panel-meta">
+            <span>Role — [Your role]</span>
+            <span>Year — [20XX]</span>
+            <span>Tools — [Tool, Tool, Tool]</span>
           </div>
-        </article>
+          <h3>Project Title One</h3>
+          <p>[Overview — describe the project in two or three sentences: what it is, who it's for, and why it exists.]
+          </p>
+          <h4>The problem</h4>
+          <p>[Placeholder — what challenge or need prompted this project?]</p>
+          <h4>The approach</h4>
+          <p>[Placeholder — what did you do, and why did you make the choices you made?]</p>
+          <h4>The outcome</h4>
+          <p>[Placeholder — what happened as a result? Metrics, feedback, or what you learned.]</p>
+          <a class="panel-link" href="#">View live project</a>
+        </div>
+      </article>
 
-        <article class="panel" id="panel-2" role="tabpanel" aria-labelledby="tab-2" tabindex="0" hidden>
-          <div class="panel-media" aria-hidden="true"><span>Project image placeholder</span></div>
-          <div class="panel-body">
-            <div class="panel-meta">
-              <span>Role — [Your role]</span>
-              <span>Year — [20XX]</span>
-              <span>Tools — [Tool, Tool, Tool]</span>
-            </div>
-            <h3>Project Title Two</h3>
-            <p>[Overview — describe the project in two or three sentences: what it is, who it's for, and why it exists.]
-            </p>
-            <h4>The problem</h4>
-            <p>[Placeholder — what challenge or need prompted this project?]</p>
-            <h4>The approach</h4>
-            <p>[Placeholder — what did you do, and why did you make the choices you made?]</p>
-            <h4>The outcome</h4>
-            <p>[Placeholder — what happened as a result? Metrics, feedback, or what you learned.]</p>
-            <a class="panel-link" href="#">View live project</a>
+      <article class="panel" id="panel-2" role="tabpanel" aria-labelledby="pv-tab-2" data-index="2" tabindex="0" hidden>
+        <div class="panel-media" aria-hidden="true"><span>Project image placeholder</span></div>
+        <div class="panel-body">
+          <div class="panel-meta">
+            <span>Role — [Your role]</span>
+            <span>Year — [20XX]</span>
+            <span>Tools — [Tool, Tool, Tool]</span>
           </div>
-        </article>
+          <h3>Project Title Two</h3>
+          <p>[Overview — describe the project in two or three sentences: what it is, who it's for, and why it exists.]
+          </p>
+          <h4>The problem</h4>
+          <p>[Placeholder — what challenge or need prompted this project?]</p>
+          <h4>The approach</h4>
+          <p>[Placeholder — what did you do, and why did you make the choices you made?]</p>
+          <h4>The outcome</h4>
+          <p>[Placeholder — what happened as a result? Metrics, feedback, or what you learned.]</p>
+          <a class="panel-link" href="#">View live project</a>
+        </div>
+      </article>
 
-        <article class="panel" id="panel-3" role="tabpanel" aria-labelledby="tab-3" tabindex="0" hidden>
-          <div class="panel-media" aria-hidden="true"><span>Project image placeholder</span></div>
-          <div class="panel-body">
-            <div class="panel-meta">
-              <span>Role — [Your role]</span>
-              <span>Year — [20XX]</span>
-              <span>Tools — [Tool, Tool, Tool]</span>
-            </div>
-            <h3>Project Title Three</h3>
-            <p>[Overview — describe the project in two or three sentences: what it is, who it's for, and why it exists.]
-            </p>
-            <h4>The problem</h4>
-            <p>[Placeholder — what challenge or need prompted this project?]</p>
-            <h4>The approach</h4>
-            <p>[Placeholder — what did you do, and why did you make the choices you made?]</p>
-            <h4>The outcome</h4>
-            <p>[Placeholder — what happened as a result? Metrics, feedback, or what you learned.]</p>
-            <a class="panel-link" href="#">View live project</a>
+      <article class="panel" id="panel-3" role="tabpanel" aria-labelledby="pv-tab-3" data-index="3" tabindex="0" hidden>
+        <div class="panel-media" aria-hidden="true"><span>Project image placeholder</span></div>
+        <div class="panel-body">
+          <div class="panel-meta">
+            <span>Role — [Your role]</span>
+            <span>Year — [20XX]</span>
+            <span>Tools — [Tool, Tool, Tool]</span>
           </div>
-        </article>
+          <h3>Project Title Three</h3>
+          <p>[Overview — describe the project in two or three sentences: what it is, who it's for, and why it exists.]
+          </p>
+          <h4>The problem</h4>
+          <p>[Placeholder — what challenge or need prompted this project?]</p>
+          <h4>The approach</h4>
+          <p>[Placeholder — what did you do, and why did you make the choices you made?]</p>
+          <h4>The outcome</h4>
+          <p>[Placeholder — what happened as a result? Metrics, feedback, or what you learned.]</p>
+          <a class="panel-link" href="#">View live project</a>
+        </div>
+      </article>
 
-        <article class="panel" id="panel-4" role="tabpanel" aria-labelledby="tab-4" tabindex="0" hidden>
-          <div class="panel-media" aria-hidden="true"><span>Project image placeholder</span></div>
-          <div class="panel-body">
-            <div class="panel-meta">
-              <span>Role — [Your role]</span>
-              <span>Year — [20XX]</span>
-              <span>Tools — [Tool, Tool, Tool]</span>
-            </div>
-            <h3>Project Title Four</h3>
-            <p>[Overview — describe the project in two or three sentences: what it is, who it's for, and why it exists.]
-            </p>
-            <h4>The problem</h4>
-            <p>[Placeholder — what challenge or need prompted this project?]</p>
-            <h4>The approach</h4>
-            <p>[Placeholder — what did you do, and why did you make the choices you made?]</p>
-            <h4>The outcome</h4>
-            <p>[Placeholder — what happened as a result? Metrics, feedback, or what you learned.]</p>
-            <a class="panel-link" href="#">View live project</a>
+      <article class="panel" id="panel-4" role="tabpanel" aria-labelledby="pv-tab-4" data-index="4" tabindex="0" hidden>
+        <div class="panel-media" aria-hidden="true"><span>Project image placeholder</span></div>
+        <div class="panel-body">
+          <div class="panel-meta">
+            <span>Role — [Your role]</span>
+            <span>Year — [20XX]</span>
+            <span>Tools — [Tool, Tool, Tool]</span>
           </div>
-        </article>
+          <h3>Project Title Four</h3>
+          <p>[Overview — describe the project in two or three sentences: what it is, who it's for, and why it exists.]
+          </p>
+          <h4>The problem</h4>
+          <p>[Placeholder — what challenge or need prompted this project?]</p>
+          <h4>The approach</h4>
+          <p>[Placeholder — what did you do, and why did you make the choices you made?]</p>
+          <h4>The outcome</h4>
+          <p>[Placeholder — what happened as a result? Metrics, feedback, or what you learned.]</p>
+          <a class="panel-link" href="#">View live project</a>
+        </div>
+      </article>
 
-        <article class="panel" id="panel-5" role="tabpanel" aria-labelledby="tab-5" tabindex="0" hidden>
-          <div class="panel-media" aria-hidden="true"><span>Project image placeholder</span></div>
-          <div class="panel-body">
-            <div class="panel-meta">
-              <span>Role — [Your role]</span>
-              <span>Year — [20XX]</span>
-              <span>Tools — [Tool, Tool, Tool]</span>
-            </div>
-            <h3>Project Title Five</h3>
-            <p>[Overview — describe the project in two or three sentences: what it is, who it's for, and why it exists.]
-            </p>
-            <h4>The problem</h4>
-            <p>[Placeholder — what challenge or need prompted this project?]</p>
-            <h4>The approach</h4>
-            <p>[Placeholder — what did you do, and why did you make the choices you made?]</p>
-            <h4>The outcome</h4>
-            <p>[Placeholder — what happened as a result? Metrics, feedback, or what you learned.]</p>
-            <a class="panel-link" href="#">View live project</a>
+      <article class="panel" id="panel-5" role="tabpanel" aria-labelledby="pv-tab-5" data-index="5" tabindex="0" hidden>
+        <div class="panel-media" aria-hidden="true"><span>Project image placeholder</span></div>
+        <div class="panel-body">
+          <div class="panel-meta">
+            <span>Role — [Your role]</span>
+            <span>Year — [20XX]</span>
+            <span>Tools — [Tool, Tool, Tool]</span>
           </div>
-        </article>
+          <h3>Project Title Five</h3>
+          <p>[Overview — describe the project in two or three sentences: what it is, who it's for, and why it exists.]
+          </p>
+          <h4>The problem</h4>
+          <p>[Placeholder — what challenge or need prompted this project?]</p>
+          <h4>The approach</h4>
+          <p>[Placeholder — what did you do, and why did you make the choices you made?]</p>
+          <h4>The outcome</h4>
+          <p>[Placeholder — what happened as a result? Metrics, feedback, or what you learned.]</p>
+          <a class="panel-link" href="#">View live project</a>
+        </div>
+      </article>
 
-      </div>
-    </section>
-
-  </main>
-
-  <footer id="contact">
-    <h2>Say hello</h2>
-    <p>[Placeholder — invite people to reach out.] Find me at
-      <a href="mailto:you@example.com">you@example.com</a> or on
-      <a href="#">[LinkedIn]</a>, <a href="#">[GitHub]</a>, <a href="#">[Other]</a>.
-    </p>
-    <p class="footer-note">&copy; <span id="year"></span> Your Name. Built from scratch.</p>
-  </footer>
+    </div>
+  </div>
 
   <script>
-    // ---- Tabbed project panels ----
-    const tabs = Array.from(document.querySelectorAll('.tab'));
-    const panels = Array.from(document.querySelectorAll('.panel'));
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-    function activate(tab, { focus = false } = {}) {
-      tabs.forEach(t => {
-        const selected = t === tab;
+    /* =========================================================
+       Full-screen project view: open / close / switch
+       ========================================================= */
+    const openTriggers = Array.from(document.querySelectorAll('.tab'));       // preview buttons on the landing page
+    const pvTabs = Array.from(document.querySelectorAll('.pv-tab'));    // top-bar tabs inside the project view
+    const panels = Array.from(document.querySelectorAll('.panel'));
+    const projectView = document.getElementById('projectView');
+    const closeBtn = document.getElementById('closeProjectView');
+    const siteContent = document.getElementById('siteContent');
+    let lastTrigger = null; // remembers what to return focus to on close
+
+    function showPanelByIndex(index) {
+      panels.forEach(p => { p.hidden = p.dataset.index !== String(index); });
+      pvTabs.forEach(t => {
+        const selected = t.dataset.index === String(index);
         t.setAttribute('aria-selected', String(selected));
         t.tabIndex = selected ? 0 : -1;
       });
-      panels.forEach(p => {
-        p.hidden = p.id !== tab.getAttribute('aria-controls');
-      });
-      if (focus) tab.focus();
     }
 
-    tabs.forEach(tab => {
-      tab.addEventListener('click', () => activate(tab));
+    function getFocusable(container) {
+      return Array.from(
+        container.querySelectorAll('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])')
+      ).filter(el => !el.disabled && el.offsetParent !== null);
+    }
 
-      tab.addEventListener('keydown', (e) => {
-        const i = tabs.indexOf(tab);
+    function trapFocus(e) {
+      if (e.key !== 'Tab') return;
+      const focusable = getFocusable(projectView);
+      if (!focusable.length) return;
+      const first = focusable[0];
+      const last = focusable[focusable.length - 1];
+      if (e.shiftKey && document.activeElement === first) {
+        e.preventDefault();
+        last.focus();
+      } else if (!e.shiftKey && document.activeElement === last) {
+        e.preventDefault();
+        first.focus();
+      }
+    }
+
+    function handleOverlayKeydown(e) {
+      if (e.key === 'Escape') {
+        closeProjectView();
+        return;
+      }
+      trapFocus(e);
+    }
+
+    function openProjectView(index, trigger) {
+      showPanelByIndex(index);
+      lastTrigger = trigger || document.activeElement;
+
+      projectView.hidden = false;
+      siteContent.setAttribute('aria-hidden', 'true');
+      siteContent.setAttribute('inert', '');
+      document.body.classList.add('view-locked');
+
+      // Add the open class on the next frame so the opening transition runs
+      // (can't transition from display:none, which [hidden] uses).
+      requestAnimationFrame(() => projectView.classList.add('is-open'));
+
+      document.addEventListener('keydown', handleOverlayKeydown);
+      setTimeout(() => closeBtn.focus(), prefersReducedMotion ? 0 : 60);
+    }
+
+    function closeProjectView() {
+      projectView.classList.remove('is-open');
+      document.body.classList.remove('view-locked');
+      siteContent.removeAttribute('aria-hidden');
+      siteContent.removeAttribute('inert');
+      document.removeEventListener('keydown', handleOverlayKeydown);
+
+      const finish = () => { projectView.hidden = true; };
+      if (prefersReducedMotion) {
+        finish();
+      } else {
+        projectView.addEventListener('transitionend', finish, { once: true });
+      }
+      if (lastTrigger) lastTrigger.focus();
+    }
+
+    // Landing-page preview buttons open the overlay on the matching project.
+    openTriggers.forEach(tab => {
+      tab.addEventListener('click', () => openProjectView(tab.dataset.index, tab));
+    });
+
+    // Top-bar tabs inside the overlay switch projects without closing.
+    pvTabs.forEach(t => {
+      t.addEventListener('click', () => showPanelByIndex(t.dataset.index));
+      t.addEventListener('keydown', (e) => {
+        const i = pvTabs.indexOf(t);
         let next = null;
-        if (e.key === 'ArrowRight') next = tabs[(i + 1) % tabs.length];
-        if (e.key === 'ArrowLeft') next = tabs[(i - 1 + tabs.length) % tabs.length];
-        if (e.key === 'Home') next = tabs[0];
-        if (e.key === 'End') next = tabs[tabs.length - 1];
+        if (e.key === 'ArrowRight') next = pvTabs[(i + 1) % pvTabs.length];
+        if (e.key === 'ArrowLeft') next = pvTabs[(i - 1 + pvTabs.length) % pvTabs.length];
+        if (e.key === 'Home') next = pvTabs[0];
+        if (e.key === 'End') next = pvTabs[pvTabs.length - 1];
         if (next) {
           e.preventDefault();
-          activate(next, { focus: true });
+          showPanelByIndex(next.dataset.index);
+          next.focus();
         }
       });
     });
 
+    closeBtn.addEventListener('click', closeProjectView);
+
     document.getElementById('year').textContent = new Date().getFullYear();
+
+    // ---- Animation #2: magnetic hero CTA ----
+    const magnetic = document.querySelector('.hero-cta');
+    if (magnetic && !prefersReducedMotion) {
+      magnetic.addEventListener('mousemove', (e) => {
+        const rect = magnetic.getBoundingClientRect();
+        const x = e.clientX - rect.left - rect.width / 2;
+        const y = e.clientY - rect.top - rect.height / 2;
+        magnetic.style.transform = `translate(${x * 0.25}px, ${y * 0.25}px)`;
+      });
+      magnetic.addEventListener('mouseleave', () => {
+        magnetic.style.transform = 'translate(0, 0)';
+      });
+    }
+
+    // ---- Animation #3: tab index numbers count up on load ----
+    document.querySelectorAll('.tab-index').forEach(el => {
+      const target = parseInt(el.textContent, 10);
+      if (prefersReducedMotion) return;
+      let current = 0;
+      el.textContent = '00';
+      const step = () => {
+        current++;
+        el.textContent = String(current).padStart(2, '0');
+        if (current < target) requestAnimationFrame(() => setTimeout(step, 60));
+      };
+      step();
+    });
+
+    // ---- Animation #4: scramble-in headline text ----
+    const scrambleEl = document.getElementById('scramble');
+    if (scrambleEl) {
+      const finalText = scrambleEl.textContent;
+
+      const runScramble = () => {
+        if (prefersReducedMotion) {
+          scrambleEl.textContent = finalText;
+          return;
+        }
+
+        // Lock the span to its final rendered size before scrambling starts.
+        // Swapped-in random letters are wider/narrower than the real ones,
+        // which was reflowing the headline (and the line below it) on every
+        // frame. Measuring after fonts are ready avoids a mismatched
+        // measurement from a fallback font flashing in first.
+        scrambleEl.style.display = 'inline-block';
+        scrambleEl.style.whiteSpace = 'nowrap';
+        scrambleEl.style.width = scrambleEl.getBoundingClientRect().width + 'px';
+
+        const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
+        let frame = 0;
+        const totalFrames = 20;
+
+        const scramble = () => {
+          frame++;
+          let output = '';
+          for (let i = 0; i < finalText.length; i++) {
+            if (finalText[i] === ' ') { output += ' '; continue; }
+            const revealPoint = (i / finalText.length) * totalFrames;
+            output += frame > revealPoint + 6
+              ? finalText[i]
+              : chars[Math.floor(Math.random() * chars.length)];
+          }
+          scrambleEl.textContent = output;
+          if (frame < totalFrames + 8) {
+            requestAnimationFrame(() => setTimeout(scramble, 30));
+          } else {
+            scrambleEl.textContent = finalText;
+            // Release the fixed sizing now that the real text is back, so
+            // the headline stays fully responsive after the animation ends.
+            scrambleEl.style.width = '';
+            scrambleEl.style.whiteSpace = '';
+            scrambleEl.style.display = '';
+          }
+        };
+        scramble();
+      };
+
+      if (document.fonts && document.fonts.ready) {
+        document.fonts.ready.then(runScramble);
+      } else {
+        runScramble();
+      }
+    }
+
+    // ---- Animation #6: custom cursor dot ----
+    const cursorDot = document.getElementById('cursorDot');
+    if (cursorDot && window.matchMedia('(hover: hover)').matches) {
+      document.addEventListener('mousemove', (e) => {
+        cursorDot.style.left = e.clientX + 'px';
+        cursorDot.style.top = e.clientY + 'px';
+      });
+      document.querySelectorAll('a, button, .tab').forEach(el => {
+        el.addEventListener('mouseenter', () => cursorDot.classList.add('hovering'));
+        el.addEventListener('mouseleave', () => cursorDot.classList.remove('hovering'));
+      });
+    }
+
+    // ---- Animation #7: tilt-on-hover for project media placeholders ----
+    if (!prefersReducedMotion) {
+      document.querySelectorAll('.panel-media').forEach(media => {
+        media.addEventListener('mousemove', (e) => {
+          const rect = media.getBoundingClientRect();
+          const x = (e.clientX - rect.left) / rect.width - 0.5;
+          const y = (e.clientY - rect.top) / rect.height - 0.5;
+          media.style.transform = `rotateY(${x * 8}deg) rotateX(${y * -8}deg)`;
+        });
+        media.addEventListener('mouseleave', () => {
+          media.style.transform = 'rotateY(0) rotateX(0)';
+        });
+      });
+    }
+
+    // ---- Animation #8: hidden Konami-code easter egg ----
+    const konami = ['ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight', 'b', 'a'];
+    let konamiProgress = 0;
+    document.addEventListener('keydown', (e) => {
+      konamiProgress = (e.key === konami[konamiProgress]) ? konamiProgress + 1 : 0;
+      if (konamiProgress === konami.length) {
+        document.body.classList.add('party-mode');
+        setTimeout(() => document.body.classList.remove('party-mode'), 4000);
+        konamiProgress = 0;
+      }
+    });
   </script>
 
 </body>
