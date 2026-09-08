@@ -28,7 +28,7 @@
     <header class="site-header">
       <a class="wordmark" href="#top">Adithyan S.</a>
       <nav class="site-nav" aria-label="Primary">
-        <a href="#work">Work</a>
+        <a href="#" id="navWork">Work</a>
         <a href="#contact">Say hello</a>
       </nav>
     </header>
@@ -42,44 +42,7 @@
           I love working on creative projects that combine art and design. I specialize in creating visually compelling
           illustrations and graphics that tell a story and engage audiences.
         </p>
-        <a class="hero-cta" href="#work">See the work</a>
-      </section>
-
-      <!-- ============ PROJECT PREVIEWS ============ -->
-      <!-- These buttons open the matching project full-screen — see #projectView below. -->
-      <section class="work" id="work">
-        <div class="work-heading">
-          <h2>Selected work</h2>
-          <p>Five projects, previewed below. Click any of them to open the full story.</p>
-        </div>
-
-        <div class="tabs" aria-label="Projects">
-          <button class="tab" data-index="1" aria-haspopup="dialog" aria-controls="panel-1">
-            <span class="tab-index">01</span>
-            <span class="tab-title">Project Title One</span>
-            <span class="tab-tag">One-line placeholder summary of the project.</span>
-          </button>
-          <button class="tab" data-index="2" aria-haspopup="dialog" aria-controls="panel-2">
-            <span class="tab-index">02</span>
-            <span class="tab-title">Project Title Two</span>
-            <span class="tab-tag">One-line placeholder summary of the project.</span>
-          </button>
-          <button class="tab" data-index="3" aria-haspopup="dialog" aria-controls="panel-3">
-            <span class="tab-index">03</span>
-            <span class="tab-title">Project Title Three</span>
-            <span class="tab-tag">One-line placeholder summary of the project.</span>
-          </button>
-          <button class="tab" data-index="4" aria-haspopup="dialog" aria-controls="panel-4">
-            <span class="tab-index">04</span>
-            <span class="tab-title">Project Title Four</span>
-            <span class="tab-tag">One-line placeholder summary of the project.</span>
-          </button>
-          <button class="tab" data-index="5" aria-haspopup="dialog" aria-controls="panel-5">
-            <span class="tab-index">05</span>
-            <span class="tab-title">Project Title Five</span>
-            <span class="tab-tag">One-line placeholder summary of the project.</span>
-          </button>
-        </div>
+        <a class="hero-cta" href="#" id="heroCta">See the work</a>
       </section>
 
     </main>
@@ -135,7 +98,9 @@
     <div class="project-view-content">
 
       <article class="panel" id="panel-1" role="tabpanel" aria-labelledby="pv-tab-1" data-index="1" tabindex="0">
-        <div class="panel-media" aria-hidden="true"><span>Project image placeholder</span></div>
+        <button class="panel-media" type="button" data-index="1" aria-label="View a larger image for Project Title One">
+          <img class="panel-image" src="images/project-1.jpg" alt="">
+        </button>
         <div class="panel-body">
           <div class="panel-meta">
             <span>Role — [Your role]</span>
@@ -156,7 +121,9 @@
       </article>
 
       <article class="panel" id="panel-2" role="tabpanel" aria-labelledby="pv-tab-2" data-index="2" tabindex="0" hidden>
-        <div class="panel-media" aria-hidden="true"><span>Project image placeholder</span></div>
+        <button class="panel-media" type="button" data-index="2" aria-label="View a larger image for Project Title Two">
+          <img class="panel-image" src="images/project-2.jpg" alt="">
+        </button>
         <div class="panel-body">
           <div class="panel-meta">
             <span>Role — [Your role]</span>
@@ -177,7 +144,10 @@
       </article>
 
       <article class="panel" id="panel-3" role="tabpanel" aria-labelledby="pv-tab-3" data-index="3" tabindex="0" hidden>
-        <div class="panel-media" aria-hidden="true"><span>Project image placeholder</span></div>
+        <button class="panel-media" type="button" data-index="3"
+          aria-label="View a larger image for Project Title Three">
+          <img class="panel-image" src="images/project-3.jpg" alt="">
+        </button>
         <div class="panel-body">
           <div class="panel-meta">
             <span>Role — [Your role]</span>
@@ -198,7 +168,10 @@
       </article>
 
       <article class="panel" id="panel-4" role="tabpanel" aria-labelledby="pv-tab-4" data-index="4" tabindex="0" hidden>
-        <div class="panel-media" aria-hidden="true"><span>Project image placeholder</span></div>
+        <button class="panel-media" type="button" data-index="4"
+          aria-label="View a larger image for Project Title Four">
+          <img class="panel-image" src="images/project-4.jpg" alt="">
+        </button>
         <div class="panel-body">
           <div class="panel-meta">
             <span>Role — [Your role]</span>
@@ -219,7 +192,10 @@
       </article>
 
       <article class="panel" id="panel-5" role="tabpanel" aria-labelledby="pv-tab-5" data-index="5" tabindex="0" hidden>
-        <div class="panel-media" aria-hidden="true"><span>Project image placeholder</span></div>
+        <button class="panel-media" type="button" data-index="5"
+          aria-label="View a larger image for Project Title Five">
+          <img class="panel-image" src="images/project-5.jpg" alt="">
+        </button>
         <div class="panel-body">
           <div class="panel-meta">
             <span>Role — [Your role]</span>
@@ -242,18 +218,30 @@
     </div>
   </div>
 
+  <!-- ============ IMAGE LIGHTBOX ============ -->
+  <!-- Opens on top of the project view when a project's photo is clicked,
+       showing that image larger. Independent of the project-view overlay
+       so it can be closed without leaving the project you're looking at. -->
+  <div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Enlarged project image" hidden>
+    <button class="lightbox-close" id="lightboxClose" type="button" aria-label="Close enlarged image">
+      <span aria-hidden="true">&times;</span>
+    </button>
+    <img class="lightbox-image" id="lightboxImage" src="" alt="">
+  </div>
+
   <script>
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
     /* =========================================================
        Full-screen project view: open / close / switch
        ========================================================= */
-    const openTriggers = Array.from(document.querySelectorAll('.tab'));       // preview buttons on the landing page
     const pvTabs = Array.from(document.querySelectorAll('.pv-tab'));    // top-bar tabs inside the project view
     const panels = Array.from(document.querySelectorAll('.panel'));
     const projectView = document.getElementById('projectView');
     const closeBtn = document.getElementById('closeProjectView');
     const siteContent = document.getElementById('siteContent');
+    const heroCta = document.getElementById('heroCta');
+    const navWork = document.getElementById('navWork');
     let lastTrigger = null; // remembers what to return focus to on close
 
     function showPanelByIndex(index) {
@@ -327,10 +315,24 @@
       if (lastTrigger) lastTrigger.focus();
     }
 
-    // Landing-page preview buttons open the overlay on the matching project.
-    openTriggers.forEach(tab => {
-      tab.addEventListener('click', () => openProjectView(tab.dataset.index, tab));
-    });
+    // "See the work" now opens the overlay directly (defaults to project 1)
+    // instead of scrolling to the #work section, since the tab previews that
+    // used to live there are gone.
+    if (heroCta) {
+      heroCta.addEventListener('click', (e) => {
+        e.preventDefault();
+        openProjectView('1', heroCta);
+      });
+    }
+
+    // Nav "Work" link used to anchor-scroll to the #work section; that
+    // section is gone now, so it opens the project overlay instead.
+    if (navWork) {
+      navWork.addEventListener('click', (e) => {
+        e.preventDefault();
+        openProjectView('1', navWork);
+      });
+    }
 
     // Top-bar tabs inside the overlay switch projects without closing.
     pvTabs.forEach(t => {
@@ -354,6 +356,59 @@
 
     document.getElementById('year').textContent = new Date().getFullYear();
 
+    /* =========================================================
+       Image lightbox — click a project photo to see it larger
+       ========================================================= */
+    const lightbox = document.getElementById('lightbox');
+    const lightboxImage = document.getElementById('lightboxImage');
+    const lightboxClose = document.getElementById('lightboxClose');
+    let lightboxLastTrigger = null;
+
+    function handleLightboxKeydown(e) {
+      if (e.key === 'Escape') closeLightbox();
+    }
+
+    function openLightbox(imgEl, trigger) {
+      lightboxImage.src = imgEl.src;
+      lightboxImage.alt = imgEl.alt || trigger.getAttribute('aria-label') || '';
+      lightboxLastTrigger = trigger;
+
+      lightbox.hidden = false;
+      requestAnimationFrame(() => lightbox.classList.add('is-open'));
+      document.addEventListener('keydown', handleLightboxKeydown);
+      setTimeout(() => lightboxClose.focus(), prefersReducedMotion ? 0 : 60);
+    }
+
+    function closeLightbox() {
+      lightbox.classList.remove('is-open');
+      document.removeEventListener('keydown', handleLightboxKeydown);
+
+      const finish = () => {
+        lightbox.hidden = true;
+        lightboxImage.src = '';
+      };
+      if (prefersReducedMotion) {
+        finish();
+      } else {
+        lightbox.addEventListener('transitionend', finish, { once: true });
+      }
+      if (lightboxLastTrigger) lightboxLastTrigger.focus();
+    }
+
+    document.querySelectorAll('.panel-media').forEach(media => {
+      media.addEventListener('click', () => {
+        const img = media.querySelector('img');
+        if (img) openLightbox(img, media);
+      });
+    });
+
+    lightboxClose.addEventListener('click', closeLightbox);
+
+    // Clicking the dark backdrop (not the image itself) also closes it.
+    lightbox.addEventListener('click', (e) => {
+      if (e.target === lightbox) closeLightbox();
+    });
+
     // ---- Animation #2: magnetic hero CTA ----
     const magnetic = document.querySelector('.hero-cta');
     if (magnetic && !prefersReducedMotion) {
@@ -367,20 +422,6 @@
         magnetic.style.transform = 'translate(0, 0)';
       });
     }
-
-    // ---- Animation #3: tab index numbers count up on load ----
-    document.querySelectorAll('.tab-index').forEach(el => {
-      const target = parseInt(el.textContent, 10);
-      if (prefersReducedMotion) return;
-      let current = 0;
-      el.textContent = '00';
-      const step = () => {
-        current++;
-        el.textContent = String(current).padStart(2, '0');
-        if (current < target) requestAnimationFrame(() => setTimeout(step, 60));
-      };
-      step();
-    });
 
     // ---- Animation #4: scramble-in headline text ----
     const scrambleEl = document.getElementById('scramble');
@@ -445,7 +486,7 @@
         cursorDot.style.left = e.clientX + 'px';
         cursorDot.style.top = e.clientY + 'px';
       });
-      document.querySelectorAll('a, button, .tab').forEach(el => {
+      document.querySelectorAll('a, button').forEach(el => {
         el.addEventListener('mouseenter', () => cursorDot.classList.add('hovering'));
         el.addEventListener('mouseleave', () => cursorDot.classList.remove('hovering'));
       });
