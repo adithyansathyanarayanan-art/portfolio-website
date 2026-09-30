@@ -241,7 +241,15 @@ body.view-locked {
 .project-view-tabs {
     display: flex;
     flex: 1;
+    min-width: 0;
     overflow-x: auto;
+    overflow-y: hidden;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+
+.project-view-tabs::-webkit-scrollbar {
+    display: none;
 }
 
 .pv-tab {
@@ -314,6 +322,12 @@ body.view-locked {
 .project-view-content {
     flex: 1;
     overflow-y: auto;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+
+.project-view-content::-webkit-scrollbar {
+    display: none;
 }
 
 .project-view-content .panel {
