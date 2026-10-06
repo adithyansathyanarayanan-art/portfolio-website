@@ -169,10 +169,23 @@ a:hover {
 }
 
 .wordmark {
-    font-family: var(--font-display);
-    font-size: 1.15rem;
-    color: var(--ink);
+    display: inline-block;
+    line-height: 0;
     text-decoration: none;
+}
+
+/* Logo image (assets/images/wordmark.png); width follows its own shape */
+.wordmark img {
+    display: block;
+    height: 110px;
+    width: auto;
+}
+
+/* Narrow screens: the sidebar becomes a top bar, so a shorter logo */
+@media (max-width: 860px) {
+    .wordmark img {
+        height: 64px;
+    }
 }
 
 .site-nav {
@@ -358,19 +371,26 @@ a:hover {
 .about {
     max-width: var(--max-width);
     margin: 0 auto;
-    padding: 2.5rem 1.5rem 4rem;
+    padding: 2.5rem 1.5rem;
     display: grid;
-    grid-template-columns: 1fr 1.3fr;
+    /* Photo column fits the photo; the photo + text pair is centred across the
+       page, and centred vertically in the window */
+    grid-template-columns: auto minmax(0, 34rem);
+    justify-content: center;
+    align-content: center;
+    align-items: center;
+    min-height: 100vh;
+    box-sizing: border-box;
     gap: 2.5rem;
-    align-items: start;
 }
 
-/* Portrait, cropped to 4:5. The stripes show only while the image loads. */
+/* Portrait, square. The stripes show only while the image loads. */
 .about-photo {
     display: block;
-    width: 100%;
+    width: 18rem;         /* desktop size (~30% smaller than its old full column) */
+    max-width: 100%;
     height: auto;
-    aspect-ratio: 4 / 5;
+    aspect-ratio: 1 / 1;
     object-fit: cover;
     border: 1px solid var(--line);
     border-radius: var(--radius);
@@ -401,8 +421,8 @@ a:hover {
     padding: 2.5rem 1.5rem 4rem;
 }
 
-/* Featured socials: Instagram sits in the true centre column,
-   Behance hangs off to its right */
+/* Featured socials: Instagram in the true centre column, with a small column
+   of icon-only links (Behance, LinkedIn) just to its right */
 .contact-featured {
     display: grid;
     grid-template-columns: 1fr auto 1fr;
@@ -436,10 +456,35 @@ a:hover {
     border-radius: 24px;
 }
 
-.contact-social--side {
+.contact-icon-links {
     grid-column: 3;
     justify-self: start;
-    padding: 1.25rem 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.contact-icon-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 60px;
+    height: 60px;
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    transition: border-color 0.2s ease, background-color 0.2s ease;
+}
+
+.contact-icon-link:hover,
+.contact-icon-link:focus-visible {
+    border-color: var(--accent-deep);
+    background: var(--panel-bg);
+}
+
+.contact-icon-link img {
+    display: block;
+    width: 30px;
+    height: 30px;
 }
 
 .contact-icon {
@@ -450,12 +495,6 @@ a:hover {
 .contact-social--primary .contact-icon {
     width: 180px;
     height: 180px;
-}
-
-.contact-social--side .contact-icon {
-    width: 40px;
-    height: 40px;
-    margin-bottom: 0.5rem;
 }
 
 /* Instagram profile picture, cropped to a circle like on the app */
@@ -534,26 +573,21 @@ a:hover {
     overflow-wrap: anywhere;
 }
 
-/* Not enough room for the side-by-side layout: stack Behance under Instagram */
-@media (max-width: 1080px) {
+/* Phones: no room beside Instagram, so the icons sit in a row underneath */
+@media (max-width: 600px) {
     .contact-featured {
-        grid-template-columns: 1fr;
+        grid-template-columns: minmax(0, 1fr);
         justify-items: center;
     }
 
     .contact-social--primary,
-    .contact-social--side {
+    .contact-icon-links {
         grid-column: 1;
         justify-self: center;
     }
 
-    .contact-social--side {
+    .contact-icon-links {
         flex-direction: row;
-        gap: 0.75rem;
-    }
-
-    .contact-social--side .contact-icon {
-        margin-bottom: 0;
     }
 }
 
@@ -1111,10 +1145,16 @@ body.view-locked {
 
     .about {
         grid-template-columns: 1fr;
+        min-height: 0;
+        align-items: start;
+        padding-bottom: 4rem;
     }
 
+    /* One column: a smaller portrait, centred above the text */
     .about-photo {
-        max-width: 360px;
+        max-width: 252px;
+        margin-inline: auto;
+        justify-self: center;
     }
 
     .panel {
