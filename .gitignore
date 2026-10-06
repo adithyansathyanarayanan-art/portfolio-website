@@ -1,3 +1,5 @@
 .DS_Store
 Thumbs.db
 .vscode/
+# Local dev tools (preview server + Alt+click picker)
+.dev/

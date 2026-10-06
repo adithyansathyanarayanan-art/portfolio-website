@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>About — Adithyan S.</title>
+  <meta name="description" content="About Adithyan S. and how to get in touch.">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Newsreader:ital,wght@0,400;0,500;0,600;1,400&family=Work+Sans:wght@400;500;600&display=swap"
+    rel="stylesheet">
+
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+  <!-- Custom cursor dot — purely decorative, hidden on touch devices -->
+  <div class="cursor-dot" id="cursorDot" aria-hidden="true"></div>
+
+  <div id="siteContent">
+
+    <!-- Sidebar navigation (same as the landing page) -->
+    <aside class="sidebar">
+      <a class="wordmark" href="index.html">Adithyan S.</a>
+      <nav class="site-nav" aria-label="Primary">
+        <a href="index.html#work">Work</a>
+        <a href="about.html" aria-current="page">About</a>
+        <a href="contact.html">Contact</a>
+      </nav>
+    </aside>
+
+    <main class="main-content" id="top">
+
+      <h1 class="sr-only">About</h1>
+
+      <section class="about" aria-label="About me">
+
+        <!-- Photo (left). Web-sized copy of "panel picture.png"; the frame crops it to 4:5. -->
+        <img class="about-photo" src="assets/images/about-photo.jpg" width="1000" height="1746"
+          alt="Portrait of Adithyan S. smiling, seated at a table in a white T-shirt.">
+
+        <!-- Text (right): bio paragraph, then the contact info -->
+        <div class="about-body">
+          <p>I'm a Design student, illustrator and an aspiring visual story teller who wants to work with illustration
+            and design to tell stories with the worlds and characters I create.</p>
+          <p>I am a Communication Design Student, so I am always finding and learning new ways to create work that
+            engages the viewer, making them put a piece of themselves in my work whenever they interact with it.</p>
+          <p>I am constantly looking to improving my approach and work in design, through experimentation, consuming
+            new human made media that inspire me and doing work that challenge my current status as a designer.</p>
+
+          <div class="about-contact" id="contact">
+            <h2>Say hello</h2>
+            <p>Find me at
+              <a href="mailto:adithyansathyanarayanan@gmail.com">adithyansathyanarayanan@gmail.com</a> or on
+              <a href="https://www.linkedin.com/in/adithyan-sathyanarayanan-072b5b22b" rel="noopener noreferrer"
+                target="_blank">LinkedIn</a>,
+              <a href="https://www.behance.net/adithyasathyan" rel="noopener noreferrer" target="_blank">Behance</a>,
+              and
+              <a href="https://www.instagram.com/artus_mushroomus/" rel="noopener noreferrer"
+                target="_blank">Instagram</a>.
+            </p>
+          </div>
+        </div>
+
+      </section>
+
+    </main>
+
+    <footer class="site-footer">
+      <p class="footer-note">&copy; <span id="year"></span> Adithyan Sathyanarayanan</p>
+    </footer>
+
+  </div>
+
+  <script>
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    // Custom cursor dot (same behaviour as the landing page)
+    const cursorDot = document.getElementById('cursorDot');
+    if (cursorDot && window.matchMedia('(hover: hover)').matches) {
+      document.addEventListener('mousemove', (e) => {
+        cursorDot.style.left = e.clientX + 'px';
+        cursorDot.style.top = e.clientY + 'px';
+      });
+      document.querySelectorAll('a, button').forEach(el => {
+        el.addEventListener('mouseenter', () => cursorDot.classList.add('hovering'));
+        el.addEventListener('mouseleave', () => cursorDot.classList.remove('hovering'));
+      });
+    }
+  </script>
+
+</body>
+
+</html>

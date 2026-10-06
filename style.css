@@ -11,6 +11,7 @@
     --font-body: "Work Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
 
     --max-width: 1040px;
+    --sidebar-width: 240px;
     --radius: 4px;
 }
 
@@ -81,6 +82,19 @@ a:hover {
     outline-offset: 3px;
 }
 
+/* Visually hidden, still read by screen readers */
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
+
 /* Animation #6 — custom cursor dot. Only takes over the cursor on devices
    that actually have a mouse/trackpad; touch devices keep the normal cursor. */
 @media (hover: hover) {
@@ -115,6 +129,12 @@ a:hover {
     }
 }
 
+/* A fullscreen element is shown on its own, so the cursor dot can't appear
+   over it. Give the normal pointer back there, or there'd be no cursor at all. */
+:fullscreen {
+    cursor: auto;
+}
+
 /* Animation #8 — Konami-code easter egg ("party mode") */
 @keyframes hueRotate {
     from {
@@ -131,15 +151,21 @@ a:hover {
 }
 
 /* =========================================================
-   Header
+   Sidebar (replaces the old top header)
    ========================================================= */
-.site-header {
-    max-width: var(--max-width);
-    margin: 0 auto;
-    padding: 2rem 1.5rem 1rem;
+.sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: var(--sidebar-width);
+    padding: 2rem 1.5rem;
     display: flex;
-    align-items: center;
-    justify-content: space-between;
+    flex-direction: column;
+    gap: 2.5rem;
+    background: var(--paper);
+    border-right: 1px solid var(--line);
+    z-index: 10;
 }
 
 .wordmark {
@@ -151,7 +177,8 @@ a:hover {
 
 .site-nav {
     display: flex;
-    gap: 1.75rem;
+    flex-direction: column;
+    gap: 0.75rem;
 }
 
 .site-nav a {
@@ -164,43 +191,386 @@ a:hover {
     color: var(--ink);
 }
 
+/* Marks the page you're currently on */
+.site-nav a[aria-current="page"] {
+    color: var(--ink);
+    text-decoration: underline;
+    text-decoration-color: var(--accent);
+    text-decoration-thickness: 2px;
+    text-underline-offset: 6px;
+}
+
+/* Everything that isn't the sidebar sits to its right */
+.main-content {
+    margin-left: var(--sidebar-width);
+}
+
 /* =========================================================
-   Hero
+   Work gallery
    ========================================================= */
-.hero {
+.gallery {
     max-width: var(--max-width);
     margin: 0 auto;
-    padding: 4.5rem 1.5rem 5rem;
+    padding: 2.5rem 1.5rem 4rem;
+    display: grid;
+    /* As many columns as fit (each at least 260px wide), Pinterest style */
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 1.25rem;
+    /* Frames keep their own height instead of stretching to match the tallest one in the row */
+    align-items: start;
 }
 
-.hero h1 {
-    font-size: clamp(2.1rem, 5vw, 3.4rem);
-    max-width: 16ch;
-    letter-spacing: -0.01em;
+/* Masonry mode (switched on by the script in index.html): the grid gets 1px
+   rows and every frame spans as many rows as it is tall, so frames of
+   different heights pack together with no empty gaps. Without JavaScript the
+   normal two-column grid above is used instead. */
+.gallery.is-masonry {
+    grid-auto-rows: 1px;
+    grid-auto-flow: dense;
+    row-gap: 0;
 }
 
-.hero-lede {
-    font-size: 1.1rem;
-    max-width: 56ch;
-    margin-top: 1.25rem;
-}
-
-.hero-cta {
-    display: inline-block;
-    margin-top: 1.5rem;
-    padding: 0.7rem 1.4rem;
-    background: var(--ink);
-    color: var(--paper);
-    text-decoration: none;
+.gallery-item {
+    appearance: none;
+    display: flex;
+    flex-direction: column;
+    padding: 0;
+    border: 1px solid var(--line);
     border-radius: var(--radius);
-    font-size: 0.95rem;
-    /* Animation #2 — smooths out the magnetic nudge driven by JS mousemove */
-    transition: transform 0.15s ease-out;
+    background: none;
+    color: inherit;
+    font: inherit;
+    text-align: left;
+    overflow: hidden;
+    cursor: pointer;
+    transition: border-color 0.15s ease, transform 0.15s ease;
 }
 
-.hero-cta:hover {
-    background: var(--accent-deep);
-    color: var(--paper);
+.gallery-item:hover,
+.gallery-item:focus-visible {
+    border-color: var(--accent-deep);
+}
+
+.gallery-item:hover {
+    transform: translateY(-2px);
+}
+
+.gallery-item-media {
+    display: block;
+    width: 100%;
+    /* Empty placeholder frames are 4:3 (see below: frames that hold an image use the image's own shape) */
+    aspect-ratio: 4 / 3;
+    background:
+        repeating-linear-gradient(135deg,
+            var(--paper),
+            var(--paper) 10px,
+            var(--line) 10px,
+            var(--line) 11px);
+}
+
+/* A frame that contains an image takes that image's exact shape — no cropping */
+.gallery-item-media:has(img) {
+    aspect-ratio: auto;
+}
+
+.gallery-item-media img {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+/* Video projects: a round play badge over the thumbnail */
+.gallery-item-media--video {
+    position: relative;
+}
+
+.gallery-item-play {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 56px;
+    height: 56px;
+    transform: translate(-50%, -50%);
+    border-radius: 50%;
+    background: rgba(13, 22, 19, 0.7);
+    border: 2px solid var(--ink);
+    transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+
+/* The triangle inside the badge */
+.gallery-item-play::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 54%;
+    transform: translate(-50%, -50%);
+    border-style: solid;
+    border-width: 10px 0 10px 16px;
+    border-color: transparent transparent transparent var(--ink);
+}
+
+.gallery-item:hover .gallery-item-play {
+    background: var(--accent);
+    border-color: var(--accent);
+}
+
+.gallery-item-caption {
+    display: flex;
+    align-items: baseline;
+    gap: 0.45rem;
+    padding: 0.85rem 1rem;
+    background: var(--panel-bg);
+    font-size: 0.95rem;
+    color: var(--ink);
+}
+
+/* Phones: always two narrow columns, like the Pinterest app */
+@media (max-width: 600px) {
+    .gallery {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 0.75rem;
+        padding: 1.5rem 0.75rem 3rem;
+    }
+
+    .gallery-item-caption {
+        padding: 0.6rem 0.7rem;
+        font-size: 0.85rem;
+    }
+
+    .gallery-item-play {
+        width: 40px;
+        height: 40px;
+    }
+
+    .gallery-item-play::after {
+        border-width: 7px 0 7px 11px;
+    }
+}
+
+.gallery-item-index {
+    color: var(--ink-soft);
+    font-size: 0.8rem;
+}
+
+/* =========================================================
+   About page
+   ========================================================= */
+.about {
+    max-width: var(--max-width);
+    margin: 0 auto;
+    padding: 2.5rem 1.5rem 4rem;
+    display: grid;
+    grid-template-columns: 1fr 1.3fr;
+    gap: 2.5rem;
+    align-items: start;
+}
+
+/* Portrait, cropped to 4:5. The stripes show only while the image loads. */
+.about-photo {
+    display: block;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 4 / 5;
+    object-fit: cover;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    background:
+        repeating-linear-gradient(135deg,
+            var(--paper),
+            var(--paper) 10px,
+            var(--line) 10px,
+            var(--line) 11px);
+}
+
+.about-contact {
+    margin-top: 2.5rem;
+    padding-top: 2rem;
+    border-top: 1px solid var(--line);
+}
+
+.about-contact h2 {
+    font-size: 1.6rem;
+}
+
+/* =========================================================
+   Contact page
+   ========================================================= */
+.contact {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 2.5rem 1.5rem 4rem;
+}
+
+/* Featured socials: Instagram sits in the true centre column,
+   Behance hangs off to its right */
+.contact-featured {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+    gap: 1.5rem;
+    margin-bottom: 3.5rem;
+}
+
+.contact-social {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.35rem;
+    text-align: center;
+    text-decoration: none;
+    color: var(--ink);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    transition: border-color 0.2s ease, background-color 0.2s ease;
+}
+
+.contact-social:hover {
+    color: var(--ink);
+    border-color: var(--accent-deep);
+    background: var(--panel-bg);
+}
+
+.contact-social--primary {
+    grid-column: 2;
+    padding: 2.5rem 3rem 2.25rem;
+    border-radius: 24px;
+}
+
+.contact-social--side {
+    grid-column: 3;
+    justify-self: start;
+    padding: 1.25rem 1.5rem;
+}
+
+.contact-icon {
+    display: block;
+    margin-bottom: 0.75rem;
+}
+
+.contact-social--primary .contact-icon {
+    width: 180px;
+    height: 180px;
+}
+
+.contact-social--side .contact-icon {
+    width: 40px;
+    height: 40px;
+    margin-bottom: 0.5rem;
+}
+
+/* Instagram profile picture, cropped to a circle like on the app */
+.contact-icon--avatar {
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid var(--line);
+    transition: border-color 0.2s ease;
+}
+
+.contact-social:hover .contact-icon--avatar {
+    border-color: var(--accent);
+}
+
+.contact-social-label {
+    font-size: 0.8rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+}
+
+.contact-social-handle {
+    font-family: var(--font-display);
+    font-size: 1.15rem;
+    text-decoration: underline;
+    text-decoration-color: var(--accent);
+    text-underline-offset: 0.2em;
+}
+
+.contact-social--primary .contact-social-handle {
+    font-size: 1.9rem;
+}
+
+.contact-social-note {
+    margin-top: 0.4rem;
+    font-size: 0.85rem;
+    color: var(--ink-soft);
+}
+
+.contact-group-title {
+    max-width: 640px;
+    margin: 2.5rem auto 0.75rem;
+    font-family: var(--font-body);
+    font-size: 0.8rem;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+}
+
+.contact-list {
+    max-width: 640px;
+    margin: 0 auto;
+    border-top: 1px solid var(--line);
+}
+
+.contact-row {
+    display: grid;
+    grid-template-columns: 8rem 1fr;
+    align-items: baseline;
+    gap: 1rem;
+    padding: 1.25rem 0;
+    border-bottom: 1px solid var(--line);
+}
+
+.contact-row dt {
+    font-size: 0.9rem;
+    color: var(--ink-soft);
+}
+
+.contact-row dd {
+    margin: 0;
+    font-family: var(--font-display);
+    font-size: 1.3rem;
+    color: var(--ink);
+    overflow-wrap: anywhere;
+}
+
+/* Not enough room for the side-by-side layout: stack Behance under Instagram */
+@media (max-width: 1080px) {
+    .contact-featured {
+        grid-template-columns: 1fr;
+        justify-items: center;
+    }
+
+    .contact-social--primary,
+    .contact-social--side {
+        grid-column: 1;
+        justify-self: center;
+    }
+
+    .contact-social--side {
+        flex-direction: row;
+        gap: 0.75rem;
+    }
+
+    .contact-social--side .contact-icon {
+        margin-bottom: 0;
+    }
+}
+
+@media (max-width: 480px) {
+    .contact-row {
+        grid-template-columns: 1fr;
+        gap: 0.15rem;
+    }
+
+    .contact-social--primary {
+        width: 100%;
+        padding: 2rem 1rem;
+    }
+
+    .contact-social--primary .contact-social-handle {
+        font-size: 1.5rem;
+    }
 }
 
 /* =========================================================
@@ -330,6 +700,51 @@ body.view-locked {
     display: none;
 }
 
+/* Previous / next project buttons at the bottom of the project view */
+.project-nav {
+    max-width: var(--max-width);
+    margin: 0 auto;
+    padding: 0 2.5rem 4rem;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.25rem;
+}
+
+.project-nav-btn {
+    appearance: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+    padding: 1rem 1.25rem;
+    background: none;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    font-family: var(--font-body);
+    color: var(--ink);
+    text-align: left;
+    cursor: pointer;
+    transition: border-color 0.15s ease;
+}
+
+.project-nav-next {
+    text-align: right;
+}
+
+.project-nav-btn:hover,
+.project-nav-btn:focus-visible {
+    border-color: var(--accent-deep);
+}
+
+.project-nav-dir {
+    font-size: 0.8rem;
+    color: var(--ink-soft);
+}
+
+.project-nav-title {
+    font-family: var(--font-display);
+    font-size: 1.15rem;
+}
+
 .project-view-content .panel {
     max-width: var(--max-width);
     margin: 0 auto;
@@ -343,6 +758,25 @@ body.view-locked {
     padding: 2.5rem;
     /* Animation #5 — springier panel switch, replaces the plain fade */
     animation: settle 0.45s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* Stacked layout (projects 1–4): title, then the image(s) centred
+   underneath, then the text. Use class="panel panel--stacked". */
+.panel.panel--stacked {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+}
+
+/* Keep stacked images short enough that the text starts in the same window.
+   Height can't be capped directly without cropping, so cap the width instead:
+   width = max height × the images' combined width/height ratio (--ratio),
+   plus any gaps between side-by-side images (--gaps). Set both on the
+   .panel-gallery in index.html. */
+.panel--stacked .panel-gallery {
+    --max-h: 55vh;
+    width: min(100%, calc(var(--max-h) * var(--ratio, 100) + var(--gaps, 0px)));
+    /* centred in the panel when the height cap makes it narrower than the text */
+    margin-inline: auto;
 }
 
 /* Without this, .panel's own `display: grid` (a normal author rule) beats
@@ -415,6 +849,67 @@ body.view-locked {
     display: block;
 }
 
+/* Video projects: native player, no zoom or tilt */
+.panel-video {
+    min-width: 0;
+    align-self: start;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    overflow: hidden;
+    background: #000;
+}
+
+.panel-video video {
+    display: block;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 16 / 9;
+}
+
+/* Panels with more than one image: the images stack in the left column and
+   each box takes the shape of its own image (nothing is cropped), so portrait,
+   landscape and square images all fit. Give each <img> its real width and
+   height attributes so the space is reserved before it loads. */
+.panel-gallery {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    min-width: 0;
+}
+
+.panel-gallery .panel-media {
+    display: block;
+    min-height: 0;
+}
+
+.panel-gallery .panel-image {
+    height: auto;
+}
+
+/* Images side by side. Each image box gets a share of the row equal to its
+   width-to-height ratio, so both end up exactly the same height. Set --w and
+   --h on each .panel-media to that image's pixel size. */
+.panel-gallery--row {
+    flex-direction: row;
+    align-items: flex-start;
+}
+
+.panel-gallery--row .panel-media {
+    flex: calc(var(--w, 1) / var(--h, 1)) 1 0%;
+    min-width: 0;
+}
+
+/* On phones there isn't room side by side, so they stack again */
+@media (max-width: 600px) {
+    .panel-gallery--row {
+        flex-direction: column;
+    }
+
+    .panel-gallery--row .panel-media {
+        flex: none;
+    }
+}
+
 .panel-meta {
     display: flex;
     flex-wrap: wrap;
@@ -429,6 +924,17 @@ body.view-locked {
     margin-bottom: 0.6rem;
 }
 
+/* Title that sits above the image in a stacked panel */
+.panel-title {
+    font-size: 1.6rem;
+    margin: 0;
+}
+
+.panel--stacked .panel-title {
+    margin-bottom: -0.75rem;
+    /* pulls the image a little closer to its title */
+}
+
 .panel-body h4 {
     font-family: var(--font-body);
     font-weight: 600;
@@ -436,13 +942,6 @@ body.view-locked {
     margin-top: 1.4rem;
     margin-bottom: 0.4rem;
     color: var(--ink);
-}
-
-.panel-link {
-    display: inline-block;
-    margin-top: 1rem;
-    font-size: 0.95rem;
-    font-weight: 500;
 }
 
 /* =========================================================
@@ -499,22 +998,77 @@ body.view-locked {
     border-color: var(--accent-deep);
 }
 
-/* =========================================================
-   Footer
-   ========================================================= */
-footer#contact {
-    max-width: var(--max-width);
-    margin: 0 auto;
-    padding: 4rem 1.5rem 5rem;
-    border-top: 1px solid var(--line);
+/* Previous / next arrows and the "1 / 2" counter — only shown for projects with several images */
+.lightbox.has-nav {
+    padding: 3rem 5rem 3.5rem;
 }
 
-footer#contact h2 {
-    font-size: 1.6rem;
+.lightbox-nav {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    appearance: none;
+    background: rgba(13, 22, 19, 0.6);
+    border: 1px solid var(--line);
+    color: var(--ink);
+    width: 2.75rem;
+    height: 2.75rem;
+    border-radius: 50%;
+    font-size: 1.8rem;
+    line-height: 1;
+    padding: 0 0 0.2rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.lightbox-nav[hidden] {
+    display: none;
+}
+
+.lightbox-prev {
+    left: 1.25rem;
+}
+
+.lightbox-next {
+    right: 1.25rem;
+}
+
+.lightbox-nav:hover,
+.lightbox-nav:focus-visible {
+    color: var(--accent-deep);
+    border-color: var(--accent-deep);
+}
+
+.lightbox-count {
+    position: absolute;
+    bottom: 1.25rem;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 0.85rem;
+    color: var(--ink-soft);
+}
+
+.lightbox-count[hidden] {
+    display: none;
+}
+
+/* =========================================================
+   Footer — copyright only. On desktop it is pinned to the
+   bottom of the sidebar; on small screens it sits at the
+   bottom of the page (see Responsive).
+   ========================================================= */
+.site-footer {
+    position: fixed;
+    left: 1.5rem;
+    bottom: 2rem;
+    width: calc(var(--sidebar-width) - 3rem);
+    z-index: 11;
 }
 
 .footer-note {
-    margin-top: 2rem;
+    margin: 0;
     font-size: 0.85rem;
     color: var(--ink-soft);
 }
@@ -523,6 +1077,46 @@ footer#contact h2 {
    Responsive
    ========================================================= */
 @media (max-width: 860px) {
+
+    /* Sidebar collapses into a top bar */
+    .sidebar {
+        position: static;
+        width: 100%;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+        gap: 1rem;
+        padding: 1.5rem;
+        border-right: none;
+        border-bottom: 1px solid var(--line);
+    }
+
+    .site-nav {
+        flex-direction: row;
+        gap: 1.75rem;
+    }
+
+    .main-content {
+        margin-left: 0;
+    }
+
+    .site-footer {
+        position: static;
+        width: auto;
+        max-width: var(--max-width);
+        margin: 0 auto;
+        padding: 2rem 1.5rem 3rem;
+        border-top: 1px solid var(--line);
+    }
+
+    .about {
+        grid-template-columns: 1fr;
+    }
+
+    .about-photo {
+        max-width: 360px;
+    }
+
     .panel {
         grid-template-columns: 1fr;
     }
@@ -544,17 +1138,31 @@ footer#contact h2 {
 }
 
 @media (max-width: 480px) {
-    .site-header {
+    .sidebar {
         flex-direction: column;
         align-items: flex-start;
         gap: 0.75rem;
     }
 
-    .hero {
-        padding-top: 3rem;
-    }
-
     .project-view-content .panel {
         padding: 1.5rem;
+    }
+
+    .project-nav {
+        padding: 0 1.5rem 3rem;
+        grid-template-columns: 1fr;
+    }
+}
+
+/* About page on phones: a small portrait so the bio is visible straight away.
+   (Comes last so it wins over the 860px rule's 360px width.) */
+@media (max-width: 600px) {
+    .about {
+        gap: 1.5rem;
+        padding-top: 1.75rem;
+    }
+
+    .about-photo {
+        max-width: 180px;
     }
 }

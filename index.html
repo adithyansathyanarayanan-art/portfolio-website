@@ -25,37 +25,62 @@
      be marked inert / aria-hidden while a project is open full-screen. -->
   <div id="siteContent">
 
-    <header class="site-header">
+    <!-- Sidebar navigation (replaces the old top header) -->
+    <aside class="sidebar">
       <a class="wordmark" href="#top">Adithyan S.</a>
       <nav class="site-nav" aria-label="Primary">
-        <a href="#" id="navWork">Work</a>
-        <a href="#contact">Say hello</a>
+        <a href="#work" aria-current="page">Work</a>
+        <a href="about.html">About</a>
+        <a href="contact.html">Contact</a>
       </nav>
-    </header>
+    </aside>
 
-    <main id="top">
+    <main class="main-content" id="top">
 
-      <!-- ============ LANDING / HERO ============ -->
-      <section class="hero">
-        <h1><span id="scramble">Hi, I'm Adithyan S.!</span><br>I am an Illustrator and a Graphic Designer.</h1>
-        <p class="hero-lede">
-          I love working on creative projects that combine art and design. I specialize in creating visually compelling
-          illustrations and graphics that tell a story and engage audiences.
-        </p>
-        <a class="hero-cta" href="#" id="heroCta">See the work</a>
+      <section class="gallery" id="work" aria-label="Selected work">
+        <button class="gallery-item" type="button" data-index="1" aria-label="Open Project Title One">
+          <span class="gallery-item-media">
+            <img src="assets/images/Dante_-1.png" width="4197" height="2290" alt="Fan art of Dante from Devil May Cry.">
+          </span>
+          <span class="gallery-item-caption"><span class="gallery-item-index">01</span> Project Title One</span>
+        </button>
+        <button class="gallery-item" type="button" data-index="2" aria-label="Open Project Title Two">
+          <span class="gallery-item-media">
+            <img src="assets/images/project-2-2.png" width="1654" height="2339"
+              alt="Digital painting of a blue-haired young man in a golden crested helmet, with a pale bald figure glaring from the shadows behind him.">
+          </span>
+          <span class="gallery-item-caption"><span class="gallery-item-index">02</span> Project Title Two</span>
+        </button>
+        <button class="gallery-item" type="button" data-index="3" aria-label="Open Project Title Three">
+          <span class="gallery-item-media">
+            <img src="assets/images/Meena_Kumari.png" width="2160" height="1620"
+              alt="Halftone pop-art portrait of Meena Kumari resting her chin on her hand, in navy and cream against a coral-pink background.">
+          </span>
+          <span class="gallery-item-caption"><span class="gallery-item-index">03</span> Project Title Three</span>
+        </button>
+        <button class="gallery-item" type="button" data-index="4" aria-label="Open Project Title Four">
+          <span class="gallery-item-media gallery-item-media--video">
+            <img src="assets/images/youth-post-thumbnail.png" width="1472" height="828"
+              alt="Painted landscape of a large leafy tree on a green hillside, with rolling hills and a small village under a bright blue sky.">
+            <!-- Play badge marks this project as a video -->
+            <span class="gallery-item-play" aria-hidden="true"></span>
+          </span>
+          <span class="gallery-item-caption"><span class="gallery-item-index">04</span> Project Title Four</span>
+        </button>
+        <button class="gallery-item" type="button" data-index="5" aria-label="Open Project Title Five">
+          <span class="gallery-item-media">
+            <img src="assets/images/project-3.gif" width="480" height="480"
+              alt="Animation of Doraemon swaying and dancing against a light blue sky, then sitting dizzy with spiral eyes beside a mouse.">
+          </span>
+          <span class="gallery-item-caption"><span class="gallery-item-index">05</span> Project Title Five</span>
+        </button>
       </section>
 
     </main>
 
-    <footer id="contact">
-      <h2>Say hello</h2>
-      <p>Find me at
-        <a href="mailto:adithyansathyanarayanan@gmail.com">adithyansathyanarayanan@gmail.com</a> or on
-        <a href="https://www.linkedin.com/in/adithyan-sathyanarayanan-072b5b22b" rel="noopener noreferrer" target="_blank">LinkedIn</a>,
-        <a href="https://www.behance.net/adithyasathyan" rel="noopener noreferrer" target="_blank">Behance</a>,
-        and
-        <a href="https://www.instagram.com/artus_mushroomus/" rel="noopener noreferrer" target="_blank">Instagram</a>.
-      </p>
+    <!-- Footer now holds only the copyright line. On desktop it sits at the
+         bottom of the sidebar; on small screens it drops to the page bottom. -->
+    <footer class="site-footer">
       <p class="footer-note">&copy; <span id="year"></span> Adithyan Sathyanarayanan</p>
     </footer>
 
@@ -100,17 +125,22 @@
 
     <div class="project-view-content">
 
-      <article class="panel" id="panel-1" role="tabpanel" aria-labelledby="pv-tab-1" data-index="1" tabindex="0">
-        <button class="panel-media" type="button" data-index="1" aria-label="View a larger image for Project Title One">
-          <img class="panel-image" src="images/project-1.jpg" alt="">
-        </button>
+      <article class="panel panel--stacked" id="panel-1" role="tabpanel" aria-labelledby="pv-tab-1" data-index="1"
+        tabindex="0">
+        <h3 class="panel-title">Project Title One</h3>
+        <div class="panel-gallery" style="--ratio: 1.833;">
+          <button class="panel-media" type="button" data-index="1"
+            aria-label="View a larger image for Project Title One">
+            <img class="panel-image" src="assets/images/Dante_-1.png" width="4197" height="2290"
+              alt="Fan art of Dante from Devil May Cry in his red coat, pointing a silver pistol toward the viewer with a large sword behind him, framed by a black border with blue ornamental flourishes.">
+          </button>
+        </div>
         <div class="panel-body">
           <div class="panel-meta">
             <span>Role — [Your role]</span>
             <span>Year — [20XX]</span>
             <span>Tools — [Tool, Tool, Tool]</span>
           </div>
-          <h3>Project Title One</h3>
           <p>[Overview — describe the project in two or three sentences: what it is, who it's for, and why it exists.]
           </p>
           <h4>The problem</h4>
@@ -119,21 +149,30 @@
           <p>[Placeholder — what did you do, and why did you make the choices you made?]</p>
           <h4>The outcome</h4>
           <p>[Placeholder — what happened as a result? Metrics, feedback, or what you learned.]</p>
-          <a class="panel-link" href="#">View live project</a>
         </div>
       </article>
 
-      <article class="panel" id="panel-2" role="tabpanel" aria-labelledby="pv-tab-2" data-index="2" tabindex="0" hidden>
-        <button class="panel-media" type="button" data-index="2" aria-label="View a larger image for Project Title Two">
-          <img class="panel-image" src="images/project-2.jpg" alt="">
-        </button>
+      <article class="panel panel--stacked" id="panel-2" role="tabpanel" aria-labelledby="pv-tab-2" data-index="2"
+        tabindex="0" hidden>
+        <h3 class="panel-title">Project Title Two</h3>
+        <div class="panel-gallery panel-gallery--row" style="--ratio: 1.707; --gaps: 1.25rem;">
+          <button class="panel-media" type="button" data-index="2"
+            aria-label="View a larger image for Project Title Two (image 1 of 2)" style="--w: 1654; --h: 2339;">
+            <img class="panel-image" src="assets/images/project-2-2.png" width="1654" height="2339"
+              alt="Digital painting of a young man with blue hair in a golden crested helmet and gold collar, looking to the left, while a pale bald figure glares from the shadows behind him.">
+          </button>
+          <button class="panel-media" type="button" data-index="2"
+            aria-label="View a larger image for Project Title Two (image 2 of 2)" style="--w: 3104; --h: 3104;">
+            <img class="panel-image" src="assets/images/project-2-1-square.png" width="3104" height="3104"
+              alt="Text on a dark, textured background. A crusader writes: It has been 3 days since my men started to die out of causes I can't understand. 3 days since my brother, the captain of our fleet, perished. I don't know what I will do without him. I am starting to lose hope on this wretched crusade. There are creatures and plant life here I haven't seen anywhere before, phenomena I can't explain. This land consumes whoever dares to enter it, and I have a feeling I am getting consumed into its madness as well. But the crusade must go on. We must push through to see another day. That is what my brother has taught me!">
+          </button>
+        </div>
         <div class="panel-body">
           <div class="panel-meta">
             <span>Role — [Your role]</span>
             <span>Year — [20XX]</span>
             <span>Tools — [Tool, Tool, Tool]</span>
           </div>
-          <h3>Project Title Two</h3>
           <p>[Overview — describe the project in two or three sentences: what it is, who it's for, and why it exists.]
           </p>
           <h4>The problem</h4>
@@ -142,22 +181,24 @@
           <p>[Placeholder — what did you do, and why did you make the choices you made?]</p>
           <h4>The outcome</h4>
           <p>[Placeholder — what happened as a result? Metrics, feedback, or what you learned.]</p>
-          <a class="panel-link" href="#">View live project</a>
         </div>
       </article>
 
-      <article class="panel" id="panel-3" role="tabpanel" aria-labelledby="pv-tab-3" data-index="3" tabindex="0" hidden>
-        <button class="panel-media" type="button" data-index="3"
-          aria-label="View a larger image for Project Title Three">
-          <img class="panel-image" src="images/project-3.jpg" alt="">
-        </button>
+      <article class="panel panel--stacked" id="panel-3" role="tabpanel" aria-labelledby="pv-tab-3" data-index="3" tabindex="0" hidden>
+        <h3 class="panel-title">Project Title Three</h3>
+        <div class="panel-gallery" style="--ratio: 1.333;">
+          <button class="panel-media" type="button" data-index="3"
+            aria-label="View a larger image for Project Title Three">
+            <img class="panel-image" src="assets/images/Meena_Kumari.png" width="2160" height="1620"
+              alt="Halftone pop-art portrait of Meena Kumari resting her chin on her hand, in navy and cream against a coral-pink background.">
+          </button>
+        </div>
         <div class="panel-body">
           <div class="panel-meta">
             <span>Role — [Your role]</span>
             <span>Year — [20XX]</span>
             <span>Tools — [Tool, Tool, Tool]</span>
           </div>
-          <h3>Project Title Three</h3>
           <p>[Overview — describe the project in two or three sentences: what it is, who it's for, and why it exists.]
           </p>
           <h4>The problem</h4>
@@ -166,22 +207,28 @@
           <p>[Placeholder — what did you do, and why did you make the choices you made?]</p>
           <h4>The outcome</h4>
           <p>[Placeholder — what happened as a result? Metrics, feedback, or what you learned.]</p>
-          <a class="panel-link" href="#">View live project</a>
         </div>
       </article>
 
-      <article class="panel" id="panel-4" role="tabpanel" aria-labelledby="pv-tab-4" data-index="4" tabindex="0" hidden>
-        <button class="panel-media" type="button" data-index="4"
-          aria-label="View a larger image for Project Title Four">
-          <img class="panel-image" src="images/project-4.jpg" alt="">
-        </button>
+      <article class="panel panel--stacked" id="panel-4" role="tabpanel" aria-labelledby="pv-tab-4" data-index="4" tabindex="0" hidden>
+        <h3 class="panel-title">Project Title Four</h3>
+        <!-- Video project: a plain player instead of the zoomable .panel-media button,
+             so the controls work and the image lightbox doesn't hijack clicks -->
+        <div class="panel-gallery" style="--ratio: 1.778;">
+          <div class="panel-video">
+            <video controls playsinline preload="metadata" poster="assets/images/youth-post-thumbnail.png"
+              aria-label="Youth post — project video">
+              <source src="assets/videos/Youth%20post.mp4" type="video/mp4">
+              Your browser can't play this video. <a href="assets/videos/Youth%20post.mp4">Download it instead</a>.
+            </video>
+          </div>
+        </div>
         <div class="panel-body">
           <div class="panel-meta">
             <span>Role — [Your role]</span>
             <span>Year — [20XX]</span>
             <span>Tools — [Tool, Tool, Tool]</span>
           </div>
-          <h3>Project Title Four</h3>
           <p>[Overview — describe the project in two or three sentences: what it is, who it's for, and why it exists.]
           </p>
           <h4>The problem</h4>
@@ -190,14 +237,14 @@
           <p>[Placeholder — what did you do, and why did you make the choices you made?]</p>
           <h4>The outcome</h4>
           <p>[Placeholder — what happened as a result? Metrics, feedback, or what you learned.]</p>
-          <a class="panel-link" href="#">View live project</a>
         </div>
       </article>
 
       <article class="panel" id="panel-5" role="tabpanel" aria-labelledby="pv-tab-5" data-index="5" tabindex="0" hidden>
         <button class="panel-media" type="button" data-index="5"
           aria-label="View a larger image for Project Title Five">
-          <img class="panel-image" src="images/project-5.jpg" alt="">
+          <img class="panel-image" src="assets/images/project-3.gif" width="480" height="480"
+            alt="Animation of Doraemon swaying and dancing against a light blue sky, then sitting dizzy with spiral eyes beside a mouse.">
         </button>
         <div class="panel-body">
           <div class="panel-meta">
@@ -214,9 +261,19 @@
           <p>[Placeholder — what did you do, and why did you make the choices you made?]</p>
           <h4>The outcome</h4>
           <p>[Placeholder — what happened as a result? Metrics, feedback, or what you learned.]</p>
-          <a class="panel-link" href="#">View live project</a>
         </div>
       </article>
+
+      <nav class="project-nav" aria-label="Move between projects">
+        <button class="project-nav-btn project-nav-prev" id="projectPrev" type="button">
+          <span class="project-nav-dir">&larr; Previous project</span>
+          <span class="project-nav-title" id="projectPrevTitle"></span>
+        </button>
+        <button class="project-nav-btn project-nav-next" id="projectNext" type="button">
+          <span class="project-nav-dir">Next project &rarr;</span>
+          <span class="project-nav-title" id="projectNextTitle"></span>
+        </button>
+      </nav>
 
     </div>
   </div>
@@ -229,7 +286,14 @@
     <button class="lightbox-close" id="lightboxClose" type="button" aria-label="Close enlarged image">
       <span aria-hidden="true">&times;</span>
     </button>
+    <button class="lightbox-nav lightbox-prev" id="lightboxPrev" type="button" aria-label="Previous image" hidden>
+      <span aria-hidden="true">&#8249;</span>
+    </button>
     <img class="lightbox-image" id="lightboxImage" src="" alt="">
+    <button class="lightbox-nav lightbox-next" id="lightboxNext" type="button" aria-label="Next image" hidden>
+      <span aria-hidden="true">&#8250;</span>
+    </button>
+    <div class="lightbox-count" id="lightboxCount" aria-live="polite" hidden></div>
   </div>
 
   <script>
@@ -243,22 +307,48 @@
     const projectView = document.getElementById('projectView');
     const closeBtn = document.getElementById('closeProjectView');
     const siteContent = document.getElementById('siteContent');
-    const heroCta = document.getElementById('heroCta');
-    const navWork = document.getElementById('navWork');
+    const projectContent = document.querySelector('.project-view-content');
+    const projectPrev = document.getElementById('projectPrev');
+    const projectNext = document.getElementById('projectNext');
+    const projectPrevTitle = document.getElementById('projectPrevTitle');
+    const projectNextTitle = document.getElementById('projectNextTitle');
     let lastTrigger = null; // remembers what to return focus to on close
 
+    // Stop any project video so it doesn't keep playing out of sight
+    function pauseVideos() {
+      projectView.querySelectorAll('video').forEach(v => v.pause());
+    }
+
     function showPanelByIndex(index) {
+      pauseVideos();
       panels.forEach(p => { p.hidden = p.dataset.index !== String(index); });
       pvTabs.forEach(t => {
         const selected = t.dataset.index === String(index);
         t.setAttribute('aria-selected', String(selected));
         t.tabIndex = selected ? 0 : -1;
       });
+
+      // A newly opened project always starts at its top
+      projectContent.scrollTop = 0;
+
+      // The buttons at the bottom name the projects on either side of this one
+      const pos = pvTabs.findIndex(t => t.dataset.index === String(index));
+      const label = (t) => t.textContent.replace(/\s+/g, ' ').trim();
+      projectPrevTitle.textContent = label(pvTabs[(pos - 1 + pvTabs.length) % pvTabs.length]);
+      projectNextTitle.textContent = label(pvTabs[(pos + 1) % pvTabs.length]);
+    }
+
+    // Move to the previous (-1) or next (+1) project, wrapping around at the ends
+    function goToProject(offset, focusTab) {
+      const current = pvTabs.findIndex(t => t.getAttribute('aria-selected') === 'true');
+      const target = (current + offset + pvTabs.length) % pvTabs.length;
+      showPanelByIndex(pvTabs[target].dataset.index);
+      if (focusTab) pvTabs[target].focus({ preventScroll: true });
     }
 
     function getFocusable(container) {
       return Array.from(
-        container.querySelectorAll('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])')
+        container.querySelectorAll('button, [href], input, select, textarea, video[controls], [tabindex]:not([tabindex="-1"])')
       ).filter(el => !el.disabled && el.offsetParent !== null);
     }
 
@@ -278,10 +368,23 @@
     }
 
     function handleOverlayKeydown(e) {
+      if (!lightbox.hidden) return; // the enlarged-image view handles its own keys
       if (e.key === 'Escape') {
         closeProjectView();
         return;
       }
+
+      // Left / right arrow keys switch project from anywhere in the project view.
+      // (If a tab already handled the key it called preventDefault, so skip it here.
+      //  On a focused video player the arrows seek instead, so leave them alone.)
+      if ((e.key === 'ArrowLeft' || e.key === 'ArrowRight') && !e.defaultPrevented
+        && e.target.tagName !== 'VIDEO'
+        && !e.altKey && !e.ctrlKey && !e.metaKey) {
+        e.preventDefault();
+        goToProject(e.key === 'ArrowRight' ? 1 : -1, true);
+        return;
+      }
+
       trapFocus(e);
     }
 
@@ -303,6 +406,7 @@
     }
 
     function closeProjectView() {
+      pauseVideos();
       projectView.classList.remove('is-open');
       document.body.classList.remove('view-locked');
       siteContent.removeAttribute('aria-hidden');
@@ -318,24 +422,11 @@
       if (lastTrigger) lastTrigger.focus();
     }
 
-    // "See the work" now opens the overlay directly (defaults to project 1)
-    // instead of scrolling to the #work section, since the tab previews that
-    // used to live there are gone.
-    if (heroCta) {
-      heroCta.addEventListener('click', (e) => {
-        e.preventDefault();
-        openProjectView('1', heroCta);
+    document.querySelectorAll('.gallery-item').forEach(item => {
+      item.addEventListener('click', () => {
+        openProjectView(item.dataset.index, item);
       });
-    }
-
-    // Nav "Work" link used to anchor-scroll to the #work section; that
-    // section is gone now, so it opens the project overlay instead.
-    if (navWork) {
-      navWork.addEventListener('click', (e) => {
-        e.preventDefault();
-        openProjectView('1', navWork);
-      });
-    }
+    });
 
     // Top-bar tabs inside the overlay switch projects without closing.
     pvTabs.forEach(t => {
@@ -356,6 +447,8 @@
     });
 
     closeBtn.addEventListener('click', closeProjectView);
+    projectPrev.addEventListener('click', () => goToProject(-1, false));
+    projectNext.addEventListener('click', () => goToProject(1, false));
 
     document.getElementById('year').textContent = new Date().getFullYear();
 
@@ -365,16 +458,64 @@
     const lightbox = document.getElementById('lightbox');
     const lightboxImage = document.getElementById('lightboxImage');
     const lightboxClose = document.getElementById('lightboxClose');
+    const lightboxPrev = document.getElementById('lightboxPrev');
+    const lightboxNext = document.getElementById('lightboxNext');
+    const lightboxCount = document.getElementById('lightboxCount');
     let lightboxLastTrigger = null;
+    let lightboxGroup = [];   // all the images belonging to the project that was clicked
+    let lightboxIndex = 0;    // which of them is showing
 
     function handleLightboxKeydown(e) {
-      if (e.key === 'Escape') closeLightbox();
+      if (e.key === 'Escape') {
+        closeLightbox();
+        return;
+      }
+
+      // Left / right arrow keys move between the project's images
+      if (lightboxGroup.length > 1) {
+        if (e.key === 'ArrowRight') { e.preventDefault(); showLightboxImage(lightboxIndex + 1); }
+        if (e.key === 'ArrowLeft') { e.preventDefault(); showLightboxImage(lightboxIndex - 1); }
+      }
+
+      // Keep Tab inside the lightbox while it is open
+      if (e.key === 'Tab') {
+        const controls = [lightboxPrev, lightboxNext, lightboxClose].filter(el => !el.hidden);
+        const first = controls[0];
+        const last = controls[controls.length - 1];
+        if (e.shiftKey && document.activeElement === first) {
+          e.preventDefault();
+          last.focus();
+        } else if (!e.shiftKey && document.activeElement === last) {
+          e.preventDefault();
+          first.focus();
+        }
+      }
     }
 
-    function openLightbox(imgEl, trigger) {
+    // Shows image number i of the current group (wraps around at both ends)
+    function showLightboxImage(i) {
+      const count = lightboxGroup.length;
+      lightboxIndex = (i + count) % count;
+      const trigger = lightboxGroup[lightboxIndex];
+      const imgEl = trigger.querySelector('img');
+
       lightboxImage.src = imgEl.src;
       lightboxImage.alt = imgEl.alt || trigger.getAttribute('aria-label') || '';
-      lightboxLastTrigger = trigger;
+      lightboxCount.textContent = (lightboxIndex + 1) + ' / ' + count;
+      lightboxLastTrigger = trigger; // focus returns to the image you were last looking at
+    }
+
+    function openLightbox(group, index) {
+      lightboxGroup = group;
+
+      // Arrows and counter only appear when the project has more than one image
+      const multiple = group.length > 1;
+      lightboxPrev.hidden = !multiple;
+      lightboxNext.hidden = !multiple;
+      lightboxCount.hidden = !multiple;
+      lightbox.classList.toggle('has-nav', multiple);
+
+      showLightboxImage(index);
 
       lightbox.hidden = false;
       requestAnimationFrame(() => lightbox.classList.add('is-open'));
@@ -400,87 +541,21 @@
 
     document.querySelectorAll('.panel-media').forEach(media => {
       media.addEventListener('click', () => {
-        const img = media.querySelector('img');
-        if (img) openLightbox(img, media);
+        if (!media.querySelector('img')) return;
+        // every image in the same project panel is part of the group
+        const group = Array.from(media.closest('.panel').querySelectorAll('.panel-media'));
+        openLightbox(group, group.indexOf(media));
       });
     });
 
+    lightboxPrev.addEventListener('click', () => showLightboxImage(lightboxIndex - 1));
+    lightboxNext.addEventListener('click', () => showLightboxImage(lightboxIndex + 1));
     lightboxClose.addEventListener('click', closeLightbox);
 
     // Clicking the dark backdrop (not the image itself) also closes it.
     lightbox.addEventListener('click', (e) => {
       if (e.target === lightbox) closeLightbox();
     });
-
-    // ---- Animation #2: magnetic hero CTA ----
-    const magnetic = document.querySelector('.hero-cta');
-    if (magnetic && !prefersReducedMotion) {
-      magnetic.addEventListener('mousemove', (e) => {
-        const rect = magnetic.getBoundingClientRect();
-        const x = e.clientX - rect.left - rect.width / 2;
-        const y = e.clientY - rect.top - rect.height / 2;
-        magnetic.style.transform = `translate(${x * 0.25}px, ${y * 0.25}px)`;
-      });
-      magnetic.addEventListener('mouseleave', () => {
-        magnetic.style.transform = 'translate(0, 0)';
-      });
-    }
-
-    // ---- Animation #4: scramble-in headline text ----
-    const scrambleEl = document.getElementById('scramble');
-    if (scrambleEl) {
-      const finalText = scrambleEl.textContent;
-
-      const runScramble = () => {
-        if (prefersReducedMotion) {
-          scrambleEl.textContent = finalText;
-          return;
-        }
-
-        // Lock the span to its final rendered size before scrambling starts.
-        // Swapped-in random letters are wider/narrower than the real ones,
-        // which was reflowing the headline (and the line below it) on every
-        // frame. Measuring after fonts are ready avoids a mismatched
-        // measurement from a fallback font flashing in first.
-        scrambleEl.style.display = 'inline-block';
-        scrambleEl.style.whiteSpace = 'nowrap';
-        scrambleEl.style.width = scrambleEl.getBoundingClientRect().width + 'px';
-
-        const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
-        let frame = 0;
-        const totalFrames = 20;
-
-        const scramble = () => {
-          frame++;
-          let output = '';
-          for (let i = 0; i < finalText.length; i++) {
-            if (finalText[i] === ' ') { output += ' '; continue; }
-            const revealPoint = (i / finalText.length) * totalFrames;
-            output += frame > revealPoint + 6
-              ? finalText[i]
-              : chars[Math.floor(Math.random() * chars.length)];
-          }
-          scrambleEl.textContent = output;
-          if (frame < totalFrames + 8) {
-            requestAnimationFrame(() => setTimeout(scramble, 30));
-          } else {
-            scrambleEl.textContent = finalText;
-            // Release the fixed sizing now that the real text is back, so
-            // the headline stays fully responsive after the animation ends.
-            scrambleEl.style.width = '';
-            scrambleEl.style.whiteSpace = '';
-            scrambleEl.style.display = '';
-          }
-        };
-        scramble();
-      };
-
-      if (document.fonts && document.fonts.ready) {
-        document.fonts.ready.then(runScramble);
-      } else {
-        runScramble();
-      }
-    }
 
     // ---- Animation #6: custom cursor dot ----
     const cursorDot = document.getElementById('cursorDot');
@@ -521,6 +596,32 @@
         konamiProgress = 0;
       }
     });
+
+    /* =========================================================
+       Gallery layout — every frame takes the shape of its own image,
+       and the frames pack together column by column (masonry style).
+       Adding or swapping an image re-flows the whole gallery on its own.
+       ========================================================= */
+    const gallery = document.querySelector('.gallery');
+    if (gallery && 'ResizeObserver' in window) {
+      gallery.classList.add('is-masonry');
+
+      // Grid rows are 1px tall, so a frame spans as many rows as it is tall,
+      // plus the gap that sits below it. (The gap is read each time because
+      // it's smaller on phones.)
+      const placeItem = (item) => {
+        const gap = parseFloat(getComputedStyle(gallery).columnGap) || 20;
+        item.style.gridRowEnd = 'span ' + Math.ceil(item.offsetHeight + gap);
+      };
+
+      const items = gallery.querySelectorAll('.gallery-item');
+      items.forEach(placeItem);
+
+      // Re-run whenever a frame changes size (an image finishing loading,
+      // the window being resized, a new image being added...).
+      const galleryObserver = new ResizeObserver(entries => entries.forEach(e => placeItem(e.target)));
+      items.forEach(item => galleryObserver.observe(item));
+    }
   </script>
 
 </body>
