@@ -1194,8 +1194,8 @@ body.view-locked {
     }
 }
 
-/* About page on phones: a small portrait so the bio is visible straight away.
-   (Comes last so it wins over the 860px rule's 360px width.) */
+/* About page on phones: the portrait spans the full content width.
+   (Comes last so it wins over the 860px rule's 252px cap.) */
 @media (max-width: 600px) {
     .about {
         gap: 1.5rem;
@@ -1203,6 +1203,7 @@ body.view-locked {
     }
 
     .about-photo {
-        max-width: 180px;
+        width: 100%;
+        max-width: none;
     }
 }
