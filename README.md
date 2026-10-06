@@ -1,91 +1,105 @@
-# Portfolio Website (Starter)
+# Adithyan S. — Portfolio
 
-A simple, dependency-free portfolio site: a landing section up top, and a
-tab-based "Selected work" section below it with five project slots. Click
-any of the five tabs to swap in that project's detail panel.
+Personal portfolio of Adithyan Sathyanarayanan: illustration, design and
+visual storytelling. A small, dependency-free static site with three pages:
+
+- **Work** (`index.html`) — a masonry gallery of projects. Clicking a project
+  opens a full-screen project view with a tab bar for jumping between
+  projects, previous/next buttons, and an image lightbox.
+- **About** (`about.html`) — portrait and bio, with links to get in touch.
+- **Contact** (`contact.html`) — contact details, ordered by how active each
+  channel is: Instagram first (with Behance beside it), then direct contact
+  (phone, WhatsApp), then professional (email, LinkedIn).
 
 ## Files
 
-- `index.html` — page structure and content (all placeholder text)
-- `style.css` — all styling (colors, type, layout, responsive rules)
-- `README.md` — this file
+```
+index.html        Work page: gallery, project view, lightbox, all page scripts
+about.html        About page
+contact.html      Contact page
+style.css         All styling for every page
+assets/
+  images/         Artwork, thumbnails, portrait and icons
+  videos/         Project videos
+```
 
-There's no build step and no dependencies beyond two Google Fonts
-(`Newsreader` for headings, `Work Sans` for body text), loaded via a
-`<link>` tag in `index.html`. Everything else — including the tab
-interaction — is plain HTML/CSS/JS.
+There's no build step. The only external dependency is two Google Fonts
+(`Newsreader` for headings, `Work Sans` for body text), loaded with a
+`<link>` tag in each page.
 
 ## Running it locally
 
-Just open `index.html` in a browser. No server or build tools required.
-
-If you want to serve it locally (useful for testing on other devices on
-your network), from this folder run:
+Open `index.html` in a browser, or serve the folder with any static server
+(serving it lets you test on a phone on the same network, and lets the
+video scrub properly), for example:
 
 ```
-python3 -m http.server 8000
+npx serve .
 ```
 
-then visit `http://localhost:8000`.
+## The Work page
 
-## How the tabs work
+### Gallery
 
-Each of the 5 project tabs is a `<button role="tab">`. Clicking one (or
-using the arrow keys while a tab is focused) shows the matching
-`<article role="tabpanel">` below and hides the other four. The logic
-lives in the small `<script>` block at the bottom of `index.html` — there's
-nothing to configure, it just matches each tab's `aria-controls` attribute
-to a panel's `id`.
+The gallery is Pinterest-style masonry: every card keeps its image's own
+shape, and cards pack into as many columns as fit (each at least 260px
+wide; always two on phones). A short script at the bottom of `index.html`
+sizes each card's grid rows from its height, and re-runs on its own when
+images load or the window is resized. Card *n* opens project *n*.
 
-## Customizing content
+### Project view
 
-Everything you're likely to want to change is marked with square brackets,
-like `[Your Name]` or `[Placeholder — ...]`. Search for `[` in `index.html`
-to find every spot that needs real content:
+Each project is an `<article class="panel">` inside the project view,
+matched to its gallery card and its tab by `data-index` / `id`. Projects
+1–4 use the **stacked** layout (`panel panel--stacked`): title, then the
+image(s) centred, then the write-up. Images are capped at 55% of the window
+height so the text starts on the same screen. To keep their shape while
+capped, each `.panel-gallery` carries a `--ratio` (the images' combined
+width ÷ height), plus `--gaps` when images sit side by side.
 
-- **Header**: your name/wordmark
-- **Hero section**: your headline, intro paragraph, and call-to-action link
-- **Each of the 5 tabs**: a short title and one-line summary (shown in the
-  tab strip itself)
-- **Each of the 5 detail panels**: role, year, tools, an overview
-  paragraph, and problem / approach / outcome sections, plus a link to the
-  live project
-- **Footer**: contact email and social links
+Project 5 uses the original two-column layout (image left, text right).
 
-Each panel also has a `.panel-media` block — a placeholder pattern with a
-"Project image placeholder" label. Swap it for a real `<img>` or background
-image once you have screenshots or artwork for that project.
+Other behaviour:
 
-## Adding, removing, or reordering projects
+- **Lightbox** — click any project image to see it larger; projects with
+  several images get previous/next arrows.
+- **Video** (project 4) — a native player with a poster image. It pauses
+  when you switch projects or close the view, and the mouse pointer comes
+  back in fullscreen.
+- **Keyboard** — arrow keys switch projects (or seek, when the video has
+  focus), Esc closes, and focus stays inside the view while it's open.
 
-The site is currently wired for exactly 5 projects (5 tabs ↔ 5 panels), to
-match a `repeat(5, 1fr)` grid in `style.css`. To change the count:
+## Editing content
 
-1. In `index.html`, add/remove a matching `<button role="tab">` /
-   `<article role="tabpanel">` pair. Keep each tab's `aria-controls` in
-   sync with its panel's `id`, and give each a unique `id` /
-   `aria-labelledby` pair.
-2. In `style.css`, update `.tabs { grid-template-columns: repeat(5, 1fr); }`
-   to the new count.
+Placeholder text is in square brackets — search for `[` in `index.html` to
+find each project's role, year, tools, overview and problem / approach /
+outcome sections, and the project titles (`Project Title One` …).
 
-The JavaScript doesn't need to change — it works off however many
-`.tab` / `.panel` elements exist on the page.
+**Adding an image to a project:** put the file in `assets/images/`, add an
+`<img>` with its real `width` and `height`, and update that project's
+`--ratio` (see above). Large source files are best exported as a smaller
+web copy first (the About portrait, for example, is a 1000px-wide JPEG made
+from the full-size original).
+
+**Adding or removing a project:** add or remove a matching gallery card
+(`.gallery-item`), project tab (`.pv-tab`) and panel (`.panel`), keeping
+their numbers in sync. The scripts work off however many exist.
 
 ## Design notes
 
-- **Palette**: warm paper background, near-black ink text, and a mustard
-  accent used sparingly (the active tab's underline, links, hover states).
-- **Type**: `Newsreader` (serif) for headings, `Work Sans` for everything
-  else.
-- **Motion**: kept deliberately minimal — the active tab's underline
-  animates in, and the detail panel does one small fade/settle transition
-  when you switch projects. Nothing animates on scroll or on hover besides
-  color changes. All of it is disabled automatically for visitors with
+- **Palette** — dark green-black background (`#0D1613`), off-white text
+  (`#F3F1EB`), a red accent (`#DF301C`) for underlines and the cursor dot,
+  and teal (`#00B7CD`) for links and hover states. All defined as CSS
+  variables at the top of `style.css`.
+- **Type** — `Newsreader` (serif) for headings and display text,
+  `Work Sans` for everything else.
+- **Motion** — a custom cursor dot, a tilt on hover over project images, a
+  small settle animation when switching projects, and a hidden Konami-code
+  easter egg. Animations are switched off for visitors with
   `prefers-reduced-motion` set.
 
 ## Deploying
 
-This is a fully static site, so any static host works: GitHub Pages,
-Netlify, Vercel, Cloudflare Pages, or a plain file upload to any web
-server. There's nothing to build — just upload `index.html` and
-`style.css` together.
+It's a fully static site, so any static host works (GitHub Pages, Netlify,
+Vercel, Cloudflare Pages…). Upload the HTML files, `style.css` and the
+`assets/` folder together — nothing needs building.
