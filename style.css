@@ -360,10 +360,6 @@ a:hover {
     }
 }
 
-.gallery-item-index {
-    color: var(--ink-soft);
-    font-size: 0.8rem;
-}
 
 /* =========================================================
    About page
@@ -670,19 +666,11 @@ body.view-locked {
     position: relative;
 }
 
-.pv-tab-index {
-    color: var(--ink-soft);
-    margin-right: 0.35rem;
-    font-size: 0.8rem;
-}
 
 .pv-tab[aria-selected="true"] {
     color: var(--ink);
 }
 
-.pv-tab[aria-selected="true"] .pv-tab-index {
-    color: var(--accent-deep);
-}
 
 .pv-tab[aria-selected="true"]::after {
     content: "";
@@ -933,6 +921,37 @@ body.view-locked {
     min-width: 0;
 }
 
+/* Grid of smaller images (e.g. process shots) under a project's write-up:
+   three across, two on phones, all in matching 4:3 frames */
+.panel-gallery--grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1rem;
+}
+
+.panel-gallery--grid .panel-image {
+    aspect-ratio: 4 / 3;
+    object-fit: cover;
+}
+
+@media (max-width: 600px) {
+    .panel-gallery--grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 0.75rem;
+    }
+}
+
+/* Small label above a section of images inside a project */
+.panel-subhead {
+    margin: 0.5rem 0 -0.75rem;
+    font-family: var(--font-body);
+    font-size: 0.8rem;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+}
+
 /* On phones there isn't room side by side, so they stack again */
 @media (max-width: 600px) {
     .panel-gallery--row {
@@ -962,6 +981,11 @@ body.view-locked {
 .panel-title {
     font-size: 1.6rem;
     margin: 0;
+}
+
+/* A title at the top of a two-column project spans both columns */
+.panel > .panel-title {
+    grid-column: 1 / -1;
 }
 
 .panel--stacked .panel-title {
