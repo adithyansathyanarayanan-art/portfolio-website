@@ -981,6 +981,29 @@ body.view-locked {
     object-fit: cover;
 }
 
+/* Square stickers: three to a row with any remainder centred underneath
+   (5 → 3 + 2); two to a row on phones */
+.panel-gallery--stickers {
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1rem;
+}
+
+.panel-gallery--stickers .panel-media {
+    flex: 0 0 calc((100% - 2rem) / 3);
+}
+
+@media (max-width: 600px) {
+    .panel-gallery--stickers {
+        gap: 0.75rem;
+    }
+
+    .panel-gallery--stickers .panel-media {
+        flex-basis: calc((100% - 0.75rem) / 2);
+    }
+}
+
 /* Four in a row (e.g. the stages of an animation); two on phones, from the rule below */
 .panel-gallery--quad {
     grid-template-columns: repeat(4, minmax(0, 1fr));
