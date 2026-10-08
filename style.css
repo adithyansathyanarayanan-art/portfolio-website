@@ -6,6 +6,7 @@
     --accent: #DF301C;
     --accent-deep: #00B7CD;
     --line: #23332F;
+    --black: #000000;
 
     --font-display: "Newsreader", Georgia, serif;
     --font-body: "Work Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
@@ -27,6 +28,9 @@
 
 html {
     scroll-behavior: smooth;
+    /* Always reserve the scrollbar's space, so the layout never shifts
+       sideways when a page gains or loses its scrollbar */
+    scrollbar-gutter: stable;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -245,6 +249,7 @@ a:hover {
 
 .gallery-item {
     appearance: none;
+    position: relative;     /* the hover label sits on top of the image */
     display: flex;
     flex-direction: column;
     padding: 0;
@@ -327,14 +332,37 @@ a:hover {
     border-color: var(--accent);
 }
 
+/* Project name: hidden until hover (or keyboard focus), then shown in the
+   palette white over a see-through black wash */
 .gallery-item-caption {
+    position: absolute;
+    inset: 0;
     display: flex;
-    align-items: baseline;
-    gap: 0.45rem;
-    padding: 0.85rem 1rem;
-    background: var(--panel-bg);
-    font-size: 0.95rem;
+    align-items: flex-end;
+    padding: 1rem 1.1rem;
+    background: color-mix(in srgb, var(--black) 60%, transparent);
+    font-size: 1.05rem;
+    font-weight: 500;
     color: var(--ink);
+    opacity: 0;
+    transition: opacity 0.25s ease;
+    pointer-events: none;
+}
+
+.gallery-item:hover .gallery-item-caption,
+.gallery-item:focus-visible .gallery-item-caption {
+    opacity: 1;
+}
+
+/* Touch screens can't hover: keep the name visible on a soft fade along the
+   bottom of the image instead */
+@media (hover: none) {
+    .gallery-item-caption {
+        top: auto;
+        padding-top: 2.5rem;
+        background: linear-gradient(transparent, color-mix(in srgb, var(--black) 80%, transparent));
+        opacity: 1;
+    }
 }
 
 /* Phones: always two narrow columns, like the Pinterest app */
@@ -346,7 +374,7 @@ a:hover {
     }
 
     .gallery-item-caption {
-        padding: 0.6rem 0.7rem;
+        padding: 1.75rem 0.7rem 0.6rem;
         font-size: 0.85rem;
     }
 
@@ -878,7 +906,7 @@ body.view-locked {
     border: 1px solid var(--line);
     border-radius: var(--radius);
     overflow: hidden;
-    background: #000;
+    background: var(--black);
 }
 
 .panel-video video {
