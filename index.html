@@ -77,8 +77,9 @@
         </button>
         <button class="gallery-item" type="button" data-index="5" aria-label="Open Doraemon Finds a Mouse">
           <span class="gallery-item-media">
-            <img src="assets/images/project-3.gif" width="480" height="480" loading="lazy" decoding="async"
-              alt="Animation of Doraemon swaying and dancing against a light blue sky, then sitting dizzy with spiral eyes beside a mouse.">
+            <video src="assets/videos/web/doraemon-final.mp4" poster="assets/images/web/doraemon-final-poster.webp"
+              width="576" height="576" muted loop playsinline preload="none" data-autoplay
+              aria-label="Animation of Doraemon swaying and dancing against a light blue sky, then sitting dizzy with spiral eyes beside a mouse."></video>
           </span>
           <span class="gallery-item-caption">Doraemon Finds a Mouse</span>
         </button>
@@ -241,8 +242,9 @@
           <div class="panel-video">
             <video controls playsinline preload="none" poster="assets/images/web/young-poster.webp"
               aria-label="Youth post — project video">
-              <source src="assets/videos/Youth%20post.mp4" type="video/mp4">
-              Your browser can't play this video. <a href="assets/videos/Youth%20post.mp4">Download it instead</a>.
+              <source src="assets/videos/web/young-720.mp4" type="video/mp4" media="(max-width: 860px)">
+              <source src="assets/videos/web/young-1080.mp4" type="video/mp4">
+              Your browser can't play this video. <a href="assets/videos/web/young-1080.mp4">Download it instead</a>.
             </video>
           </div>
         </div>
@@ -263,13 +265,18 @@
         </div>
       </article>
 
-      <article class="panel" id="panel-5" role="tabpanel" aria-labelledby="pv-tab-5" data-index="5" tabindex="0" hidden>
+      <!-- Doraemon: the finished animation, the write-up, then each stage of it as a looping clip.
+           Clips play only while on screen (see data-autoplay in the script). -->
+      <article class="panel panel--stacked" id="panel-5" role="tabpanel" aria-labelledby="pv-tab-5" data-index="5"
+        tabindex="0" hidden>
         <h3 class="panel-title">Doraemon Finds a Mouse</h3>
-        <button class="panel-media" type="button" data-index="5"
-          aria-label="View a larger image for Doraemon Finds a Mouse">
-          <img class="panel-image" loading="lazy" decoding="async" src="assets/images/project-3.gif" width="480" height="480"
-            alt="Animation of Doraemon swaying and dancing against a light blue sky, then sitting dizzy with spiral eyes beside a mouse.">
-        </button>
+        <div class="panel-gallery" style="--ratio: 1;">
+          <div class="panel-video panel-video--loop">
+            <video src="assets/videos/web/doraemon-final.mp4" poster="assets/images/web/doraemon-final-poster.webp"
+              width="576" height="576" muted loop playsinline preload="none" data-autoplay
+              aria-label="Animation of Doraemon swaying and dancing against a light blue sky, then sitting dizzy with spiral eyes beside a mouse."></video>
+          </div>
+        </div>
         <div class="panel-body">
           <div class="panel-meta">
             <span>Role — [Your role]</span>
@@ -284,6 +291,41 @@
           <p>[Placeholder — what did you do, and why did you make the choices you made?]</p>
           <h4>The outcome</h4>
           <p>[Placeholder — what happened as a result? Metrics, feedback, or what you learned.]</p>
+        </div>
+        <h4 class="panel-subhead">Process</h4>
+        <div class="panel-gallery panel-gallery--grid panel-gallery--quad" data-autoplay-group>
+          <figure class="panel-clip">
+            <div class="panel-video panel-video--loop">
+              <video src="assets/videos/web/rough-draft.mp4" poster="assets/images/web/rough-draft-poster.webp"
+                width="576" height="576" muted loop playsinline preload="none" data-autoplay
+                aria-label="Rough draft: loose sketchy pencil lines of Doraemon dancing, then tumbling backwards."></video>
+            </div>
+            <figcaption>Rough draft</figcaption>
+          </figure>
+          <figure class="panel-clip">
+            <div class="panel-video panel-video--loop">
+              <video src="assets/videos/web/basic-pencil.mp4" poster="assets/images/web/basic-pencil-poster.webp"
+                width="576" height="576" muted loop playsinline preload="none" data-autoplay
+                aria-label="Basic pencil: lighter, simpler outlines of Doraemon dancing and sitting dizzy beside a mouse."></video>
+            </div>
+            <figcaption>Basic pencil</figcaption>
+          </figure>
+          <figure class="panel-clip">
+            <div class="panel-video panel-video--loop">
+              <video src="assets/videos/web/doraemon.mp4" poster="assets/images/web/doraemon-poster.webp"
+                width="576" height="576" muted loop playsinline preload="none" data-autoplay
+                aria-label="Clean line art of Doraemon dancing and sitting dizzy beside a mouse, before colouring."></video>
+            </div>
+            <figcaption>Line art</figcaption>
+          </figure>
+          <figure class="panel-clip">
+            <div class="panel-video panel-video--loop">
+              <video src="assets/videos/web/doraemon-final.mp4" poster="assets/images/web/doraemon-final-poster.webp"
+                width="576" height="576" muted loop playsinline preload="none" data-autoplay
+                aria-label="Final coloured animation of Doraemon dancing, then sitting dizzy with spiral eyes beside a mouse."></video>
+            </div>
+            <figcaption>Final</figcaption>
+          </figure>
         </div>
       </article>
 
@@ -637,6 +679,46 @@
     lightbox.addEventListener('click', (e) => {
       if (e.target === lightbox) closeLightbox();
     });
+
+    /* =========================================================
+       Looping clips (data-autoplay) — they play only while on screen,
+       so phones don't download or decode them out of sight
+       ========================================================= */
+    const loopVideos = document.querySelectorAll('video[data-autoplay]');
+    if (prefersReducedMotion) {
+      // No motion by default: project clips get play controls, the card keeps its still poster
+      loopVideos.forEach(v => { if (v.closest('.panel')) v.controls = true; });
+    } else if ('IntersectionObserver' in window) {
+      // Clips inside a [data-autoplay-group] (the process stages) are one unit:
+      // they start together from the first frame and stay in step on every loop
+      const groupClips = (group) => Array.from(group.querySelectorAll('video[data-autoplay]'));
+
+      async function playGroup(group) {
+        const clips = groupClips(group);
+        // wait until every clip can actually play, so a slow download doesn't fall behind
+        await Promise.all(clips.map(v => v.play().catch(() => {})));
+        clips.forEach(v => { v.currentTime = 0; });
+      }
+
+      const loopObserver = new IntersectionObserver(entries => entries.forEach(e => {
+        const clips = e.target.matches('[data-autoplay-group]') ? groupClips(e.target) : [e.target];
+        if (!e.isIntersecting) clips.forEach(v => v.pause());
+        else if (clips.length > 1) playGroup(e.target);
+        else clips[0].play().catch(() => {});
+      }), { rootMargin: '100px' });
+
+      loopVideos.forEach(v => { if (!v.closest('[data-autoplay-group]')) loopObserver.observe(v); });
+      document.querySelectorAll('[data-autoplay-group]').forEach(group => {
+        loopObserver.observe(group);
+        // the clips are the same length, so when the first one wraps round, line the others up with it
+        const [lead, ...rest] = groupClips(group);
+        let last = 0;
+        lead.addEventListener('timeupdate', () => {
+          if (lead.currentTime < last) rest.forEach(v => { v.currentTime = lead.currentTime; });
+          last = lead.currentTime;
+        });
+      });
+    }
 
     // ---- Animation #6: custom cursor dot ----
     const cursorDot = document.getElementById('cursorDot');

@@ -287,11 +287,13 @@ a:hover {
 }
 
 /* A frame that contains an image takes that image's exact shape — no cropping */
-.gallery-item-media:has(img) {
+.gallery-item-media:has(img),
+.gallery-item-media:has(video) {
     aspect-ratio: auto;
 }
 
-.gallery-item-media img {
+.gallery-item-media img,
+.gallery-item-media video {
     width: 100%;
     height: auto;
     display: block;
@@ -916,6 +918,23 @@ body.view-locked {
     aspect-ratio: 16 / 9;
 }
 
+/* Short looping animations (no controls): square, light background like the clips */
+.panel-video--loop video {
+    aspect-ratio: 1;
+}
+
+/* A clip with its name underneath */
+.panel-clip {
+    margin: 0;
+    min-width: 0;
+}
+
+.panel-clip figcaption {
+    margin-top: 0.4rem;
+    font-size: 0.8rem;
+    color: var(--ink-soft);
+}
+
 /* Panels with more than one image: the images stack in the left column and
    each box takes the shape of its own image (nothing is cropped), so portrait,
    landscape and square images all fit. Give each <img> its real width and
@@ -960,6 +979,11 @@ body.view-locked {
 .panel-gallery--grid .panel-image {
     aspect-ratio: 4 / 3;
     object-fit: cover;
+}
+
+/* Four in a row (e.g. the stages of an animation); two on phones, from the rule below */
+.panel-gallery--quad {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
 }
 
 @media (max-width: 600px) {
