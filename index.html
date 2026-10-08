@@ -526,6 +526,13 @@
       // A newly opened project always starts at its top
       projectContent.scrollTop = 0;
 
+      // On phones the tab bar scrolls sideways — bring the current project's tab into view
+      const tab = pvTabs.find(t => t.dataset.index === String(index));
+      if (tab) tab.parentElement.scrollTo({
+        left: tab.offsetLeft - (tab.parentElement.clientWidth - tab.offsetWidth) / 2,
+        behavior: prefersReducedMotion ? 'auto' : 'smooth'
+      });
+
       // The buttons at the bottom name the projects on either side of this one
       const pos = pvTabs.findIndex(t => t.dataset.index === String(index));
       const label = (t) => t.textContent.replace(/\s+/g, ' ').trim();
@@ -645,6 +652,46 @@
     projectPrev.addEventListener('click', () => goToProject(-1, false));
     projectNext.addEventListener('click', () => goToProject(1, false));
 
+    /* =========================================================
+       Swipe gestures (touch screens)
+       ========================================================= */
+    // Calls onSwipe(+1) for a swipe left (next) or onSwipe(-1) for a swipe right (previous).
+    // Only quick, clearly sideways, one-finger swipes count, so scrolling up and down,
+    // pinch-zoom and panning a zoomed-in page are unaffected.
+    function addSwipe(el, onSwipe) {
+      let start = null;
+      el.addEventListener('touchstart', (e) => {
+        const zoomedIn = window.visualViewport && window.visualViewport.scale > 1.05;
+        // not on a video player either, where dragging scrubs the video
+        start = (e.touches.length === 1 && !zoomedIn && !e.target.closest('video[controls]'))
+          ? { x: e.touches[0].clientX, y: e.touches[0].clientY, t: Date.now() }
+          : null;
+      }, { passive: true });
+      el.addEventListener('touchend', (e) => {
+        if (!start) return;
+        const dx = e.changedTouches[0].clientX - start.x;
+        const dy = e.changedTouches[0].clientY - start.y;
+        const quick = Date.now() - start.t < 600;
+        start = null;
+        if (quick && Math.abs(dx) > 60 && Math.abs(dx) > Math.abs(dy) * 1.5) onSwipe(dx < 0 ? 1 : -1);
+      }, { passive: true });
+    }
+
+    // Slides an element in from the right (+1, going forward) or the left (-1, going back)
+    function slideIn(el, direction) {
+      if (!el || prefersReducedMotion) return;
+      el.classList.remove('swipe-in-left', 'swipe-in-right');
+      void el.offsetWidth; // restart the animation if the same class is reapplied
+      el.classList.add(direction > 0 ? 'swipe-in-right' : 'swipe-in-left');
+      el.addEventListener('animationend', () => el.classList.remove('swipe-in-left', 'swipe-in-right'), { once: true });
+    }
+
+    // Swipe in the project view moves to the next / previous project
+    addSwipe(projectContent, (offset) => {
+      goToProject(offset, false);
+      slideIn(panels.find(p => !p.hidden), offset);
+    });
+
     document.getElementById('year').textContent = new Date().getFullYear();
 
     /* =========================================================
@@ -668,8 +715,8 @@
 
       // Left / right arrow keys move between the project's images
       if (lightboxGroup.length > 1) {
-        if (e.key === 'ArrowRight') { e.preventDefault(); showLightboxImage(lightboxIndex + 1); }
-        if (e.key === 'ArrowLeft') { e.preventDefault(); showLightboxImage(lightboxIndex - 1); }
+        if (e.key === 'ArrowRight') { e.preventDefault(); stepLightbox(1); }
+        if (e.key === 'ArrowLeft') { e.preventDefault(); stepLightbox(-1); }
       }
 
       // Keep Tab inside the lightbox while it is open
@@ -698,6 +745,13 @@
       lightboxImage.alt = imgEl.alt || trigger.getAttribute('aria-label') || '';
       lightboxCount.textContent = (lightboxIndex + 1) + ' / ' + count;
       lightboxLastTrigger = trigger; // focus returns to the image you were last looking at
+    }
+
+    // Next (+1) or previous (-1) image, sliding in from that side once it's ready to show
+    function stepLightbox(direction) {
+      if (lightboxGroup.length < 2) return;
+      showLightboxImage(lightboxIndex + direction);
+      lightboxImage.decode().catch(() => {}).then(() => slideIn(lightboxImage, direction));
     }
 
     function openLightbox(group, index) {
@@ -743,8 +797,9 @@
       });
     });
 
-    lightboxPrev.addEventListener('click', () => showLightboxImage(lightboxIndex - 1));
-    lightboxNext.addEventListener('click', () => showLightboxImage(lightboxIndex + 1));
+    lightboxPrev.addEventListener('click', () => stepLightbox(-1));
+    lightboxNext.addEventListener('click', () => stepLightbox(1));
+    addSwipe(lightbox, stepLightbox);
     lightboxClose.addEventListener('click', closeLightbox);
 
     // Clicking the dark backdrop (not the image itself) also closes it.

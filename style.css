@@ -840,6 +840,32 @@ body.view-locked {
     display: none;
 }
 
+/* After a swipe the next project (replacing the settle above) or enlarged image
+   slides in from the side */
+.panel.swipe-in-right,
+.lightbox-image.swipe-in-right {
+    animation: swipe-in-right 0.3s ease-out;
+}
+
+.panel.swipe-in-left,
+.lightbox-image.swipe-in-left {
+    animation: swipe-in-left 0.3s ease-out;
+}
+
+@keyframes swipe-in-right {
+    from {
+        opacity: 0;
+        transform: translateX(40px);
+    }
+}
+
+@keyframes swipe-in-left {
+    from {
+        opacity: 0;
+        transform: translateX(-40px);
+    }
+}
+
 @keyframes settle {
     0% {
         opacity: 0;
