@@ -178,14 +178,17 @@ a:hover {
     text-decoration: none;
 }
 
-/* Logo image (assets/images/wordmark.png); width follows its own shape */
+/* Animated logo (assets/images/web/logo-animated.webp, still version for reduced
+   motion). Its square frame leaves room for the wide mushroom frames, so it's set
+   larger than the drawing itself looks. */
 .wordmark img {
     display: block;
-    height: 110px;
+    height: 180px;
     width: auto;
 }
 
-/* Narrow screens: the sidebar becomes a top bar, so a shorter logo */
+/* Narrow screens: the sidebar becomes a top bar, so a shorter logo — a still of
+   the wordmark (logo-mobile.webp), cropped tight since there's no animation */
 @media (max-width: 860px) {
     .wordmark img {
         height: 64px;
