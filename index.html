@@ -35,8 +35,8 @@
 
   <!-- ============ INTRO ============ -->
   <!-- Two full-screen cards over the site: the logo animation (plays once), then,
-       on their own once it finishes, the introduction. "See my work", "Skip intro"
-       or Esc slides the intro up and away to reveal the site, and it's removed. -->
+       on their own once it finishes, the introduction. "See my work" or Esc
+       slides the intro up and away to reveal the site, and it's removed. -->
   <div class="intro" id="intro" role="region" aria-label="Introduction" tabindex="-1">
     <section class="intro-card intro-card--logo" id="introLogoCard">
       <picture>
@@ -63,7 +63,6 @@
         </div>
       </div>
     </section>
-    <button class="intro-skip" id="introSkip" type="button">Skip intro</button>
   </div>
 
   <!-- Custom cursor dot (animation #6) — purely decorative, hidden on touch devices -->
@@ -1420,7 +1419,6 @@
       document.addEventListener('keydown', introKeydown);
 
       document.getElementById('introEnter').addEventListener('click', leaveIntro);
-      document.getElementById('introSkip').addEventListener('click', leaveIntro);
     } else {
       if (intro) intro.remove();
       startGalleryReveal();

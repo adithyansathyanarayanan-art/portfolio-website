@@ -1,12 +1,13 @@
 :root {
-    /* Warm palette: dark browns, a red primary accent and a green secondary one */
+    /* Warm palette: dark browns, a red primary accent and a yellow secondary one */
     --paper: #17110D;       /* page background: very dark brown */
     --panel-bg: #211913;    /* panels and the project view: a step lighter */
     --ink: #F3ECE2;         /* main text: warm off-white */
-    --ink-soft: #A5A982;    /* secondary text: earthy sage green */
+    --ink-soft: #F2D35B;    /* secondary text: saturated light yellow */
+    --ink-body: #E3D6A8;    /* paragraph text (project write-ups, About): softer, less saturated yellow */
     --accent: #EF2D14;      /* primary accent: saturated red (current page, markers) */
-    --accent-2: #6DB552;    /* secondary accent: leaf green (glows, selection) */
-    --accent-2-vivid: #5FE04A; /* a bright, saturated green: the Instagram card's hover outline */
+    --accent-2: #FFBE0B;    /* secondary accent: saturated golden yellow (glows, selection) */
+    --accent-2-vivid: #FFD60A; /* a bright, saturated yellow: the Instagram card's hover outline */
     --accent-deep: #FF5A40; /* hover and focus outlines: lighter saturated red */
     --line: #3A2C22;        /* lines and outlines: brown */
     --black: #000000;
@@ -26,7 +27,7 @@
 /* Animation #1 — custom text selection color */
 ::selection {
     background: var(--accent-2);
-    color: var(--paper); /* dark text reads better on the green */
+    color: var(--paper); /* dark text reads better on the yellow */
 }
 
 html {
@@ -70,7 +71,7 @@ h4 {
 
 p {
     margin: 0 0 1em;
-    color: var(--ink-soft);
+    color: var(--ink-body);
     max-width: 62ch;
 }
 
@@ -751,7 +752,7 @@ a:hover {
     border-radius: 24px;
 }
 
-/* Its outline turns green on hover (unlike the red hover elsewhere) */
+/* Its outline turns yellow on hover (unlike the red hover elsewhere) */
 .contact-social--primary:hover,
 .contact-social.contact-social--primary:hover .contact-icon--avatar {
     border-color: var(--accent-2-vivid);
@@ -1775,7 +1776,7 @@ video[data-autoplay]::-webkit-media-controls {
     gap: 0.4rem 1rem;
     margin-bottom: 1rem;
     font-size: 0.85rem;
-    color: var(--ink-soft);
+    color: var(--ink-body);
 }
 
 .panel-body h3 {
@@ -2250,24 +2251,3 @@ video.lightbox-image {
     color: var(--accent-deep);
 }
 
-/* Small, out-of-the-way way out, in the corner of the intro */
-.intro-skip {
-    position: absolute;
-    top: 1.25rem;
-    right: 1.25rem;
-    z-index: 1;
-    appearance: none;
-    padding: 0.45rem 0.8rem;
-    background: rgba(23, 17, 13, 0.6);
-    border: 1px solid var(--line);
-    border-radius: var(--radius);
-    color: var(--ink-soft);
-    font: 0.8rem var(--font-body);
-    cursor: pointer;
-}
-
-.intro-skip:hover,
-.intro-skip:focus-visible {
-    color: var(--ink);
-    border-color: var(--accent-deep);
-}
