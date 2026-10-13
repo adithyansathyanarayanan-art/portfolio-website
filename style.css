@@ -8,6 +8,7 @@
     --accent: #EF2D14;      /* primary accent: saturated red (current page, markers) */
     --accent-2: #FFBE0B;    /* secondary accent: saturated golden yellow (glows, selection) */
     --accent-2-vivid: #FFD60A; /* a bright, saturated yellow: the Instagram card's hover outline */
+    --green-hint: #9EC27A;  /* hints of green: sidebar links, small labels, copyright */
     --accent-deep: #FF5A40; /* hover and focus outlines: lighter saturated red */
     --line: #3A2C22;        /* lines and outlines: brown */
     --black: #000000;
@@ -206,7 +207,7 @@ a:hover {
 }
 
 .site-nav a {
-    color: var(--ink-soft);
+    color: var(--green-hint);
     text-decoration: none;
     font-size: 0.95rem;
 }
@@ -217,7 +218,7 @@ a:hover {
 
 /* Marks the page you're currently on */
 .site-nav a[aria-current="page"] {
-    color: var(--ink);
+    color: var(--green-hint);
     text-decoration: underline;
     text-decoration-color: var(--accent);
     text-decoration-thickness: 2px;
@@ -844,7 +845,7 @@ a:hover {
     font-weight: 500;
     letter-spacing: 0.08em;
     text-transform: uppercase;
-    color: var(--ink-soft);
+    color: var(--green-hint);
 }
 
 .contact-list {
@@ -864,7 +865,7 @@ a:hover {
 
 .contact-row dt {
     font-size: 0.9rem;
-    color: var(--ink-soft);
+    color: var(--green-hint);
 }
 
 .contact-row dd {
@@ -1285,14 +1286,14 @@ html:has(#lightbox:not([hidden])) {
 
 .project-side--prev::before {
     background: linear-gradient(to right,
-            color-mix(in srgb, var(--accent-2) 22%, var(--paper)) 0%,
+            color-mix(in srgb, var(--green-hint) 22%, var(--paper)) 0%,
             transparent 100%);
     transform: translateX(-100%);
 }
 
 .project-side--next::before {
     background: linear-gradient(to left,
-            color-mix(in srgb, var(--accent-2) 22%, var(--paper)) 0%,
+            color-mix(in srgb, var(--green-hint) 22%, var(--paper)) 0%,
             transparent 100%);
     transform: translateX(100%);
 }
@@ -1933,14 +1934,14 @@ video.lightbox-image {
 
 .lightbox-prev::before {
     background: linear-gradient(to right,
-            color-mix(in srgb, var(--accent-2) 22%, var(--paper)) 0%,
+            color-mix(in srgb, var(--green-hint) 22%, var(--paper)) 0%,
             transparent 100%);
     transform: translateX(-100%);
 }
 
 .lightbox-next::before {
     background: linear-gradient(to left,
-            color-mix(in srgb, var(--accent-2) 22%, var(--paper)) 0%,
+            color-mix(in srgb, var(--green-hint) 22%, var(--paper)) 0%,
             transparent 100%);
     transform: translateX(100%);
 }
@@ -2020,7 +2021,7 @@ video.lightbox-image {
 .footer-note {
     margin: 0;
     font-size: 0.85rem;
-    color: var(--ink-soft);
+    color: var(--green-hint);
 }
 
 /* =========================================================
