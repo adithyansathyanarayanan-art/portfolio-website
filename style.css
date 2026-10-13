@@ -1434,12 +1434,8 @@ html:has(#lightbox:not([hidden])) {
         touch-action: none;
         user-select: none;
         -webkit-user-select: none;
-        transition: transform 0.2s ease;
-    }
-
-    /* While scrubbing, the strip grows a little under the finger */
-    .project-dots.is-scrubbing {
-        transform: translateX(-50%) scale(1.12);
+        /* (no growing or animated dots while scrubbing: with the blurred
+           background, Safari leaves smeared copies of the dots behind) */
     }
 
     .project-dots-row {
@@ -1467,7 +1463,6 @@ html:has(#lightbox:not([hidden])) {
         border-radius: 4px;
         background: var(--ink-soft);
         opacity: 0.45;
-        transition: width 0.2s ease, background-color 0.2s ease, opacity 0.2s ease;
     }
 
     .project-dot.is-current::before {
