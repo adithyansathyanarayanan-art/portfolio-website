@@ -2,7 +2,7 @@
     /* Warm palette: dark browns, a red primary accent and a yellow secondary one */
     --paper: #17110D;       /* page background: very dark brown */
     --panel-bg: #211913;    /* panels and the project view: a step lighter */
-    --ink: #F3ECE2;         /* main text: warm off-white */
+    --ink: #F2E6C2;         /* main text: pale, soft yellow (lighter than the paragraph yellow) */
     --ink-soft: #F2D35B;    /* secondary text: saturated light yellow */
     --ink-body: #E3D6A8;    /* paragraph text (project write-ups, About): softer, less saturated yellow */
     --accent: #EF2D14;      /* primary accent: saturated red (current page, markers) */
