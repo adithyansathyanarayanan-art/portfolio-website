@@ -25,8 +25,13 @@
 
     <!-- Sidebar navigation (same as the landing page) -->
     <aside class="sidebar">
-      <a class="wordmark" href="index.html" aria-label="Adithyan S. — home"><picture><source srcset="assets/images/web/logo-mobile.webp" media="(max-width: 860px)" width="219" height="240"><source srcset="assets/images/web/logo-still.webp" media="(prefers-reduced-motion: reduce)"><img src="assets/images/web/logo-animated.webp" alt="" width="240" height="240"></picture></a>
-      <nav class="site-nav" aria-label="Primary">
+      <a class="wordmark" href="index.html#intro" aria-label="Adithyan S. — play the intro"><picture><source srcset="assets/images/web/logo-mobile.webp" media="(max-width: 860px)" width="219" height="240"><source srcset="assets/images/web/logo-still.webp" media="(prefers-reduced-motion: reduce)"><img src="assets/images/web/logo-animated.webp" alt="" width="240" height="240"></picture></a>
+      <!-- Phones: the links fold into a full-screen menu behind this button (menu.js) -->
+      <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="siteNav">
+        <span class="menu-toggle-label sr-only">Menu</span>
+        <span class="menu-toggle-icon" aria-hidden="true"></span>
+      </button>
+      <nav class="site-nav" id="siteNav" aria-label="Primary">
         <a href="index.html">Work</a>
         <a href="about.html" aria-current="page">About</a>
         <a href="contact.html">Contact</a>
@@ -54,14 +59,12 @@
 
           <div class="about-contact" id="contact">
             <h2>Say hello</h2>
-            <p>Find me at
-              <a href="mailto:adithyansathyanarayanan@gmail.com">adithyansathyanarayanan@gmail.com</a> or on
-              <a href="https://www.linkedin.com/in/adithyan-sathyanarayanan-072b5b22b" rel="noopener noreferrer"
-                target="_blank">LinkedIn</a>,
-              <a href="https://www.behance.net/adithyasathyan" rel="noopener noreferrer" target="_blank">Behance</a>,
-              and
+            <p>Find me on
               <a href="https://www.instagram.com/artus_mushroomus/" rel="noopener noreferrer"
-                target="_blank">Instagram</a>.
+                target="_blank">Instagram</a>,
+              <a href="https://www.linkedin.com/in/adithyan-sathyanarayanan-072b5b22b" rel="noopener noreferrer"
+                target="_blank">LinkedIn</a>, and
+              <a href="https://www.behance.net/adithyasathyan" rel="noopener noreferrer" target="_blank">Behance</a>.
             </p>
           </div>
         </div>
@@ -92,6 +95,8 @@
       });
     }
   </script>
+
+  <script src="menu.js" defer></script>
 
 </body>
 

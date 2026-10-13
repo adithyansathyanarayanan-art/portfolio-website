@@ -1,11 +1,14 @@
 :root {
-    --paper: #0D1613;
-    --panel-bg: #16211E;
-    --ink: #F3F1EB;
-    --ink-soft: #9FBAB8;
-    --accent: #DF301C;
-    --accent-deep: #00B7CD;
-    --line: #23332F;
+    /* Warm palette: dark browns, a red primary accent and a green secondary one */
+    --paper: #17110D;       /* page background: very dark brown */
+    --panel-bg: #211913;    /* panels and the project view: a step lighter */
+    --ink: #F3ECE2;         /* main text: warm off-white */
+    --ink-soft: #A5A982;    /* secondary text: earthy sage green */
+    --accent: #EF2D14;      /* primary accent: saturated red (current page, markers) */
+    --accent-2: #6DB552;    /* secondary accent: leaf green (glows, selection) */
+    --accent-2-vivid: #5FE04A; /* a bright, saturated green: the Instagram card's hover outline */
+    --accent-deep: #FF5A40; /* hover and focus outlines: lighter saturated red */
+    --line: #3A2C22;        /* lines and outlines: brown */
     --black: #000000;
 
     --font-display: "Newsreader", Georgia, serif;
@@ -22,8 +25,8 @@
 
 /* Animation #1 — custom text selection color */
 ::selection {
-    background: var(--accent);
-    color: var(--ink);
+    background: var(--accent-2);
+    color: var(--paper); /* dark text reads better on the green */
 }
 
 html {
@@ -124,7 +127,7 @@ a:hover {
 .cursor-dot.hovering {
     width: 28px;
     height: 28px;
-    background: var(--accent-deep);
+    background: var(--accent-2);
 }
 
 @media (hover: none) {
@@ -191,7 +194,7 @@ a:hover {
    the wordmark (logo-mobile.webp), cropped tight since there's no animation */
 @media (max-width: 860px) {
     .wordmark img {
-        height: 64px;
+        height: 88px;
     }
 }
 
@@ -220,6 +223,200 @@ a:hover {
     text-underline-offset: 6px;
 }
 
+/* Desktop sidebar: logo, links and copyright centred down the middle, with
+   larger links. (Phones keep the top-bar layout from the Responsive section.) */
+@media (min-width: 861px) {
+    .sidebar {
+        align-items: center;
+    }
+
+    /* Each link is a rectangle running the full width of the sidebar, edge to
+       edge (out through the sidebar's side padding), with its word centred, so
+       the whole bar is clickable */
+    .site-nav {
+        align-self: stretch;
+        align-items: stretch;
+        gap: 0.5rem;
+        margin-inline: -1.5rem; /* = the sidebar's side padding */
+    }
+
+    .site-nav a {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 52px;
+        padding: 0.5rem 1rem;
+        font-size: 1.25rem;
+        transition: color 0.15s ease;
+    }
+
+    /* Hover: a light underline under the word (the current page keeps its red one) */
+    .site-nav a:hover:not([aria-current="page"]),
+    .site-nav a:focus-visible:not([aria-current="page"]) {
+        text-decoration: underline;
+        text-decoration-color: color-mix(in srgb, var(--ink) 35%, transparent);
+        text-decoration-thickness: 1px;
+        text-underline-offset: 6px;
+    }
+
+    .site-footer .footer-note {
+        font-size: 0.95rem;
+        text-align: center;
+    }
+}
+
+/* Moving between pages (Work / About / Contact) crossfades instead of cutting
+   straight over, in browsers that support it; others just change page as before */
+@media (prefers-reduced-motion: no-preference) {
+    @view-transition {
+        navigation: auto;
+    }
+}
+
+/* Phone menu (menu.js adds .has-menu to the sidebar; .menu-open while it's open).
+   Desktop never shows the button. */
+.menu-toggle {
+    display: none;
+}
+
+@media (max-width: 860px) {
+
+    /* Top bar: logo on the left, Menu button on the right — even on the
+       narrowest phones, which otherwise stack the logo above the links */
+    .sidebar.has-menu {
+        position: relative;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    /* Icon-only square button (its "Menu" / "Close" label is for screen readers) */
+    .has-menu .menu-toggle {
+        appearance: none;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 48px;
+        height: 48px;
+        padding: 0;
+        background: none;
+        border: 1px solid var(--line);
+        border-radius: var(--radius);
+        color: var(--ink);
+        font: 500 1rem var(--font-body);
+        cursor: pointer;
+    }
+
+    .has-menu .menu-toggle:focus-visible {
+        border-color: var(--accent-deep);
+    }
+
+    /* Three lines that turn into an × when open */
+    .menu-toggle-icon,
+    .menu-toggle-icon::before,
+    .menu-toggle-icon::after {
+        display: block;
+        width: 20px;
+        height: 2px;
+        background: currentColor;
+        border-radius: 1px;
+        transition: transform 0.25s ease, background-color 0.25s ease;
+    }
+
+    .menu-toggle-icon {
+        position: relative;
+    }
+
+    .menu-toggle-icon::before,
+    .menu-toggle-icon::after {
+        content: "";
+        position: absolute;
+        left: 0;
+    }
+
+    .menu-toggle-icon::before {
+        top: -6px;
+    }
+
+    .menu-toggle-icon::after {
+        top: 6px;
+    }
+
+    .menu-open .menu-toggle-icon {
+        background-color: transparent;
+    }
+
+    .menu-open .menu-toggle-icon::before {
+        transform: translateY(6px) rotate(45deg);
+    }
+
+    .menu-open .menu-toggle-icon::after {
+        transform: translateY(-6px) rotate(-45deg);
+    }
+
+    /* While open, the top bar sits above the rest of the page (but below the intro),
+       and the page behind doesn't scroll */
+    .sidebar.menu-open {
+        z-index: 650;
+    }
+
+    .menu-is-open body {
+        overflow: hidden;
+    }
+
+    /* The close button stays on top of the overlay, pinned to the screen's
+       top-right corner (exactly where it sits in the top bar), so it can be
+       reached even after scrolling down the page */
+    .has-menu .menu-toggle {
+        position: relative;
+        z-index: 1;
+    }
+
+    .menu-open .menu-toggle {
+        position: fixed;
+        /* top bar padding + centred against the 88px logo */
+        top: calc(1.5rem + (88px - 48px) / 2);
+        right: 1.5rem;
+    }
+
+    /* The overlay: covers the whole screen, links in the very middle */
+    .has-menu .site-nav {
+        position: fixed;
+        inset: 0;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+        padding: 6rem 1.5rem;
+        background: var(--paper);
+        /* closed: hidden, and out of the tab order */
+        visibility: hidden;
+        opacity: 0;
+        transition: opacity 0.25s ease, visibility 0s linear 0.25s;
+    }
+
+    .menu-open .site-nav {
+        visibility: visible;
+        opacity: 1;
+        transition: opacity 0.25s ease, visibility 0s;
+    }
+
+    /* Big, easy-to-tap links that rise in slightly as it opens */
+    .has-menu .site-nav a {
+        display: block;
+        padding: 0.6rem 1.5rem;
+        text-align: center;
+        font-family: var(--font-body);
+        font-size: 2rem;
+        transform: translateY(12px);
+        transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1), color 0.15s ease;
+    }
+
+    .menu-open .site-nav a {
+        transform: none;
+    }
+}
+
 /* Everything that isn't the sidebar sits to its right */
 .main-content {
     margin-left: var(--sidebar-width);
@@ -228,16 +425,31 @@ a:hover {
 /* =========================================================
    Work gallery
    ========================================================= */
+/* The grid keeps its cards big at every window size: columns are at least
+   ~340px wide when there's room (so a narrower window drops to fewer, still-big
+   columns instead of squeezing three small ones), never fewer than two, and the
+   whole grid can spread up to 1320px (three ~410px columns on a big screen). */
 .gallery {
-    max-width: var(--max-width);
+    max-width: 1320px;
     margin: 0 auto;
     padding: 2.5rem 1.5rem 4rem;
     display: grid;
-    /* As many columns as fit (each at least 260px wide), Pinterest style */
-    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(min(340px, calc((100% - 1.25rem) / 2)), 1fr));
     gap: 1.25rem;
     /* Frames keep their own height instead of stretching to match the tallest one in the row */
     align-items: start;
+}
+
+/* Mid-size windows (861–1100px), where the sidebar takes the biggest share of
+   the width: a slimmer sidebar and logo, so the grid has room to stay big */
+@media (min-width: 861px) and (max-width: 1100px) {
+    :root {
+        --sidebar-width: 200px;
+    }
+
+    .wordmark img {
+        height: 150px;
+    }
 }
 
 /* Masonry mode (switched on by the script in index.html): the grid gets 1px
@@ -274,6 +486,24 @@ a:hover {
 
 .gallery-item:hover {
     transform: translateY(-2px);
+}
+
+/* Slide-in (index.html script): cards wait hidden, then slide up into place.
+   The animation only fills *before* it plays, so once it's done the card's
+   normal styles (and its hover lift) take over again. */
+.gallery.reveal-ready .gallery-item:not(.is-revealed) {
+    opacity: 0;
+}
+
+.gallery-item.is-revealed {
+    animation: card-slide-in 0.7s cubic-bezier(0.22, 1, 0.36, 1) backwards;
+}
+
+@keyframes card-slide-in {
+    from {
+        opacity: 0;
+        transform: translateY(48px);
+    }
 }
 
 .gallery-item-media {
@@ -315,9 +545,10 @@ a:hover {
     height: 56px;
     transform: translate(-50%, -50%);
     border-radius: 50%;
-    background: rgba(13, 22, 19, 0.7);
+    background: rgba(23, 17, 13, 0.7);
     border: 2px solid var(--ink);
     transition: background-color 0.2s ease, border-color 0.2s ease;
+    z-index: 2; /* above the dark name overlay that appears on hover */
 }
 
 /* The triangle inside the badge */
@@ -352,6 +583,7 @@ a:hover {
     opacity: 0;
     transition: opacity 0.25s ease;
     pointer-events: none;
+    z-index: 1;
 }
 
 .gallery-item:hover .gallery-item-caption,
@@ -431,6 +663,40 @@ a:hover {
             var(--line) 11px);
 }
 
+/* A small entrance on arriving at the About and Contact pages: each part fades in
+   while rising slightly, one just after another. ("backwards" only holds the
+   starting state during each delay; afterwards the parts' own styles apply.) */
+@media (prefers-reduced-motion: no-preference) {
+
+    /* About: the photo, then the text */
+    .about-photo,
+    .about-body,
+    /* Contact: the Instagram card, the Behance / LinkedIn buttons, then the
+       "Direct" heading and its rows */
+    .contact-social--primary,
+    .contact-icon-link,
+    .contact-group-title,
+    .contact-row {
+        animation: page-enter 0.6s cubic-bezier(0.22, 1, 0.36, 1) backwards;
+    }
+
+    .about-body { animation-delay: 0.08s; }
+
+    .contact-icon-link:nth-child(1) { animation-delay: 0.08s; }
+    .contact-icon-link:nth-child(2) { animation-delay: 0.14s; }
+    .contact-group-title { animation-delay: 0.2s; }
+    .contact-row:nth-child(1) { animation-delay: 0.26s; }
+    .contact-row:nth-child(2) { animation-delay: 0.32s; }
+    .contact-row:nth-child(3) { animation-delay: 0.38s; }
+}
+
+@keyframes page-enter {
+    from {
+        opacity: 0;
+        transform: translateY(14px);
+    }
+}
+
 .about-contact {
     margin-top: 2.5rem;
     padding-top: 2rem;
@@ -485,22 +751,28 @@ a:hover {
     border-radius: 24px;
 }
 
+/* Its outline turns green on hover (unlike the red hover elsewhere) */
+.contact-social--primary:hover,
+.contact-social.contact-social--primary:hover .contact-icon--avatar {
+    border-color: var(--accent-2-vivid);
+}
+
 .contact-icon-links {
     grid-column: 3;
     justify-self: start;
     display: flex;
     flex-direction: column;
-    gap: 0.75rem;
+    gap: 1rem;
 }
 
 .contact-icon-link {
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 60px;
-    height: 60px;
+    width: 100px;
+    height: 100px;
     border: 1px solid var(--line);
-    border-radius: 16px;
+    border-radius: 24px;
     transition: border-color 0.2s ease, background-color 0.2s ease;
 }
 
@@ -512,8 +784,8 @@ a:hover {
 
 .contact-icon-link img {
     display: block;
-    width: 30px;
-    height: 30px;
+    width: 50px;
+    height: 50px;
 }
 
 .contact-icon {
@@ -664,6 +936,18 @@ body.view-locked {
     overflow: hidden;
 }
 
+/* The page keeps room for its scrollbar (scrollbar-gutter on html). While a
+   full-screen view is open the page can't scroll, so that room sits empty down
+   the right edge — colour it to match the view, so no strip shows. */
+html:has(body.view-locked) {
+    background: var(--panel-bg);
+}
+
+/* ...and the darker enlarged-image view over it (its 92% --paper scrim over --panel-bg) */
+html:has(#lightbox:not([hidden])) {
+    background: rgb(24, 18, 13);
+}
+
 .project-view-bar {
     display: flex;
     align-items: stretch;
@@ -679,6 +963,187 @@ body.view-locked {
     overflow-y: hidden;
     scrollbar-width: none;
     -ms-overflow-style: none;
+}
+
+/* The row of project tabs is replaced by the title dropdown below (desktop) and
+   the dots (phones); the tabs stay in the page, hidden, as the projects' labels */
+.project-view .project-view-tabs {
+    display: none;
+}
+
+.project-view-bar {
+    min-height: 52px;
+}
+
+/* Title dropdown: the current project's name with a ▾, opening a list of all
+   the projects */
+.project-picker {
+    position: relative;
+    flex: 1;
+    display: flex;
+    align-items: stretch;
+    min-width: 0;
+}
+
+.project-picker-toggle {
+    appearance: none;
+    display: flex;
+    align-items: center;
+    gap: 0.55rem;
+    padding: 0 1.5rem;
+    background: none;
+    border: none;
+    color: var(--ink);
+    font: 500 0.95rem var(--font-body);
+    cursor: pointer;
+    transition: color 0.15s ease;
+}
+
+.project-picker-toggle:hover,
+.project-picker-toggle:focus-visible {
+    color: var(--accent-deep);
+}
+
+.project-picker-caret {
+    font-size: 0.75rem;
+    transition: transform 0.2s ease;
+}
+
+.project-picker-toggle[aria-expanded="true"] .project-picker-caret {
+    transform: rotate(180deg);
+}
+
+.project-picker-list {
+    position: absolute;
+    top: calc(100% + 6px);
+    left: 1rem;
+    z-index: 5;
+    min-width: 16rem;
+    margin: 0;
+    padding: 0.4rem;
+    list-style: none;
+    background: var(--panel-bg);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    box-shadow: 0 18px 40px rgba(0, 0, 0, 0.45);
+    /* closed: hidden, and out of the tab order */
+    visibility: hidden;
+    opacity: 0;
+    transform: translateY(-6px);
+    transition: opacity 0.18s ease, transform 0.18s ease, visibility 0s linear 0.18s;
+}
+
+.project-picker-list.is-open {
+    visibility: visible;
+    opacity: 1;
+    transform: none;
+    transition: opacity 0.18s ease, transform 0.18s ease, visibility 0s;
+}
+
+.project-picker-item {
+    appearance: none;
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+    width: 100%;
+    padding: 0.6rem 0.8rem;
+    background: none;
+    border: none;
+    border-radius: 5px;
+    color: var(--ink-soft);
+    font: 0.95rem var(--font-body);
+    text-align: left;
+    white-space: nowrap;
+    cursor: pointer;
+}
+
+/* a small dot marks the project you're on */
+.project-picker-item::before {
+    content: "";
+    flex-shrink: 0;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: transparent;
+}
+
+.project-picker-item[aria-current="true"] {
+    color: var(--ink);
+}
+
+.project-picker-item[aria-current="true"]::before {
+    background: var(--accent);
+}
+
+.project-picker-item:hover,
+.project-picker-item:focus-visible {
+    background: rgba(255, 255, 255, 0.05);
+    color: var(--ink);
+    outline: none;
+}
+
+/* Desktop: no bar — the title dropdown and the × float as two separate rounded
+   shapes in the top corners, over the project. (Phones have their own layout.) */
+@media (min-width: 861px) {
+    .project-view .project-view-bar {
+        position: absolute;
+        top: 1rem;
+        left: 1rem;
+        right: 1rem;
+        min-height: 0;
+        justify-content: space-between;
+        align-items: flex-start;
+        border: none;
+        background: none;
+        pointer-events: none; /* only the two shapes take clicks, not the gap between */
+    }
+
+    .project-view .project-picker,
+    .project-view .project-view-close {
+        pointer-events: auto;
+    }
+
+    .project-view .project-picker {
+        flex: 0 1 auto;
+    }
+
+    .project-view .project-picker-toggle,
+    .project-view .project-view-close {
+        height: 46px;
+        background: rgba(23, 17, 13, 0.8);
+        -webkit-backdrop-filter: blur(6px);
+        backdrop-filter: blur(6px);
+        border: 1px solid var(--line);
+        transition: color 0.15s ease, border-color 0.15s ease;
+    }
+
+    .project-view .project-picker-toggle {
+        padding: 0 1.2rem 0 1.3rem;
+        border-radius: 999px;
+    }
+
+    .project-view .project-view-close {
+        justify-content: center;
+        width: 46px;
+        padding: 0;
+        border-radius: 50%;
+    }
+
+    .project-view .project-picker-toggle:hover,
+    .project-view .project-picker-toggle:focus-visible,
+    .project-view .project-view-close:hover,
+    .project-view .project-view-close:focus-visible {
+        border-color: var(--accent-deep);
+    }
+
+    .project-view .project-picker-list {
+        left: 0;
+    }
+
+    /* The project now starts at the very top, so leave room under the shapes */
+    .project-view .project-view-content .panel {
+        padding-top: 5rem;
+    }
 }
 
 .project-view-tabs::-webkit-scrollbar {
@@ -724,7 +1189,7 @@ body.view-locked {
     background: none;
     border: none;
     border-left: 1px solid var(--line);
-    padding: 1.1rem 1.5rem;
+    padding: 0 1.4rem;
     font-family: var(--font-body);
     font-size: 0.9rem;
     color: var(--ink);
@@ -735,9 +1200,11 @@ body.view-locked {
     flex-shrink: 0;
 }
 
+/* Just the × (its name, "Close project", is for screen readers) */
 .project-view-close .close-x {
-    font-size: 1.2rem;
+    font-size: 2rem;
     line-height: 1;
+    margin-top: -0.1em; /* the × sits a little low in the font */
 }
 
 .project-view-close:hover {
@@ -746,58 +1213,273 @@ body.view-locked {
 
 .project-view-content {
     flex: 1;
+    /* relative + clipped sideways: during a touch page-turn the neighbouring
+       project is laid next to this one, just off-screen */
+    position: relative;
+    overflow-x: hidden;
     overflow-y: auto;
     scrollbar-width: none;
     -ms-overflow-style: none;
+    /* the browser handles up/down scrolling and pinch-zoom; sideways drags
+       are the page-turn (index.html script) */
+    touch-action: pan-y pinch-zoom;
 }
 
 .project-view-content::-webkit-scrollbar {
     display: none;
 }
 
-/* Previous / next project buttons at the bottom of the project view */
-.project-nav {
-    max-width: var(--max-width);
-    margin: 0 auto;
-    padding: 0 2.5rem 4rem;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 1.25rem;
+/* Previous / next project (desktop): full-height click zones down the left and
+   right edges of the project view. Invisible at rest; on hover (or keyboard
+   focus) a gradient slides in from the edge and the neighbouring project's
+   title appears in it. The top bar sits above them. */
+.project-view {
+    --side-w: clamp(72px, 9vw, 140px);
 }
 
-.project-nav-btn {
+.project-view-bar {
+    position: relative;
+    z-index: 3;
+    background: var(--panel-bg);
+}
+
+.project-side {
     appearance: none;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    z-index: 2;
+    width: var(--side-w);
     display: flex;
-    flex-direction: column;
-    gap: 0.2rem;
-    padding: 1rem 1.25rem;
+    align-items: center;
+    padding: 0 0.9rem;
+    overflow: hidden;
     background: none;
-    border: 1px solid var(--line);
-    border-radius: var(--radius);
-    font-family: var(--font-body);
+    border: none;
     color: var(--ink);
-    text-align: left;
+    font: inherit;
     cursor: pointer;
-    transition: border-color 0.15s ease;
 }
 
-.project-nav-next {
+.project-side--prev {
+    left: 0;
+    justify-content: flex-start;
+    text-align: left;
+}
+
+.project-side--next {
+    right: 0;
+    justify-content: flex-end;
     text-align: right;
 }
 
-.project-nav-btn:hover,
-.project-nav-btn:focus-visible {
-    border-color: var(--accent-deep);
+/* The gradient: tucked off the edge, slides in on hover */
+.project-side::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.35s ease;
 }
 
-.project-nav-dir {
-    font-size: 0.8rem;
+.project-side--prev::before {
+    background: linear-gradient(to right,
+            color-mix(in srgb, var(--accent-2) 22%, var(--paper)) 0%,
+            transparent 100%);
+    transform: translateX(-100%);
+}
+
+.project-side--next::before {
+    background: linear-gradient(to left,
+            color-mix(in srgb, var(--accent-2) 22%, var(--paper)) 0%,
+            transparent 100%);
+    transform: translateX(100%);
+}
+
+.project-side:hover::before,
+.project-side:focus-visible::before {
+    opacity: 1;
+    transform: none;
+}
+
+/* The title: follows the gradient in, a beat later */
+.project-side-label {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+    opacity: 0;
+    transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1) 0.05s, opacity 0.25s ease 0.05s;
+}
+
+.project-side--prev .project-side-label {
+    transform: translateX(-14px);
+}
+
+.project-side--next .project-side-label {
+    transform: translateX(14px);
+}
+
+.project-side:hover .project-side-label,
+.project-side:focus-visible .project-side-label {
+    opacity: 1;
+    transform: none;
+}
+
+.project-side-dir {
+    font-size: 0.7rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
     color: var(--ink-soft);
 }
 
-.project-nav-title {
+.project-side-name {
     font-family: var(--font-display);
-    font-size: 1.15rem;
+    font-size: 1.1rem;
+    line-height: 1.2;
+}
+
+.project-side:focus-visible {
+    outline: none;
+}
+
+/* Mid-sized windows: keep the project clear of the side zones */
+@media (min-width: 861px) and (max-width: 1239px) {
+    .project-view .project-view-content .panel {
+        padding-inline: calc(var(--side-w) + 0.75rem);
+    }
+}
+
+/* Phones: no arrows — projects are turned like pages by dragging sideways, and
+   that drag is the only movement: projects opened or picked any other way
+   simply appear, without the settle or slide animations */
+@media (max-width: 860px) {
+    .project-side {
+        display: none;
+    }
+
+    .project-view-content .panel,
+    .project-view-content .panel.swipe-in-left,
+    .project-view-content .panel.swipe-in-right {
+        animation: none;
+    }
+}
+
+/* Project dots (phones only): one per project along the bottom of the screen,
+   the current one a red pill with its name underneath. Tap one, or press and
+   slide along them to scrub through the projects (index.html script). */
+.project-dots {
+    display: none;
+}
+
+@media (max-width: 860px) {
+
+    /* No bar of titles on phones: just Close, floating in the top corner */
+    .project-view .project-view-bar {
+        position: absolute;
+        top: 0.9rem;
+        right: 0.9rem;
+        z-index: 3;
+        min-height: 0;
+        border: none;
+        background: none;
+    }
+
+    /* phones pick projects with the dots instead */
+    .project-view .project-picker {
+        display: none;
+    }
+
+    .project-view .project-view-tabs {
+        display: none;
+    }
+
+    .project-view .project-view-close {
+        justify-content: center;
+        width: 48px;
+        height: 48px;
+        padding: 0;
+        background: rgba(23, 17, 13, 0.8);
+        -webkit-backdrop-filter: blur(6px);
+        backdrop-filter: blur(6px);
+        border: 1px solid var(--line);
+        border-radius: 50%;
+    }
+
+    /* Room at the top for Close and at the bottom for the dots */
+    .project-view .project-view-content .panel {
+        padding-top: 4.75rem;
+        padding-bottom: 7rem;
+    }
+
+    .project-dots {
+        position: absolute;
+        left: 50%;
+        bottom: 1rem;
+        z-index: 3;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.2rem;
+        padding: 0.45rem 0.75rem 0.5rem;
+        transform: translateX(-50%);
+        background: rgba(23, 17, 13, 0.8);
+        -webkit-backdrop-filter: blur(6px);
+        backdrop-filter: blur(6px);
+        border: 1px solid var(--line);
+        border-radius: 999px;
+        /* the finger drags along the dots rather than scrolling the page */
+        touch-action: none;
+        user-select: none;
+        -webkit-user-select: none;
+        transition: transform 0.2s ease;
+    }
+
+    /* While scrubbing, the strip grows a little under the finger */
+    .project-dots.is-scrubbing {
+        transform: translateX(-50%) scale(1.12);
+    }
+
+    .project-dots-row {
+        display: flex;
+    }
+
+    /* A wide, easy-to-hit button around a small dot */
+    .project-dot {
+        appearance: none;
+        display: grid;
+        place-items: center;
+        width: 26px;
+        height: 22px;
+        padding: 0;
+        background: none;
+        border: none;
+        cursor: pointer;
+        -webkit-tap-highlight-color: transparent;
+    }
+
+    .project-dot::before {
+        content: "";
+        width: 7px;
+        height: 7px;
+        border-radius: 4px;
+        background: var(--ink-soft);
+        opacity: 0.45;
+        transition: width 0.2s ease, background-color 0.2s ease, opacity 0.2s ease;
+    }
+
+    .project-dot.is-current::before {
+        width: 18px;
+        background: var(--accent);
+        opacity: 1;
+    }
+
+    .project-dots-name {
+        margin: 0;
+        font-size: 0.8rem;
+        color: var(--ink);
+        white-space: nowrap;
+    }
 }
 
 .project-view-content .panel {
@@ -840,15 +1522,13 @@ body.view-locked {
     display: none;
 }
 
-/* After a swipe the next project (replacing the settle above) or enlarged image
-   slides in from the side */
-.panel.swipe-in-right,
-.lightbox-image.swipe-in-right {
+/* After a swipe the next project slides in from the side (replacing the settle
+   above). Changing image in the enlarged view has its own slide, in the script. */
+.panel.swipe-in-right {
     animation: swipe-in-right 0.3s ease-out;
 }
 
-.panel.swipe-in-left,
-.lightbox-image.swipe-in-left {
+.panel.swipe-in-left {
     animation: swipe-in-left 0.3s ease-out;
 }
 
@@ -947,6 +1627,30 @@ body.view-locked {
 /* Short looping animations (no controls): square, light background like the clips */
 .panel-video--loop video {
     aspect-ratio: 1;
+}
+
+/* The clip frames are buttons (click to see the clip larger): plain box, zoom cursor */
+button.panel-video--loop {
+    appearance: none;
+    display: block;
+    width: 100%;
+    padding: 0;
+    font: inherit;
+    cursor: zoom-in;
+    transition: border-color 0.15s ease;
+}
+
+button.panel-video--loop:hover,
+button.panel-video--loop:focus-visible {
+    border-color: var(--accent-deep);
+}
+
+/* Self-playing clips never show Safari's own ▶ button — e.g. in Low Power Mode,
+   when iPhones won't start videos by themselves: the still poster shows instead */
+video[data-autoplay]::-webkit-media-controls-start-playback-button,
+video[data-autoplay]::-webkit-media-controls {
+    display: none !important;
+    -webkit-appearance: none;
 }
 
 /* A clip with its name underneath */
@@ -1112,7 +1816,7 @@ body.view-locked {
     inset: 0;
     z-index: 600;
     /* Dark scrim over whatever's behind it — project view or page. */
-    background: rgba(13, 22, 19, 0.92);
+    background: rgba(23, 17, 13, 0.92);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -1134,6 +1838,17 @@ body.view-locked {
     max-height: 100%;
     object-fit: contain;
     border-radius: var(--radius);
+}
+
+.lightbox-image[hidden] {
+    display: none;
+}
+
+/* Animation clips are small files (576px square), so let them scale up to fill
+   most of the screen's height rather than sitting small in the middle */
+video.lightbox-image {
+    width: min(100%, 75vh, 800px);
+    height: auto;
 }
 
 .lightbox-close {
@@ -1158,29 +1873,38 @@ body.view-locked {
     border-color: var(--accent-deep);
 }
 
-/* Previous / next arrows and the "1 / 2" counter — only shown for projects with several images */
+/* Previous / next image (desktop): wide, full-height click zones down the left
+   and right edges. Invisible at rest; on hover (or keyboard focus) a gradient
+   slides in from the edge with "Previous" / "Next". The image sits between them.
+   Only shown when the project has several images. Phones swipe instead. */
+.lightbox {
+    --lb-zone: clamp(96px, 14vw, 220px);
+}
+
 .lightbox.has-nav {
-    padding: 3rem 5rem 3.5rem;
+    padding: 3rem var(--lb-zone) 3.5rem;
+}
+
+.lightbox-close {
+    z-index: 2; /* stays clickable above the "Next" zone */
 }
 
 .lightbox-nav {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
     appearance: none;
-    background: rgba(13, 22, 19, 0.6);
-    border: 1px solid var(--line);
-    color: var(--ink);
-    width: 2.75rem;
-    height: 2.75rem;
-    border-radius: 50%;
-    font-size: 1.8rem;
-    line-height: 1;
-    padding: 0 0 0.2rem;
-    cursor: pointer;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    z-index: 1;
+    width: var(--lb-zone);
     display: flex;
     align-items: center;
-    justify-content: center;
+    padding: 0 1.5rem;
+    overflow: hidden;
+    background: none;
+    border: none;
+    color: var(--ink);
+    font: inherit;
+    cursor: pointer;
 }
 
 .lightbox-nav[hidden] {
@@ -1188,17 +1912,82 @@ body.view-locked {
 }
 
 .lightbox-prev {
-    left: 1.25rem;
+    left: 0;
+    justify-content: flex-start;
 }
 
 .lightbox-next {
-    right: 1.25rem;
+    right: 0;
+    justify-content: flex-end;
 }
 
-.lightbox-nav:hover,
+/* The gradient: tucked off the edge, slides in on hover */
+.lightbox-nav::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.35s ease;
+}
+
+.lightbox-prev::before {
+    background: linear-gradient(to right,
+            color-mix(in srgb, var(--accent-2) 22%, var(--paper)) 0%,
+            transparent 100%);
+    transform: translateX(-100%);
+}
+
+.lightbox-next::before {
+    background: linear-gradient(to left,
+            color-mix(in srgb, var(--accent-2) 22%, var(--paper)) 0%,
+            transparent 100%);
+    transform: translateX(100%);
+}
+
+.lightbox-nav:hover::before,
+.lightbox-nav:focus-visible::before {
+    opacity: 1;
+    transform: none;
+}
+
+/* The label follows the gradient in, a beat later */
+.lightbox-nav-label {
+    position: relative;
+    font-size: 0.75rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ink);
+    opacity: 0;
+    transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1) 0.05s, opacity 0.25s ease 0.05s;
+}
+
+.lightbox-prev .lightbox-nav-label {
+    transform: translateX(-14px);
+}
+
+.lightbox-next .lightbox-nav-label {
+    transform: translateX(14px);
+}
+
+.lightbox-nav:hover .lightbox-nav-label,
+.lightbox-nav:focus-visible .lightbox-nav-label {
+    opacity: 1;
+    transform: none;
+}
+
 .lightbox-nav:focus-visible {
-    color: var(--accent-deep);
-    border-color: var(--accent-deep);
+    outline: none;
+}
+
+/* Phones: no zones (swipe left / right instead), so the image gets the width */
+@media (max-width: 860px) {
+    .lightbox .lightbox-nav {
+        display: none;
+    }
+
+    .lightbox.has-nav {
+        padding: 3rem 1rem 3.5rem;
+    }
 }
 
 .lightbox-count {
@@ -1299,7 +2088,7 @@ body.view-locked {
     }
 
     .project-view-close {
-        padding: 0.9rem 1.1rem;
+        padding: 0 1.1rem;
     }
 }
 
@@ -1314,10 +2103,6 @@ body.view-locked {
         padding: 1.5rem;
     }
 
-    .project-nav {
-        padding: 0 1.5rem 3rem;
-        grid-template-columns: 1fr;
-    }
 }
 
 /* About page on phones: the portrait spans the full content width.
@@ -1332,4 +2117,157 @@ body.view-locked {
         width: 100%;
         max-width: none;
     }
+}
+
+/* =========================================================
+   Intro — fresh visits only (html.show-intro, set in index.html's <head>).
+   Two full-screen cards over the site: the logo animation, then the
+   introduction, which takes over on its own (.show-text). Leaving slides
+   the whole intro up and away (.is-leaving) to reveal the site.
+   ========================================================= */
+.intro {
+    display: none;
+}
+
+.show-intro .intro {
+    display: block;
+    position: fixed;
+    inset: 0;
+    z-index: 700;
+    background: var(--paper);
+    /* a soft edge as it slides up off the site */
+    box-shadow: 0 24px 48px rgba(0, 0, 0, 0.55);
+    outline: none;
+    transition: transform 0.7s cubic-bezier(0.65, 0, 0.35, 1);
+}
+
+.intro.is-leaving {
+    transform: translateY(-100%);
+}
+
+/* The site underneath doesn't scroll while the intro is up */
+.show-intro body {
+    overflow: hidden;
+}
+
+/* Both cards fill the screen in the same spot; one is shown at a time */
+.intro-card {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    padding: 4rem 1.5rem;
+    /* a long introduction on a short phone screen can still be read in full */
+    overflow-y: auto;
+    transition: opacity 0.8s ease, transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* The card change: the logo lifts away as the introduction rises in */
+.intro-card--text {
+    opacity: 0;
+    transform: translateY(40px);
+}
+
+.intro.show-text .intro-card--logo {
+    opacity: 0;
+    transform: translateY(-40px);
+}
+
+.intro.show-text .intro-card--text {
+    opacity: 1;
+    transform: none;
+}
+
+.intro-logo {
+    display: block;
+    width: min(70vw, 55vh, 420px);
+    height: auto;
+}
+
+/* The introduction: the About photo beside the text (stacked on phones) */
+.intro-about {
+    display: grid;
+    grid-template-columns: minmax(0, clamp(220px, 26vw, 360px)) minmax(0, 36rem);
+    align-items: center;
+    gap: clamp(2rem, 4vw, 4rem);
+}
+
+.intro-photo {
+    display: block;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+}
+
+@media (max-width: 760px) {
+    .intro-about {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 1.75rem;
+    }
+
+    .intro-photo {
+        width: min(55vw, 240px);
+    }
+}
+
+.intro-text {
+    max-width: 36rem;
+    font-family: var(--font-display);
+    font-size: clamp(1.15rem, 1rem + 0.8vw, 1.5rem);
+    line-height: 1.55;
+    color: var(--ink);
+}
+
+.intro-text p {
+    margin: 0 0 1.1em;
+}
+
+.intro-text .intro-hello {
+    font-size: 1.6em;
+    line-height: 1.2;
+    color: var(--accent);
+}
+
+.intro-enter {
+    appearance: none;
+    margin-top: 0.75rem;
+    padding: 0.7rem 1.2rem;
+    background: none;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    color: var(--ink);
+    font: 500 0.95rem var(--font-body);
+    cursor: pointer;
+    transition: border-color 0.15s ease, color 0.15s ease;
+}
+
+.intro-enter:hover,
+.intro-enter:focus-visible {
+    border-color: var(--accent-deep);
+    color: var(--accent-deep);
+}
+
+/* Small, out-of-the-way way out, in the corner of the intro */
+.intro-skip {
+    position: absolute;
+    top: 1.25rem;
+    right: 1.25rem;
+    z-index: 1;
+    appearance: none;
+    padding: 0.45rem 0.8rem;
+    background: rgba(23, 17, 13, 0.6);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    color: var(--ink-soft);
+    font: 0.8rem var(--font-body);
+    cursor: pointer;
+}
+
+.intro-skip:hover,
+.intro-skip:focus-visible {
+    color: var(--ink);
+    border-color: var(--accent-deep);
 }

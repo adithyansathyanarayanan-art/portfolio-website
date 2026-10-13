@@ -14,9 +14,57 @@
     rel="stylesheet">
 
   <link rel="stylesheet" href="style.css">
+
+  <!-- Intro: shown on a fresh visit (once per browser tab), so going to About and
+       back to Work doesn't replay it — and again whenever the logo is clicked
+       (it links to index.html#intro). Decided here, before the page is drawn, so
+       the site never flashes up first. Without JS there's no intro. -->
+  <script>
+    try {
+      if (location.hash === '#intro') {
+        history.replaceState(null, '', location.pathname + location.search); // tidy the address
+        document.documentElement.classList.add('show-intro');
+      } else if (!sessionStorage.getItem('introSeen')) {
+        document.documentElement.classList.add('show-intro');
+      }
+    } catch (e) { /* storage blocked: skip the intro */ }
+  </script>
 </head>
 
 <body>
+
+  <!-- ============ INTRO ============ -->
+  <!-- Two full-screen cards over the site: the logo animation (plays once), then,
+       on their own once it finishes, the introduction. "See my work", "Skip intro"
+       or Esc slides the intro up and away to reveal the site, and it's removed. -->
+  <div class="intro" id="intro" role="region" aria-label="Introduction" tabindex="-1">
+    <section class="intro-card intro-card--logo" id="introLogoCard">
+      <picture>
+        <source srcset="assets/images/web/logo-intro-still.webp" media="(prefers-reduced-motion: reduce)">
+        <img class="intro-logo" id="introLogo" src="assets/images/web/logo-intro.webp" width="420" height="420"
+          alt="Adithyan S. logo">
+      </picture>
+    </section>
+    <!-- Same photo and text as the About page, side by side (stacked on phones).
+         Inert (can't be reached) until it's shown. -->
+    <section class="intro-card intro-card--text" id="introTextCard" inert>
+      <div class="intro-about">
+        <img class="intro-photo" src="assets/images/about-photo.jpg" width="1000" height="1000"
+          alt="Portrait of Adithyan S. smiling, seated at a table in a white T-shirt.">
+        <div class="intro-text">
+          <p class="intro-hello">Hi, I'm Adithyan.</p>
+          <p>I'm a Design student, illustrator and an aspiring visual story teller who wants to work with illustration
+            and design to tell stories with the worlds and characters I create.</p>
+          <p>I am a Communication Design Student, so I am always finding and learning new ways to create work that
+            engages the viewer, making them put a piece of themselves in my work whenever they interact with it.</p>
+          <p>I am constantly looking to improving my approach and work in design, through experimentation, consuming
+            new human made media that inspire me and doing work that challenge my current status as a designer.</p>
+          <button class="intro-enter" id="introEnter" type="button">See my work <span aria-hidden="true">&rarr;</span></button>
+        </div>
+      </div>
+    </section>
+    <button class="intro-skip" id="introSkip" type="button">Skip intro</button>
+  </div>
 
   <!-- Custom cursor dot (animation #6) — purely decorative, hidden on touch devices -->
   <div class="cursor-dot" id="cursorDot" aria-hidden="true"></div>
@@ -27,8 +75,13 @@
 
     <!-- Sidebar navigation (replaces the old top header) -->
     <aside class="sidebar">
-      <a class="wordmark" href="#top" aria-label="Adithyan S. — home"><picture><source srcset="assets/images/web/logo-mobile.webp" media="(max-width: 860px)" width="219" height="240"><source srcset="assets/images/web/logo-still.webp" media="(prefers-reduced-motion: reduce)"><img src="assets/images/web/logo-animated.webp" alt="" width="240" height="240"></picture></a>
-      <nav class="site-nav" aria-label="Primary">
+      <a class="wordmark" href="index.html#intro" aria-label="Adithyan S. — play the intro"><picture><source srcset="assets/images/web/logo-mobile.webp" media="(max-width: 860px)" width="219" height="240"><source srcset="assets/images/web/logo-still.webp" media="(prefers-reduced-motion: reduce)"><img src="assets/images/web/logo-animated.webp" alt="" width="240" height="240"></picture></a>
+      <!-- Phones: the links fold into a full-screen menu behind this button (menu.js) -->
+      <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="siteNav">
+        <span class="menu-toggle-label sr-only">Menu</span>
+        <span class="menu-toggle-icon" aria-hidden="true"></span>
+      </button>
+      <nav class="site-nav" id="siteNav" aria-label="Primary">
         <a href="#work" aria-current="page">Work</a>
         <a href="about.html">About</a>
         <a href="contact.html">Contact</a>
@@ -42,7 +95,7 @@
           <span class="gallery-item-media">
             <img src="assets/images/web/son-of-sparda-800.webp"
               srcset="assets/images/web/son-of-sparda-400.webp 400w, assets/images/web/son-of-sparda-800.webp 800w"
-              sizes="(max-width: 600px) 50vw, 340px" width="800" height="436" loading="lazy" decoding="async" alt="Fan art of Dante from Devil May Cry.">
+              sizes="(max-width: 860px) 50vw, 500px" width="800" height="436" loading="lazy" decoding="async" alt="Fan art of Dante from Devil May Cry.">
           </span>
           <span class="gallery-item-caption">Son of Sparda</span>
         </button>
@@ -50,7 +103,7 @@
           <span class="gallery-item-media">
             <img src="assets/images/web/futility-800.webp"
               srcset="assets/images/web/futility-400.webp 400w, assets/images/web/futility-800.webp 800w"
-              sizes="(max-width: 600px) 50vw, 340px" width="800" height="1132" loading="lazy" decoding="async"
+              sizes="(max-width: 860px) 50vw, 500px" width="800" height="1132" loading="lazy" decoding="async"
               alt="Digital painting of a blue-haired young man in a golden crested helmet, with a pale bald figure glaring from the shadows behind him.">
           </span>
           <span class="gallery-item-caption">Futility</span>
@@ -59,7 +112,7 @@
           <span class="gallery-item-media">
             <img src="assets/images/web/hopeless-romantic-800.webp"
               srcset="assets/images/web/hopeless-romantic-400.webp 400w, assets/images/web/hopeless-romantic-800.webp 800w"
-              sizes="(max-width: 600px) 50vw, 340px" width="800" height="600" loading="lazy" decoding="async"
+              sizes="(max-width: 860px) 50vw, 500px" width="800" height="600" loading="lazy" decoding="async"
               alt="Halftone pop-art portrait of Meena Kumari resting her chin on her hand, in navy and cream against a coral-pink background.">
           </span>
           <span class="gallery-item-caption">Hopeless Romantic</span>
@@ -68,7 +121,7 @@
           <span class="gallery-item-media gallery-item-media--video">
             <img src="assets/images/web/young-800.webp"
               srcset="assets/images/web/young-400.webp 400w, assets/images/web/young-800.webp 800w"
-              sizes="(max-width: 600px) 50vw, 340px" width="800" height="450" loading="lazy" decoding="async"
+              sizes="(max-width: 860px) 50vw, 500px" width="800" height="450" loading="lazy" decoding="async"
               alt="Painted landscape of a large leafy tree on a green hillside, with rolling hills and a small village under a bright blue sky.">
             <!-- Play badge marks this project as a video -->
             <span class="gallery-item-play" aria-hidden="true"></span>
@@ -87,7 +140,7 @@
           <span class="gallery-item-media">
             <img src="assets/images/web/shepard-boy-800.webp"
               srcset="assets/images/web/shepard-boy-400.webp 400w, assets/images/web/shepard-boy-800.webp 800w"
-              sizes="(max-width: 600px) 50vw, 340px" width="800" height="600" loading="lazy" decoding="async"
+              sizes="(max-width: 860px) 50vw, 500px" width="800" height="600" loading="lazy" decoding="async"
               alt="Illustration of a shepherd boy with small ram horns, resting against a flock of purple sheep in a yellow-green meadow, with farmhouses under a pink sky.">
           </span>
           <span class="gallery-item-caption">Shepard Boy</span>
@@ -96,7 +149,7 @@
           <span class="gallery-item-media">
             <img src="assets/images/web/sticker-designs-800.webp"
               srcset="assets/images/web/sticker-designs-400.webp 400w, assets/images/web/sticker-designs-800.webp 800w"
-              sizes="(max-width: 600px) 50vw, 340px" width="800" height="397" loading="lazy" decoding="async"
+              sizes="(max-width: 860px) 50vw, 500px" width="800" height="397" loading="lazy" decoding="async"
               alt="Collage of five square character stickers in bold two-tone colours: Luffy large on the left, with Garp, Dragon, Gojo and Guts beside him.">
           </span>
           <span class="gallery-item-caption">Sticker Designs</span>
@@ -153,8 +206,21 @@
         </button>
       </div>
 
-      <button class="project-view-close" id="closeProjectView" type="button">
-        <span class="close-x" aria-hidden="true">&times;</span> Close
+      <!-- Desktop: the current project's title with a ▾ — click it for a list of
+           every project. (The tabs above are kept, hidden, as the projects'
+           labels; phones use the dots at the bottom instead.) The list is built
+           from the tabs in the script. -->
+      <div class="project-picker">
+        <button class="project-picker-toggle" id="projectPickerToggle" type="button" aria-haspopup="true"
+          aria-expanded="false" aria-controls="projectPickerList">
+          <span id="projectPickerCurrent"></span>
+          <span class="project-picker-caret" aria-hidden="true">&#9662;</span>
+        </button>
+        <ul class="project-picker-list" id="projectPickerList" aria-label="All projects"></ul>
+      </div>
+
+      <button class="project-view-close" id="closeProjectView" type="button" aria-label="Close project">
+        <span class="close-x" aria-hidden="true">&times;</span>
       </button>
     </div>
 
@@ -279,16 +345,17 @@
       </article>
 
       <!-- Doraemon: the finished animation, the write-up, then each stage of it as a looping clip.
-           Clips play only while on screen (see data-autoplay in the script). -->
+           Clips play only while on screen (see data-autoplay in the script); click one
+           to see it larger in the enlarged view, like a picture. -->
       <article class="panel panel--stacked" id="panel-5" role="tabpanel" aria-labelledby="pv-tab-5" data-index="5"
         tabindex="0" style="--ratio: 1;" hidden>
         <h3 class="panel-title">Doraemon Finds a Mouse</h3>
         <div class="panel-gallery">
-          <div class="panel-video panel-video--loop">
+          <button class="panel-video panel-video--loop" type="button">
             <video src="assets/videos/web/doraemon-final.mp4" poster="assets/images/web/doraemon-final-poster.webp"
               width="576" height="576" muted loop playsinline preload="none" data-autoplay
               aria-label="Animation of Doraemon swaying and dancing against a light blue sky, then sitting dizzy with spiral eyes beside a mouse."></video>
-          </div>
+          </button>
         </div>
         <div class="panel-body">
           <div class="panel-meta">
@@ -308,35 +375,35 @@
         <h4 class="panel-subhead">Process</h4>
         <div class="panel-gallery panel-gallery--grid panel-gallery--quad" data-autoplay-group>
           <figure class="panel-clip">
-            <div class="panel-video panel-video--loop">
+            <button class="panel-video panel-video--loop" type="button">
               <video src="assets/videos/web/rough-draft.mp4" poster="assets/images/web/rough-draft-poster.webp"
                 width="576" height="576" muted loop playsinline preload="none" data-autoplay
                 aria-label="Rough draft: loose sketchy pencil lines of Doraemon dancing, then tumbling backwards."></video>
-            </div>
+            </button>
             <figcaption>Rough draft</figcaption>
           </figure>
           <figure class="panel-clip">
-            <div class="panel-video panel-video--loop">
+            <button class="panel-video panel-video--loop" type="button">
               <video src="assets/videos/web/basic-pencil.mp4" poster="assets/images/web/basic-pencil-poster.webp"
                 width="576" height="576" muted loop playsinline preload="none" data-autoplay
                 aria-label="Basic pencil: lighter, simpler outlines of Doraemon dancing and sitting dizzy beside a mouse."></video>
-            </div>
+            </button>
             <figcaption>Basic pencil</figcaption>
           </figure>
           <figure class="panel-clip">
-            <div class="panel-video panel-video--loop">
+            <button class="panel-video panel-video--loop" type="button">
               <video src="assets/videos/web/doraemon.mp4" poster="assets/images/web/doraemon-poster.webp"
                 width="576" height="576" muted loop playsinline preload="none" data-autoplay
                 aria-label="Clean line art of Doraemon dancing and sitting dizzy beside a mouse, before colouring."></video>
-            </div>
+            </button>
             <figcaption>Line art</figcaption>
           </figure>
           <figure class="panel-clip">
-            <div class="panel-video panel-video--loop">
+            <button class="panel-video panel-video--loop" type="button">
               <video src="assets/videos/web/doraemon-final.mp4" poster="assets/images/web/doraemon-final-poster.webp"
                 width="576" height="576" muted loop playsinline preload="none" data-autoplay
                 aria-label="Final coloured animation of Doraemon dancing, then sitting dizzy with spiral eyes beside a mouse."></video>
-            </div>
+            </button>
             <figcaption>Final</figcaption>
           </figure>
         </div>
@@ -459,18 +526,32 @@
         </div>
       </article>
 
-      <nav class="project-nav" aria-label="Move between projects">
-        <button class="project-nav-btn project-nav-prev" id="projectPrev" type="button">
-          <span class="project-nav-dir">&larr; Previous project</span>
-          <span class="project-nav-title" id="projectPrevTitle"></span>
-        </button>
-        <button class="project-nav-btn project-nav-next" id="projectNext" type="button">
-          <span class="project-nav-dir">Next project &rarr;</span>
-          <span class="project-nav-title" id="projectNextTitle"></span>
-        </button>
-      </nav>
-
     </div>
+
+    <!-- Previous / next project (desktop): full-height click zones down the left and
+         right edges. Invisible until hovered, when a gradient slides in from the
+         edge with the neighbouring project's title. (The top bar's titles work
+         too.) Phones turn projects like pages by dragging sideways instead. -->
+    <button class="project-side project-side--prev" id="projectSidePrev" type="button">
+      <span class="project-side-label" aria-hidden="true">
+        <span class="project-side-dir">Previous</span>
+        <span class="project-side-name" id="projectSidePrevName"></span>
+      </span>
+    </button>
+    <button class="project-side project-side--next" id="projectSideNext" type="button">
+      <span class="project-side-label" aria-hidden="true">
+        <span class="project-side-dir">Next</span>
+        <span class="project-side-name" id="projectSideNextName"></span>
+      </span>
+    </button>
+
+    <!-- Phones (instead of the top bar of titles): a dot per project along the
+         bottom, the current one highlighted with its name underneath. Tap a dot
+         to jump to that project. The dots are built from the tabs in the script. -->
+    <nav class="project-dots" aria-label="Projects">
+      <div class="project-dots-row" id="projectDotsRow"></div>
+      <p class="project-dots-name" id="projectDotsName" aria-hidden="true"></p>
+    </nav>
   </div>
 
   <!-- ============ IMAGE LIGHTBOX ============ -->
@@ -481,12 +562,17 @@
     <button class="lightbox-close" id="lightboxClose" type="button" aria-label="Close enlarged image">
       <span aria-hidden="true">&times;</span>
     </button>
+    <!-- Previous / next image (desktop): wide click zones down the left and right
+         edges, invisible until hovered, when a gradient slides in with the label.
+         Phones swipe instead. -->
     <button class="lightbox-nav lightbox-prev" id="lightboxPrev" type="button" aria-label="Previous image" hidden>
-      <span aria-hidden="true">&#8249;</span>
+      <span class="lightbox-nav-label" aria-hidden="true">Previous</span>
     </button>
     <img class="lightbox-image" id="lightboxImage" src="" alt="">
+    <!-- For animation clips (e.g. Doraemon): shown instead of the image, looping -->
+    <video class="lightbox-image" id="lightboxVideo" muted loop playsinline hidden></video>
     <button class="lightbox-nav lightbox-next" id="lightboxNext" type="button" aria-label="Next image" hidden>
-      <span aria-hidden="true">&#8250;</span>
+      <span class="lightbox-nav-label" aria-hidden="true">Next</span>
     </button>
     <div class="lightbox-count" id="lightboxCount" aria-live="polite" hidden></div>
   </div>
@@ -503,10 +589,101 @@
     const closeBtn = document.getElementById('closeProjectView');
     const siteContent = document.getElementById('siteContent');
     const projectContent = document.querySelector('.project-view-content');
-    const projectPrev = document.getElementById('projectPrev');
-    const projectNext = document.getElementById('projectNext');
-    const projectPrevTitle = document.getElementById('projectPrevTitle');
-    const projectNextTitle = document.getElementById('projectNextTitle');
+    const tabLabel = (t) => t.textContent.replace(/\s+/g, ' ').trim();
+
+    // Phone project dots: one per tab, in the same order
+    const projectDotsName = document.getElementById('projectDotsName');
+    const projectDots = pvTabs.map(t => {
+      const dot = document.createElement('button');
+      dot.type = 'button';
+      dot.className = 'project-dot';
+      dot.dataset.index = t.dataset.index;
+      dot.setAttribute('aria-label', tabLabel(t));
+      dot.addEventListener('click', () => showPanelByIndex(t.dataset.index));
+      document.getElementById('projectDotsRow').appendChild(dot);
+      return dot;
+    });
+
+    // Desktop title dropdown: one entry per tab, in the same order
+    const projectPickerToggle = document.getElementById('projectPickerToggle');
+    const projectPickerCurrent = document.getElementById('projectPickerCurrent');
+    const projectPickerList = document.getElementById('projectPickerList');
+    const projectPickerItems = pvTabs.map(t => {
+      const li = document.createElement('li');
+      const item = document.createElement('button');
+      item.type = 'button';
+      item.className = 'project-picker-item';
+      item.dataset.index = t.dataset.index;
+      item.textContent = tabLabel(t);
+      item.addEventListener('click', () => {
+        setPickerOpen(false);
+        showPanelByIndex(t.dataset.index);
+        projectPickerToggle.focus();
+      });
+      li.appendChild(item);
+      projectPickerList.appendChild(li);
+      return item;
+    });
+
+    function pickerIsOpen() {
+      return projectPickerToggle.getAttribute('aria-expanded') === 'true';
+    }
+    function setPickerOpen(open) {
+      projectPickerToggle.setAttribute('aria-expanded', String(open));
+      projectPickerList.classList.toggle('is-open', open);
+      // opening puts the keyboard on the project you're on
+      if (open) (projectPickerItems.find(b => b.hasAttribute('aria-current')) || projectPickerItems[0]).focus();
+    }
+
+    projectPickerToggle.addEventListener('click', () => setPickerOpen(!pickerIsOpen()));
+    // clicking anywhere else closes it
+    document.addEventListener('click', (e) => {
+      if (pickerIsOpen() && !e.target.closest('.project-picker')) setPickerOpen(false);
+    });
+    // up / down arrows move through the list; Tab leaves it (and closes it)
+    projectPickerList.addEventListener('keydown', (e) => {
+      const i = projectPickerItems.indexOf(document.activeElement);
+      let next = null;
+      if (e.key === 'ArrowDown') next = projectPickerItems[(i + 1) % projectPickerItems.length];
+      if (e.key === 'ArrowUp') next = projectPickerItems[(i - 1 + projectPickerItems.length) % projectPickerItems.length];
+      if (e.key === 'Home') next = projectPickerItems[0];
+      if (e.key === 'End') next = projectPickerItems[projectPickerItems.length - 1];
+      if (next) { e.preventDefault(); next.focus(); }
+      if (e.key === 'Tab') setPickerOpen(false);
+    });
+
+    // Press on the dots and slide along them to scrub through the projects
+    // (like page dots on a phone): whichever dot the finger is over is shown,
+    // and the name underneath follows along
+    (function setupDotScrub() {
+      const strip = document.querySelector('.project-dots');
+      const row = document.getElementById('projectDotsRow');
+      let scrubbing = false;
+
+      function showDotUnder(x) {
+        const r = row.getBoundingClientRect();
+        const n = projectDots.length;
+        const i = Math.min(n - 1, Math.max(0, Math.floor((x - r.left) / (r.width / n))));
+        const dot = projectDots[i];
+        if (dot.classList.contains('is-current')) return;
+        showPanelByIndex(dot.dataset.index);
+        if (navigator.vibrate) navigator.vibrate(6); // a small tick per project, where phones support it
+      }
+
+      strip.addEventListener('pointerdown', (e) => {
+        scrubbing = true;
+        strip.classList.add('is-scrubbing');
+        showDotUnder(e.clientX);
+        // keep receiving the finger's moves even when it slides off the strip
+        try { strip.setPointerCapture(e.pointerId); } catch (err) { /* pointer already gone */ }
+      });
+      strip.addEventListener('pointermove', (e) => { if (scrubbing) showDotUnder(e.clientX); });
+      const stop = () => { scrubbing = false; strip.classList.remove('is-scrubbing'); };
+      strip.addEventListener('pointerup', stop);
+      strip.addEventListener('pointercancel', stop);
+    })();
+    const projectSidePrev = document.getElementById('projectSidePrev');
+    const projectSideNext = document.getElementById('projectSideNext');
     let lastTrigger = null; // remembers what to return focus to on close
 
     // Stop any project video so it doesn't keep playing out of sight
@@ -514,9 +691,21 @@
       projectView.querySelectorAll('video').forEach(v => v.pause());
     }
 
-    function showPanelByIndex(index) {
+    // direction: +1 / -1 when stepping to the next / previous project, so the new
+    // one slides in from that side; left out, it just appears with the usual settle
+    function showPanelByIndex(index, direction) {
       pauseVideos();
-      panels.forEach(p => { p.hidden = p.dataset.index !== String(index); });
+      // Reset each panel's opening animation (a page-turn drag switches it off).
+      // The slide class goes on before the panel is shown, so the slide is its only
+      // animation, and it stays until the panel is hidden again — taking it off
+      // straight after would restart the settle animation (a second, unwanted bounce).
+      panels.forEach(p => {
+        p.style.removeProperty('animation');
+        p.classList.remove('swipe-in-left', 'swipe-in-right');
+      });
+      const target = panels.find(p => p.dataset.index === String(index));
+      if (direction && target) target.classList.add(direction > 0 ? 'swipe-in-right' : 'swipe-in-left');
+      panels.forEach(p => { p.hidden = p !== target; });
       pvTabs.forEach(t => {
         const selected = t.dataset.index === String(index);
         t.setAttribute('aria-selected', String(selected));
@@ -533,18 +722,37 @@
         behavior: prefersReducedMotion ? 'auto' : 'smooth'
       });
 
-      // The buttons at the bottom name the projects on either side of this one
+      // The side buttons name the projects on either side of this one (for screen readers)
       const pos = pvTabs.findIndex(t => t.dataset.index === String(index));
       const label = (t) => t.textContent.replace(/\s+/g, ' ').trim();
-      projectPrevTitle.textContent = label(pvTabs[(pos - 1 + pvTabs.length) % pvTabs.length]);
-      projectNextTitle.textContent = label(pvTabs[(pos + 1) % pvTabs.length]);
+      const prevName = label(pvTabs[(pos - 1 + pvTabs.length) % pvTabs.length]);
+      const nextName = label(pvTabs[(pos + 1) % pvTabs.length]);
+      // phone dots: highlight this project's dot and show its name
+      projectDots.forEach(d => {
+        const on = d.dataset.index === String(index);
+        d.classList.toggle('is-current', on);
+        if (on) d.setAttribute('aria-current', 'true'); else d.removeAttribute('aria-current');
+      });
+      projectDotsName.textContent = label(pvTabs[pos]);
+
+      // desktop title dropdown: this project's name, and its place marked in the list
+      projectPickerCurrent.textContent = label(pvTabs[pos]);
+      projectPickerItems.forEach(b => {
+        if (b.dataset.index === String(index)) b.setAttribute('aria-current', 'true');
+        else b.removeAttribute('aria-current');
+      });
+
+      document.getElementById('projectSidePrevName').textContent = prevName;
+      document.getElementById('projectSideNextName').textContent = nextName;
+      projectSidePrev.setAttribute('aria-label', 'Previous project: ' + prevName);
+      projectSideNext.setAttribute('aria-label', 'Next project: ' + nextName);
     }
 
     // Move to the previous (-1) or next (+1) project, wrapping around at the ends
     function goToProject(offset, focusTab) {
       const current = pvTabs.findIndex(t => t.getAttribute('aria-selected') === 'true');
       const target = (current + offset + pvTabs.length) % pvTabs.length;
-      showPanelByIndex(pvTabs[target].dataset.index);
+      showPanelByIndex(pvTabs[target].dataset.index, offset);
       if (focusTab) pvTabs[target].focus({ preventScroll: true });
     }
 
@@ -572,9 +780,11 @@
     function handleOverlayKeydown(e) {
       if (!lightbox.hidden) return; // the enlarged-image view handles its own keys
       if (e.key === 'Escape') {
+        if (pickerIsOpen()) { setPickerOpen(false); projectPickerToggle.focus(); return; } // Esc closes the list first
         closeProjectView();
         return;
       }
+      if (pickerIsOpen()) return; // the list handles its own arrow keys
 
       // Left / right arrow keys switch project from anywhere in the project view.
       // (If a tab already handled the key it called preventDefault, so skip it here.
@@ -609,6 +819,7 @@
 
     function closeProjectView() {
       pauseVideos();
+      setPickerOpen(false);
       projectView.classList.remove('is-open');
       document.body.classList.remove('view-locked');
       siteContent.removeAttribute('aria-hidden');
@@ -635,22 +846,20 @@
       t.addEventListener('click', () => showPanelByIndex(t.dataset.index));
       t.addEventListener('keydown', (e) => {
         const i = pvTabs.indexOf(t);
-        let next = null;
-        if (e.key === 'ArrowRight') next = pvTabs[(i + 1) % pvTabs.length];
-        if (e.key === 'ArrowLeft') next = pvTabs[(i - 1 + pvTabs.length) % pvTabs.length];
+        let next = null, direction = 0;
+        if (e.key === 'ArrowRight') { next = pvTabs[(i + 1) % pvTabs.length]; direction = 1; }
+        if (e.key === 'ArrowLeft') { next = pvTabs[(i - 1 + pvTabs.length) % pvTabs.length]; direction = -1; }
         if (e.key === 'Home') next = pvTabs[0];
         if (e.key === 'End') next = pvTabs[pvTabs.length - 1];
         if (next) {
           e.preventDefault();
-          showPanelByIndex(next.dataset.index);
+          showPanelByIndex(next.dataset.index, direction);
           next.focus();
         }
       });
     });
 
     closeBtn.addEventListener('click', closeProjectView);
-    projectPrev.addEventListener('click', () => goToProject(-1, false));
-    projectNext.addEventListener('click', () => goToProject(1, false));
 
     /* =========================================================
        Swipe gestures (touch screens)
@@ -677,20 +886,116 @@
       }, { passive: true });
     }
 
-    // Slides an element in from the right (+1, going forward) or the left (-1, going back)
-    function slideIn(el, direction) {
-      if (!el || prefersReducedMotion) return;
-      el.classList.remove('swipe-in-left', 'swipe-in-right');
-      void el.offsetWidth; // restart the animation if the same class is reapplied
-      el.classList.add(direction > 0 ? 'swipe-in-right' : 'swipe-in-left');
-      el.addEventListener('animationend', () => el.classList.remove('swipe-in-left', 'swipe-in-right'), { once: true });
-    }
+    /* Touch: page-turn between projects. Dragging a project sideways moves it
+       with the finger while the neighbouring project slides in right beside it.
+       Let go past a quarter of the screen (or flick) to turn to it; otherwise
+       both spring back. Up-and-down scrolling is left alone. */
+    (function setupProjectPager() {
+      const DRAG_PROPS = ['position', 'top', 'left', 'right', 'transform', 'transition'];
+      const clearDrag = (p) => DRAG_PROPS.forEach(k => p.style.removeProperty(k));
+      const panelFor = (offset) => {
+        const cur = pvTabs.findIndex(t => t.getAttribute('aria-selected') === 'true');
+        const idx = pvTabs[(cur + offset + pvTabs.length) % pvTabs.length].dataset.index;
+        return panels.find(p => p.dataset.index === idx);
+      };
 
-    // Swipe in the project view moves to the next / previous project
-    addSwipe(projectContent, (offset) => {
-      goToProject(offset, false);
-      slideIn(panels.find(p => !p.hidden), offset);
-    });
+      let start = null;   // where the finger went down
+      let axis = null;    // 'x' once it's clearly a sideways drag, 'y' for a scroll
+      let drag = null;    // { current, peer, offset, samples }
+      let settling = false;
+
+      // The neighbour sits just off-screen on the side it's coming from, level
+      // with the top of the screen (wherever the current project is scrolled to)
+      function showPeer(offset) {
+        if (drag.peer) { drag.peer.hidden = true; clearDrag(drag.peer); }
+        drag.offset = offset;
+        const peer = drag.peer = panelFor(offset);
+        peer.style.animation = 'none';
+        peer.style.position = 'absolute';
+        peer.style.top = projectContent.scrollTop + 'px';
+        peer.style.left = '0';
+        peer.style.right = '0';
+        peer.hidden = false;
+      }
+
+      function place(dx) {
+        const offset = dx < 0 ? 1 : -1; // dragging left brings in the next project
+        if (offset !== drag.offset) showPeer(offset);
+        drag.current.style.transform = `translateX(${dx}px)`;
+        drag.peer.style.transform = `translateX(${dx + offset * projectContent.clientWidth}px)`;
+      }
+
+      projectContent.addEventListener('touchstart', (e) => {
+        const zoomedIn = window.visualViewport && window.visualViewport.scale > 1.05;
+        start = (!settling && e.touches.length === 1 && !zoomedIn && !e.target.closest('video[controls]'))
+          ? { x: e.touches[0].clientX, y: e.touches[0].clientY } : null;
+        axis = null;
+      }, { passive: true });
+
+      projectContent.addEventListener('touchmove', (e) => {
+        if (!start) return;
+        const t = e.touches[0];
+        const dx = t.clientX - start.x, dy = t.clientY - start.y;
+        if (!axis) {
+          if (Math.abs(dx) < 8 && Math.abs(dy) < 8) return;
+          axis = Math.abs(dx) > Math.abs(dy) * 1.2 ? 'x' : 'y';
+          if (axis === 'x') {
+            const current = panels.find(p => !p.hidden);
+            current.style.animation = 'none';
+            current.style.transition = 'none';
+            drag = { current, peer: null, offset: 0, samples: [] };
+          }
+        }
+        if (axis !== 'x') return;
+        e.preventDefault(); // the drag is ours: don't scroll as well
+        place(dx);
+        drag.samples.push({ x: t.clientX, t: e.timeStamp });
+        if (drag.samples.length > 6) drag.samples.shift();
+      }, { passive: false });
+
+      function release(e) {
+        if (!drag) { start = null; return; }
+        const d = drag;
+        drag = null;
+        const lastX = e && e.changedTouches && e.changedTouches[0] ? e.changedTouches[0].clientX : start.x;
+        const dx = lastX - start.x;
+        start = null;
+        if (!d.peer) { clearDrag(d.current); return; }
+
+        // speed over the last moment of the drag, for flicks
+        const s = d.samples, first = s[0], last = s[s.length - 1];
+        const v = s.length > 1 && last.t > first.t ? (last.x - first.x) / (last.t - first.t) : 0;
+        const width = projectContent.clientWidth;
+        const turn = Math.abs(dx) > width * 0.25 ||
+          (Math.abs(v) > 0.45 && Math.sign(v) === Math.sign(dx) && Math.abs(dx) > 20);
+
+        settling = true;
+        const ease = prefersReducedMotion ? 'none' : 'transform 0.32s cubic-bezier(0.22, 1, 0.36, 1)';
+        [d.current, d.peer].forEach(p => { p.style.transition = ease; });
+        d.current.style.transform = `translateX(${turn ? -d.offset * width : 0}px)`;
+        d.peer.style.transform = `translateX(${turn ? 0 : d.offset * width}px)`;
+
+        setTimeout(() => {
+          clearDrag(d.current);
+          if (turn) {
+            // the neighbour becomes the project; it's already in place, so no settle animation
+            showPanelByIndex(d.peer.dataset.index);
+            clearDrag(d.peer);
+            d.peer.style.animation = 'none';
+          } else {
+            d.peer.hidden = true;
+            clearDrag(d.peer);
+          }
+          settling = false;
+        }, prefersReducedMotion ? 0 : 330);
+      }
+      projectContent.addEventListener('touchend', release);
+      projectContent.addEventListener('touchcancel', release);
+    })();
+
+    // The side arrows step to the previous / next project (the same slide as the arrow keys)
+    projectSidePrev.addEventListener('click', () => goToProject(-1, false));
+    projectSideNext.addEventListener('click', () => goToProject(1, false));
 
     document.getElementById('year').textContent = new Date().getFullYear();
 
@@ -721,7 +1026,7 @@
 
       // Keep Tab inside the lightbox while it is open
       if (e.key === 'Tab') {
-        const controls = [lightboxPrev, lightboxNext, lightboxClose].filter(el => !el.hidden);
+        const controls = [lightboxPrev, lightboxNext, lightboxClose].filter(el => !el.hidden && el.offsetParent !== null); // (the zones are hidden on phones)
         const first = controls[0];
         const last = controls[controls.length - 1];
         if (e.shiftKey && document.activeElement === first) {
@@ -734,24 +1039,133 @@
       }
     }
 
-    // Shows image number i of the current group (wraps around at both ends)
-    function showLightboxImage(i) {
+    // Lightbox requests are numbered; when images are changed quickly, only
+    // the newest one is allowed to finish (no stale image flashing up)
+    let lightboxToken = 0;
+
+    // Loads an image off-screen and resolves once it's ready to draw
+    function loadImage(src) {
+      const im = new Image();
+      im.src = src;
+      return im.decode().catch(() => { });
+    }
+
+    // The lightbox shows either a picture (lightboxImage) or, for an animation
+    // clip, a looping video (lightboxVideo) — only one at a time
+    const lightboxVideo = document.getElementById('lightboxVideo');
+    const shownMedia = () => (lightboxVideo.hidden ? lightboxImage : lightboxVideo);
+
+    // Points the lightbox at item number i of the group (wrapping round) and
+    // updates the counter; returns that item's <img> or <video> in the project
+    function pointLightboxAt(i) {
       const count = lightboxGroup.length;
       lightboxIndex = (i + count) % count;
       const trigger = lightboxGroup[lightboxIndex];
-      const imgEl = trigger.querySelector('img');
-
-      lightboxImage.src = imgEl.src;
-      lightboxImage.alt = imgEl.alt || trigger.getAttribute('aria-label') || '';
+      const media = trigger.querySelector('img, video');
+      const label = media.alt || media.getAttribute('aria-label') || trigger.getAttribute('aria-label') || '';
+      if (media.tagName === 'VIDEO') lightboxVideo.setAttribute('aria-label', label);
+      else lightboxImage.alt = label;
       lightboxCount.textContent = (lightboxIndex + 1) + ' / ' + count;
-      lightboxLastTrigger = trigger; // focus returns to the image you were last looking at
+      lightboxLastTrigger = trigger; // focus returns to the item you were last looking at
+      return media;
     }
 
-    // Next (+1) or previous (-1) image, sliding in from that side once it's ready to show
-    function stepLightbox(direction) {
+    // Puts a clip in the lightbox (hiding the picture) and starts it looping;
+    // resolves once its first frame is ready to show
+    function putClip(clip) {
+      lightboxImage.hidden = true;
+      lightboxImage.removeAttribute('src');
+      lightboxVideo.hidden = false;
+      lightboxVideo.poster = clip.poster;
+      lightboxVideo.src = clip.currentSrc || clip.getAttribute('src');
+      // opening a clip is the visitor's own choice, so it plays even when motion
+      // is reduced — but then with controls, so it can be paused
+      lightboxVideo.controls = prefersReducedMotion;
+      if (!prefersReducedMotion) lightboxVideo.play().catch(() => { });
+      return new Promise(resolve => {
+        if (lightboxVideo.readyState >= 2) return resolve();
+        lightboxVideo.addEventListener('loadeddata', resolve, { once: true });
+        setTimeout(resolve, 900); // don't wait for ever on a slow connection
+      });
+    }
+
+    // Back to showing pictures: stop and clear the clip player
+    function putPicture() {
+      lightboxVideo.pause();
+      lightboxVideo.hidden = true;
+      lightboxVideo.removeAttribute('src');
+      lightboxVideo.load();
+      lightboxImage.hidden = false;
+    }
+
+    // The copy of an image the project page has already drawn (it can be shown
+    // at once), or null if it hasn't loaded yet
+    const loadedCopy = (imgEl) => (imgEl.complete && imgEl.naturalWidth ? imgEl.currentSrc : null);
+
+    // Shows item i straight away. A picture shows the already-loaded copy first
+    // if there is one, then swaps in the full-size file once it's ready — no
+    // blank flash. A clip starts playing.
+    function showLightboxImage(i) {
+      const media = pointLightboxAt(i);
+      const token = ++lightboxToken;
+      if (media.tagName === 'VIDEO') { putClip(media); return; }
+      putPicture();
+      const quick = loadedCopy(media);
+      if (quick) lightboxImage.src = quick;
+      if (quick !== media.src) {
+        loadImage(media.src).then(() => { if (token === lightboxToken) lightboxImage.src = media.src; });
+      }
+    }
+
+    // Next (+1) or previous (-1) item: the current one slides out to the side,
+    // the next slides in from the other side once it's ready to show
+    async function stepLightbox(direction) {
       if (lightboxGroup.length < 2) return;
-      showLightboxImage(lightboxIndex + direction);
-      lightboxImage.decode().catch(() => {}).then(() => slideIn(lightboxImage, direction));
+      const media = pointLightboxAt(lightboxIndex + direction);
+      const token = ++lightboxToken;
+      const isClip = media.tagName === 'VIDEO';
+      const full = isClip ? null : loadImage(media.src);
+      const quick = isClip ? null : loadedCopy(media);
+      const shift = 60 * direction;
+
+      if (!prefersReducedMotion) {
+        const out = shownMedia();
+        out.getAnimations().forEach(a => a.cancel());
+        await out.animate(
+          [{ opacity: 1, transform: 'none' }, { opacity: 0, transform: `translateX(${-shift}px)` }],
+          { duration: 170, easing: 'cubic-bezier(0.4, 0, 1, 1)', fill: 'forwards' }
+        ).finished.catch(() => { });
+        // (it stays faded out until the next fade-in, which clears it)
+      }
+      if (token !== lightboxToken) return;
+
+      if (isClip) {
+        await putClip(media);
+      } else {
+        putPicture();
+        // the loaded copy if there is one (instant), else wait for the full file
+        if (quick) {
+          lightboxImage.src = quick;
+          await lightboxImage.decode().catch(() => { });
+        } else {
+          await full;
+          lightboxImage.src = media.src;
+        }
+      }
+      if (token !== lightboxToken) return;
+
+      if (!prefersReducedMotion) {
+        const into = shownMedia();
+        into.getAnimations().forEach(a => a.cancel());
+        into.animate(
+          [{ opacity: 0, transform: `translateX(${shift}px)` }, { opacity: 1, transform: 'none' }],
+          { duration: 320, easing: 'cubic-bezier(0.22, 1, 0.36, 1)' }
+        );
+      }
+      // then sharpen to the full-size file (same picture, so no visible jump)
+      if (quick && quick !== media.src) {
+        full.then(() => { if (token === lightboxToken) lightboxImage.src = media.src; });
+      }
     }
 
     function openLightbox(group, index) {
@@ -764,6 +1178,7 @@
       lightboxCount.hidden = !multiple;
       lightbox.classList.toggle('has-nav', multiple);
 
+      [lightboxImage, lightboxVideo].forEach(m => m.getAnimations().forEach(a => a.cancel()));
       showLightboxImage(index);
 
       lightbox.hidden = false;
@@ -775,25 +1190,31 @@
     function closeLightbox() {
       lightbox.classList.remove('is-open');
       document.removeEventListener('keydown', handleLightboxKeydown);
+      lightboxToken++; // any image still loading is no longer wanted
 
+      // Once the fade-out is over (unless it was re-opened in the meantime)
       const finish = () => {
+        if (lightbox.classList.contains('is-open')) return;
         lightbox.hidden = true;
-        lightboxImage.src = '';
+        lightboxImage.removeAttribute('src');
+        putPicture(); // stops and clears any clip
       };
-      if (prefersReducedMotion) {
-        finish();
-      } else {
-        lightbox.addEventListener('transitionend', finish, { once: true });
-      }
-      if (lightboxLastTrigger) lightboxLastTrigger.focus();
+      setTimeout(finish, prefersReducedMotion ? 0 : 260);
+
+      // back to the image you were last looking at, without scrolling the page under it
+      if (lightboxLastTrigger) lightboxLastTrigger.focus({ preventScroll: true });
     }
 
-    document.querySelectorAll('.panel-media').forEach(media => {
-      media.addEventListener('click', () => {
-        if (!media.querySelector('img')) return;
-        // every image in the same project panel is part of the group
-        const group = Array.from(media.closest('.panel').querySelectorAll('.panel-media'));
-        openLightbox(group, group.indexOf(media));
+    // Pictures (.panel-media) and animation clips (.panel-video--loop) open in the
+    // lightbox; everything of either kind in the same project is one group
+    const LIGHTBOX_ITEMS = '.panel-media, .panel-video--loop';
+    document.querySelectorAll(LIGHTBOX_ITEMS).forEach(item => {
+      const clip = item.querySelector('video');
+      if (clip) item.setAttribute('aria-label', 'View larger: ' + (clip.getAttribute('aria-label') || 'animation'));
+      item.addEventListener('click', () => {
+        if (!item.querySelector('img, video')) return;
+        const group = Array.from(item.closest('.panel').querySelectorAll(LIGHTBOX_ITEMS));
+        openLightbox(group, group.indexOf(item));
       });
     });
 
@@ -813,8 +1234,9 @@
        ========================================================= */
     const loopVideos = document.querySelectorAll('video[data-autoplay]');
     if (prefersReducedMotion) {
-      // No motion by default: project clips get play controls, the card keeps its still poster
-      loopVideos.forEach(v => { if (v.closest('.panel')) v.controls = true; });
+      // No motion by default: every clip just shows its still poster (no play /
+      // pause controls on the page). Tapping one opens it in the enlarged view,
+      // where it can be played.
     } else if ('IntersectionObserver' in window) {
       // Clips inside a [data-autoplay-group] (the process stages) are one unit:
       // they start together from the first frame and stay in step on every loop
@@ -912,7 +1334,100 @@
       const galleryObserver = new ResizeObserver(entries => entries.forEach(e => placeItem(e.target)));
       items.forEach(item => galleryObserver.observe(item));
     }
+
+    /* =========================================================
+       Gallery cards slide up into place, one after another, as they
+       come into view (once each). Skipped when motion is reduced.
+       ========================================================= */
+    const galleryCards = gallery ? Array.from(gallery.querySelectorAll('.gallery-item')) : [];
+    const canReveal = galleryCards.length && !prefersReducedMotion && 'IntersectionObserver' in window;
+    if (canReveal) gallery.classList.add('reveal-ready'); // hides the cards until they slide in
+
+    let revealStarted = false;
+    function startGalleryReveal() {
+      if (!canReveal || revealStarted) return;
+      revealStarted = true;
+      const revealObserver = new IntersectionObserver((entries) => {
+        // cards arriving together slide in in order, a beat apart
+        entries.filter(e => e.isIntersecting).forEach((e, i) => {
+          e.target.style.animationDelay = (i * 90) + 'ms';
+          e.target.classList.add('is-revealed');
+          revealObserver.unobserve(e.target);
+        });
+      }, { rootMargin: '0px 0px -8% 0px' });
+      galleryCards.forEach(card => revealObserver.observe(card));
+    }
+
+    /* =========================================================
+       Intro (fresh visits, or the logo clicked — see the script in <head>)
+       ========================================================= */
+
+    // The logo replays the intro. On the other pages it's a plain link to
+    // index.html#intro; here (already on this page) that would only jump to an
+    // anchor, so reload the page in "intro" mode instead.
+    document.querySelector('.sidebar .wordmark').addEventListener('click', (e) => {
+      e.preventDefault();
+      history.replaceState(null, '', location.pathname + '#intro');
+      location.reload();
+    });
+
+    const intro = document.getElementById('intro');
+    if (document.documentElement.classList.contains('show-intro')) {
+      const introLogo = document.getElementById('introLogo');
+      const introLogoCard = document.getElementById('introLogoCard');
+      const introTextCard = document.getElementById('introTextCard');
+      // How long the logo card stays before the introduction replaces it: the
+      // whole animation at its original speed (mushroom, the change, wordmark —
+      // about 3 s), or a short look at the still logo when motion is reduced
+      const LOGO_CARD_MS = prefersReducedMotion ? 2500 : 3100;
+
+      // The site underneath can't be reached until the intro is done
+      siteContent.setAttribute('inert', '');
+      siteContent.setAttribute('aria-hidden', 'true');
+      intro.focus({ preventScroll: true });
+
+      // Logo card → introduction card, on its own once the logo has played
+      let cardTimer = null;
+      const startCardTimer = () => {
+        cardTimer = setTimeout(() => {
+          intro.classList.add('show-text');
+          introLogoCard.inert = true;
+          introTextCard.inert = false;
+        }, LOGO_CARD_MS);
+      };
+      if (introLogo.complete) startCardTimer(); else introLogo.addEventListener('load', startCardTimer, { once: true });
+
+      let leaving = false;
+      function finishIntro() {
+        try { sessionStorage.setItem('introSeen', '1'); } catch (e) { }
+        document.documentElement.classList.remove('show-intro');
+        siteContent.removeAttribute('inert');
+        siteContent.removeAttribute('aria-hidden');
+        intro.remove();
+      }
+      // The intro slides up and away to reveal the site, then is removed
+      function leaveIntro() {
+        if (leaving) return;
+        leaving = true;
+        clearTimeout(cardTimer);
+        startGalleryReveal(); // the cards slide in as the intro slides away
+        document.removeEventListener('keydown', introKeydown);
+        if (prefersReducedMotion) { finishIntro(); return; }
+        intro.addEventListener('transitionend', (e) => { if (e.target === intro) finishIntro(); });
+        intro.classList.add('is-leaving');
+      }
+      function introKeydown(e) { if (e.key === 'Escape') leaveIntro(); }
+      document.addEventListener('keydown', introKeydown);
+
+      document.getElementById('introEnter').addEventListener('click', leaveIntro);
+      document.getElementById('introSkip').addEventListener('click', leaveIntro);
+    } else {
+      if (intro) intro.remove();
+      startGalleryReveal();
+    }
   </script>
+
+  <script src="menu.js" defer></script>
 
 </body>
 
