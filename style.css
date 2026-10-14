@@ -931,7 +931,7 @@ a:hover {
 
 .project-view.is-open {
     opacity: 1;
-    transform: translateY(0);
+    transform: none; /* (not translateY(0): no extra layer for Safari to manage under the page-turn) */
 }
 
 body.view-locked {
@@ -1401,9 +1401,9 @@ html:has(#lightbox:not([hidden])) {
         width: 48px;
         height: 48px;
         padding: 0;
-        background: rgba(23, 17, 13, 0.8);
-        -webkit-backdrop-filter: blur(6px);
-        backdrop-filter: blur(6px);
+        /* solid rather than a see-through blur: over a sliding project, Safari's
+           blur leaves stale, half-drawn copies of the content behind */
+        background: rgba(23, 17, 13, 0.94);
         border: 1px solid var(--line);
         border-radius: 50%;
     }
@@ -1416,7 +1416,6 @@ html:has(#lightbox:not([hidden])) {
 
     .project-dots {
         position: absolute;
-        left: 50%;
         bottom: 1rem;
         z-index: 3;
         display: flex;
@@ -1424,18 +1423,22 @@ html:has(#lightbox:not([hidden])) {
         align-items: center;
         gap: 0.2rem;
         padding: 0.45rem 0.75rem 0.5rem;
-        transform: translateX(-50%);
-        background: rgba(23, 17, 13, 0.8);
-        -webkit-backdrop-filter: blur(6px);
-        backdrop-filter: blur(6px);
+        /* centred without a transform, and solid rather than a see-through
+           blur: over a sliding project, Safari's blur leaves stale, half-drawn
+           copies of the content behind (seen on iPhone) */
+        left: 0;
+        right: 0;
+        width: fit-content;
+        margin-inline: auto;
+        background: rgba(23, 17, 13, 0.94);
         border: 1px solid var(--line);
         border-radius: 999px;
         /* the finger drags along the dots rather than scrolling the page */
         touch-action: none;
         user-select: none;
         -webkit-user-select: none;
-        /* (no growing or animated dots while scrubbing: with the blurred
-           background, Safari leaves smeared copies of the dots behind) */
+        /* (no growing or animated dots while scrubbing either: Safari left
+           smeared copies of the dots behind) */
     }
 
     .project-dots-row {
