@@ -931,7 +931,7 @@ a:hover {
 
 .project-view.is-open {
     opacity: 1;
-    transform: none; /* (not translateY(0): no extra layer for Safari to manage under the page-turn) */
+    transform: none; /* (not translateY(0): no extra layer for Safari to manage) */
 }
 
 body.view-locked {
@@ -1215,15 +1215,15 @@ html:has(#lightbox:not([hidden])) {
 
 .project-view-content {
     flex: 1;
-    /* relative + clipped sideways: during a touch page-turn the neighbouring
-       project is laid next to this one, just off-screen */
+    /* clipped sideways, so a project sliding in from the side never makes the
+       view scroll sideways */
     position: relative;
     overflow-x: hidden;
     overflow-y: auto;
     scrollbar-width: none;
     -ms-overflow-style: none;
-    /* the browser handles up/down scrolling and pinch-zoom; sideways drags
-       are the page-turn (index.html script) */
+    /* the browser handles up/down scrolling and pinch-zoom; sideways swipes
+       change project (index.html script) */
     touch-action: pan-y pinch-zoom;
 }
 
@@ -1352,17 +1352,15 @@ html:has(#lightbox:not([hidden])) {
     }
 }
 
-/* Phones: no arrows — projects are turned like pages by dragging sideways, and
-   that drag is the only movement: projects opened or picked any other way
-   simply appear, without the settle or slide animations */
+/* Phones: no arrows — a sideways swipe changes project, and that swipe is the
+   only movement: the new project slides in like on desktop, while projects
+   opened or picked any other way simply appear, without the settle */
 @media (max-width: 860px) {
     .project-side {
         display: none;
     }
 
-    .project-view-content .panel,
-    .project-view-content .panel.swipe-in-left,
-    .project-view-content .panel.swipe-in-right {
+    .project-view-content .panel:not(.swipe-in-left):not(.swipe-in-right) {
         animation: none;
     }
 }

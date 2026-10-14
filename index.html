@@ -530,7 +530,7 @@
     <!-- Previous / next project (desktop): full-height click zones down the left and
          right edges. Invisible until hovered, when a gradient slides in from the
          edge with the neighbouring project's title. (The top bar's titles work
-         too.) Phones turn projects like pages by dragging sideways instead. -->
+         too.) Phones change project with a sideways swipe instead. -->
     <button class="project-side project-side--prev" id="projectSidePrev" type="button">
       <span class="project-side-label" aria-hidden="true">
         <span class="project-side-dir">Previous</span>
@@ -694,7 +694,7 @@
     // one slides in from that side; left out, it just appears with the usual settle
     function showPanelByIndex(index, direction) {
       pauseVideos();
-      // Reset each panel's opening animation (a page-turn drag switches it off).
+      // Reset each panel's opening animation.
       // The slide class goes on before the panel is shown, so the slide is its only
       // animation, and it stays until the panel is hidden again — taking it off
       // straight after would restart the settle animation (a second, unwanted bounce).
@@ -880,157 +880,25 @@
         const zoomedIn = window.visualViewport && window.visualViewport.scale > 1.05;
         // not on a video player either, where dragging scrubs the video
         start = (e.touches.length === 1 && !zoomedIn && !e.target.closest('video[controls]'))
-          ? { x: e.touches[0].clientX, y: e.touches[0].clientY, t: Date.now() }
+          ? { x: e.touches[0].clientX, y: e.touches[0].clientY, t: e.timeStamp }
           : null;
       }, { passive: true });
       el.addEventListener('touchend', (e) => {
         if (!start) return;
         const dx = e.changedTouches[0].clientX - start.x;
         const dy = e.changedTouches[0].clientY - start.y;
-        const quick = Date.now() - start.t < 600;
+        // timed by when the touches actually happened (not when they were
+        // handled), so a busy phone can't make a quick swipe look slow
+        const quick = e.timeStamp - start.t < 800;
         start = null;
         if (quick && Math.abs(dx) > 60 && Math.abs(dx) > Math.abs(dy) * 1.5) onSwipe(dx < 0 ? 1 : -1);
       }, { passive: true });
     }
 
-    /* Touch: page-turn between projects. Dragging a project sideways moves it
-       with the finger while the neighbouring project slides in right beside it.
-       Let go past a quarter of the screen (or flick) to turn to it; otherwise
-       both spring back. Up-and-down scrolling is left alone. */
-    (function setupProjectPager() {
-      const DRAG_PROPS = ['position', 'top', 'left', 'right', 'transform', 'transition', 'will-change'];
-      const clearDrag = (p) => DRAG_PROPS.forEach(k => p.style.removeProperty(k));
-      const visiblePanel = () => panels.find(p => p.dataset.index === pvTabs.find(t => t.getAttribute('aria-selected') === 'true').dataset.index);
-      const panelFor = (offset) => {
-        const cur = pvTabs.findIndex(t => t.getAttribute('aria-selected') === 'true');
-        const idx = pvTabs[(cur + offset + pvTabs.length) % pvTabs.length].dataset.index;
-        return panels.find(p => p.dataset.index === idx);
-      };
-
-      // Puts every panel back in order: only `keep` showing, no leftover drag
-      // positions. Run before each drag and after each turn, so a half-finished
-      // or interrupted turn can never leave two projects on screen at once.
-      function resetPanels(keep) {
-        panels.forEach(p => { clearDrag(p); p.hidden = p !== keep; });
-      }
-
-      let start = null;   // where the finger went down
-      let axis = null;    // 'x' once it's clearly a sideways drag, 'y' for a scroll
-      let drag = null;    // { current, peer, offset, samples }
-      let settle = null;  // the turn (or spring-back) that's still animating
-
-      // Ends the animating turn now: the right project shown, everything tidy.
-      // Called when the slide finishes — or straight away if a new swipe starts
-      // first, so quick swipes through several projects all count.
-      function finishSettle() {
-        if (!settle) return;
-        const s = settle;
-        settle = null;
-        clearTimeout(s.timer);
-        s.d.peer.removeEventListener('transitionend', s.onEnd);
-        try {
-          if (s.turn) showPanelByIndex(s.d.peer.dataset.index); // (scrolls to the top of the new project)
-        } finally {
-          const keep = s.turn ? s.d.peer : s.d.current;
-          resetPanels(keep);
-          keep.style.animation = 'none'; // already in place: no settle animation
-        }
-      }
-
-      // The neighbour sits just off-screen on the side it's coming from, level
-      // with the top of the screen (wherever the current project is scrolled to)
-      function showPeer(offset) {
-        if (drag.peer) { drag.peer.hidden = true; clearDrag(drag.peer); }
-        drag.offset = offset;
-        const peer = drag.peer = panelFor(offset);
-        peer.style.animation = 'none';
-        peer.style.position = 'absolute';
-        peer.style.top = projectContent.scrollTop + 'px';
-        peer.style.left = '0';
-        peer.style.right = '0';
-        peer.style.willChange = 'transform';
-        peer.hidden = false;
-      }
-
-      function place(dx) {
-        const offset = dx < 0 ? 1 : -1; // dragging left brings in the next project
-        if (offset !== drag.offset) showPeer(offset);
-        drag.current.style.transform = `translate3d(${dx}px, 0, 0)`;
-        drag.peer.style.transform = `translate3d(${dx + offset * projectContent.clientWidth}px, 0, 0)`;
-      }
-
-      projectContent.addEventListener('touchstart', (e) => {
-        finishSettle(); // a new swipe during a turn: finish that turn first
-        const zoomedIn = window.visualViewport && window.visualViewport.scale > 1.05;
-        start = (e.touches.length === 1 && !zoomedIn && !e.target.closest('video[controls]'))
-          ? { x: e.touches[0].clientX, y: e.touches[0].clientY } : null;
-        axis = null;
-      }, { passive: true });
-
-      projectContent.addEventListener('touchmove', (e) => {
-        if (!start) return;
-        const t = e.touches[0];
-        const dx = t.clientX - start.x, dy = t.clientY - start.y;
-        if (!axis) {
-          if (Math.abs(dx) < 8 && Math.abs(dy) < 8) return;
-          axis = Math.abs(dx) > Math.abs(dy) * 1.2 ? 'x' : 'y';
-          if (axis === 'x') {
-            const current = visiblePanel();
-            resetPanels(current); // start clean: only the current project showing
-            // stop any leftover momentum scroll, so the neighbour lines up with the screen
-            projectContent.scrollTop = projectContent.scrollTop;
-            current.style.animation = 'none';
-            current.style.transition = 'none';
-            current.style.willChange = 'transform';
-            drag = { current, peer: null, offset: 0, samples: [] };
-          }
-        }
-        if (axis !== 'x') return;
-        e.preventDefault(); // the drag is ours: don't scroll as well
-        place(dx);
-        drag.samples.push({ x: t.clientX, t: e.timeStamp });
-        if (drag.samples.length > 6) drag.samples.shift();
-      }, { passive: false });
-
-      function release(e) {
-        if (!drag) { start = null; return; }
-        const d = drag;
-        drag = null;
-        const cancelled = e && e.type === 'touchcancel';
-        const lastX = !cancelled && e.changedTouches && e.changedTouches[0] ? e.changedTouches[0].clientX : start.x;
-        const dx = lastX - start.x;
-        start = null;
-        if (!d.peer) { resetPanels(d.current); return; }
-
-        // speed over the last moment of the drag, for flicks
-        const s = d.samples, first = s[0], last = s[s.length - 1];
-        const v = s.length > 1 && last.t > first.t ? (last.x - first.x) / (last.t - first.t) : 0;
-        const width = projectContent.clientWidth;
-        const turn = !cancelled && (Math.abs(dx) > width * 0.25 ||
-          (Math.abs(v) > 0.45 && Math.sign(v) === Math.sign(dx) && Math.abs(dx) > 20));
-
-        if (prefersReducedMotion) {
-          settle = { d, turn, timer: 0, onEnd: () => { } };
-          finishSettle();
-          return;
-        }
-
-        // Slide both the rest of the way (or back); finish when the slide really
-        // ends (transitionend), with a timer only as a safety net
-        const ease = 'transform 0.32s cubic-bezier(0.22, 1, 0.36, 1)';
-        [d.current, d.peer].forEach(p => { p.style.transition = ease; });
-        const onEnd = (ev) => { if (ev.target === d.peer && ev.propertyName === 'transform') finishSettle(); };
-        settle = { d, turn, onEnd, timer: setTimeout(finishSettle, 700) };
-        d.peer.addEventListener('transitionend', onEnd);
-        d.current.style.transform = `translate3d(${turn ? -d.offset * width : 0}px, 0, 0)`;
-        d.peer.style.transform = `translate3d(${turn ? 0 : d.offset * width}px, 0, 0)`;
-      }
-      projectContent.addEventListener('touchend', release);
-      projectContent.addEventListener('touchcancel', release);
-
-      // Closing the project view mid-turn: tidy up straight away
-      closeBtn.addEventListener('click', finishSettle);
-    })();
+    // Touch: a quick sideways swipe moves to the next / previous project, which
+    // slides in with the same animation as the desktop arrows. (The project
+    // doesn't follow the finger: on iPhone, Safari couldn't draw that cleanly.)
+    addSwipe(projectContent, (offset) => goToProject(offset, false));
 
     // The side arrows step to the previous / next project (the same slide as the arrow keys)
     projectSidePrev.addEventListener('click', () => goToProject(-1, false));
