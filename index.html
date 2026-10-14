@@ -39,11 +39,10 @@
        slides the intro up and away to reveal the site, and it's removed. -->
   <div class="intro" id="intro" role="region" aria-label="Introduction" tabindex="-1">
     <section class="intro-card intro-card--logo" id="introLogoCard">
-      <picture>
-        <source srcset="assets/images/web/logo-intro-still.webp" media="(prefers-reduced-motion: reduce)">
-        <img class="intro-logo" id="introLogo" src="assets/images/web/logo-intro.webp" width="420" height="420"
-          alt="Adithyan S. logo">
-      </picture>
+      <!-- The logo animation always plays here, on every device — even with
+           Reduce Motion on: it's the intro's centrepiece, short and gentle -->
+      <img class="intro-logo" id="introLogo" src="assets/images/web/logo-intro.webp" width="420" height="420"
+        alt="Adithyan S. logo">
     </section>
     <!-- Same photo and text as the About page, side by side (stacked on phones).
          Inert (can't be reached) until it's shown. -->
@@ -1285,8 +1284,8 @@
       const introTextCard = document.getElementById('introTextCard');
       // How long the logo card stays before the introduction replaces it: the
       // whole animation at its original speed (mushroom, the change, wordmark —
-      // about 3 s), or a short look at the still logo when motion is reduced
-      const LOGO_CARD_MS = prefersReducedMotion ? 2500 : 3100;
+      // about 3 s)
+      const LOGO_CARD_MS = 3100;
 
       // The site underneath can't be reached until the intro is done
       siteContent.setAttribute('inert', '');
