@@ -2437,12 +2437,12 @@ video.lightbox-image {
                 card-float 6s ease-in-out var(--float-delay, 0s) infinite alternate;
         }
 
-        .gallery-item:nth-child(2) { --float-delay: -2.1s; }
-        .gallery-item:nth-child(3) { --float-delay: -4.3s; }
-        .gallery-item:nth-child(4) { --float-delay: -1.2s; }
-        .gallery-item:nth-child(5) { --float-delay: -5.1s; }
-        .gallery-item:nth-child(6) { --float-delay: -3.2s; }
-        .gallery-item:nth-child(7) { --float-delay: -0.6s; }
+        .gallery-slot:nth-child(2) .gallery-item { --float-delay: -2.1s; }
+        .gallery-slot:nth-child(3) .gallery-item { --float-delay: -4.3s; }
+        .gallery-slot:nth-child(4) .gallery-item { --float-delay: -1.2s; }
+        .gallery-slot:nth-child(5) .gallery-item { --float-delay: -5.1s; }
+        .gallery-slot:nth-child(6) .gallery-item { --float-delay: -3.2s; }
+        .gallery-slot:nth-child(7) .gallery-item { --float-delay: -0.6s; }
     }
 
     @keyframes card-float {
@@ -2556,10 +2556,10 @@ video.lightbox-image {
 /* =========================================================
    Phones: the home page is one sideways strip too, like desktop —
    the introduction, then each project, then the contact details,
-   swiped one at a time (the strip follows the finger, then glides to the
-   next stop). Everything fits one screen height, so nothing scrolls up
-   and down. The centred card is full size, its neighbours smaller and
-   turned inward, and it leans as the phone tilts (all in index.html).
+   swiped one at a time with the phone's own scrolling and snapping.
+   Everything fits one screen height, so nothing scrolls up and down. The
+   centred card is full size, its neighbours smaller and turned inward,
+   and it leans as the phone tilts (index.html).
    ========================================================= */
 @media (max-width: 860px) {
     /* The page is exactly one screen: a slim top bar, then the strip */
@@ -2591,7 +2591,9 @@ video.lightbox-image {
         overflow-x: auto;
         overflow-y: hidden;
         overscroll-behavior-x: contain;
-        touch-action: pan-y pinch-zoom; /* sideways swipes are handled by the script */
+        /* the phone's own scrolling (smooth, off the main thread), stopping at each
+           screen / card: one per swipe, however hard the flick */
+        scroll-snap-type: x mandatory;
         scrollbar-width: none;
     }
 
@@ -2608,6 +2610,8 @@ video.lightbox-image {
         align-items: safe center;
         justify-content: center;
         overflow-y: auto; /* (only on very short screens) */
+        scroll-snap-align: center;
+        scroll-snap-stop: always;
     }
 
     /* The introduction: all of it, scrolling up and down within its screen when it's
@@ -2721,9 +2725,16 @@ video.lightbox-image {
         transform: perspective(900px) rotateY(calc(var(--turn, 0deg) + var(--tilt-y, 0deg))) rotateX(var(--tilt-x, 0deg));
     }
 
-    .gallery-item {
+    /* Each card sits in a plain, never-transformed slot, and the snapping lines up
+       with the slots: the cards' turns and tilts can't shift where a swipe stops */
+    .gallery-slot {
         flex: 0 0 auto;
         margin-inline: -7vw; /* tucks the (much smaller) neighbours in, so they peek past the edges */
+        scroll-snap-align: center;
+        scroll-snap-stop: always;
+    }
+
+    .gallery-item {
         box-shadow: 0 24px 40px -20px rgba(0, 0, 0, 0.8);
         transition: scale 0.4s cubic-bezier(0.22, 1, 0.36, 1), transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
     }
@@ -2736,8 +2747,8 @@ video.lightbox-image {
         scale: 0.7;
     }
 
-    .gallery > .is-before { --turn: 25deg; }
-    .gallery > .is-after { --turn: -25deg; }
+    .gallery .is-before { --turn: 25deg; }
+    .gallery .is-after { --turn: -25deg; }
 
     /* As big as fits: at most 82% of the width and 64% of the height, in the picture's own shape */
     .gallery-item-media img,
