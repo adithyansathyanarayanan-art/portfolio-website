@@ -32,6 +32,9 @@
 }
 
 html {
+    /* dark scrollbars in the site's browns, on every scrolling area (inherited) */
+    color-scheme: dark;
+    scrollbar-color: var(--line) var(--paper);
     scroll-behavior: smooth;
     /* Always reserve the scrollbar's space, so the layout never shifts
        sideways when a page gains or loses its scrollbar */
@@ -498,7 +501,7 @@ a:hover {
 }
 
 .gallery-item.is-revealed {
-    animation: card-slide-in 0.7s cubic-bezier(0.22, 1, 0.36, 1) backwards;
+    animation: card-slide-in 0.7s cubic-bezier(0.22, 1, 0.36, 1) var(--reveal-delay, 0s) backwards;
 }
 
 @keyframes card-slide-in {
@@ -1588,9 +1591,18 @@ html:has(#lightbox:not([hidden])) {
     justify-content: center;
     overflow: hidden;
     cursor: zoom-in;
-    /* Animation #7 — smooths the tilt driven by JS mousemove */
-    transition: transform 0.1s ease-out, border-color 0.15s ease;
-    transform-style: preserve-3d;
+    position: relative; /* holds the hover lights */
+    /* Animation #7 — pops out on hover (below) */
+    transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.3s ease, border-color 0.15s ease;
+}
+
+/* Hover: the image pops out — a little bigger, lifted on a drop shadow, above its neighbours */
+@media (hover: hover) {
+    .panel-media:hover {
+        z-index: 1;
+        transform: scale(1.04);
+        box-shadow: 0 30px 60px -20px rgba(0, 0, 0, 0.85), 0 12px 24px -12px rgba(0, 0, 0, 0.6);
+    }
 }
 
 .panel-media:hover,
@@ -1783,7 +1795,11 @@ video[data-autoplay]::-webkit-media-controls {
 
 /* Title that sits above the image in a stacked panel */
 .panel-title {
-    font-size: 1.6rem;
+    font-family: Inter, sans-serif; /* Inter Black, loaded in index.html */
+    font-weight: 900;
+    letter-spacing: -0.05em; /* tight tracking */
+    font-size: min(4.1rem, 12vw); /* about 30pt bigger than before; phones: limited by the width */
+    line-height: 1;
     margin: 0;
 }
 
@@ -2119,9 +2135,8 @@ video.lightbox-image {
 
 /* =========================================================
    Intro — fresh visits only (html.show-intro, set in index.html's <head>).
-   Two full-screen cards over the site: the logo animation, then the
-   introduction, which takes over on its own (.show-text). Leaving slides
-   the whole intro up and away (.is-leaving) to reveal the site.
+   A full-screen cover over the site with the logo animation; once it has
+   played, the cover slides up and away (.is-leaving) to reveal the site.
    ========================================================= */
 .intro {
     display: none;
@@ -2148,32 +2163,13 @@ video.lightbox-image {
     overflow: hidden;
 }
 
-/* Both cards fill the screen in the same spot; one is shown at a time */
+/* The logo, centred on the cover */
 .intro-card {
     position: absolute;
     inset: 0;
     display: grid;
     place-items: center;
     padding: 4rem 1.5rem;
-    /* a long introduction on a short phone screen can still be read in full */
-    overflow-y: auto;
-    transition: opacity 0.8s ease, transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
-}
-
-/* The card change: the logo lifts away as the introduction rises in */
-.intro-card--text {
-    opacity: 0;
-    transform: translateY(40px);
-}
-
-.intro.show-text .intro-card--logo {
-    opacity: 0;
-    transform: translateY(-40px);
-}
-
-.intro.show-text .intro-card--text {
-    opacity: 1;
-    transform: none;
 }
 
 .intro-logo {
@@ -2224,9 +2220,20 @@ video.lightbox-image {
 }
 
 .intro-text .intro-hello {
-    font-size: 1.6em;
-    line-height: 1.2;
+    /* Helvetica where it's built in (Apple devices), Inter (loaded in index.html) elsewhere.
+       (Not plain "Helvetica": Windows quietly swaps that name for Arial.) */
+    font-family: "Helvetica Neue", Inter, sans-serif;
+    font-weight: 900;
+    letter-spacing: -0.05em; /* tight tracking (-50) */
+    font-size: min(9.3vh, 10.7vw, 5rem); /* big, but always fits the window (phones: limited by the width) */
+    line-height: 0.95;
+    margin-block: 0 0.35em; /* (the usual paragraph gap would be huge at this size) */
     color: var(--accent);
+}
+
+/* A smaller comma, so its tail doesn't reach down into "Adithyan" on the line below */
+.intro-hello-comma {
+    font-size: 0.55em;
 }
 
 .intro-enter {
@@ -2248,3 +2255,450 @@ video.lightbox-image {
     color: var(--accent-deep);
 }
 
+
+/* =========================================================
+   Desktop (wider than 860px): one sideways-scrolling strip —
+   introduction → work → contact. The sidebar shrinks to a small logo in
+   the top-left corner (click it to replay the intro). (Phones get their
+   own version of the strip, at the end of this file.) Without the strip
+   styles the introduction and contact sections stay hidden.
+   ========================================================= */
+.hscroll-intro,
+.hscroll-contact {
+    display: none;
+}
+
+@media (min-width: 861px) {
+
+    /* the strip does the scrolling, not the page */
+    html,
+    body {
+        overflow: hidden;
+    }
+
+    html {
+        scrollbar-gutter: auto;
+    }
+
+    /* the sidebar becomes just the logo, small, in the corner */
+    .sidebar {
+        bottom: auto;
+        width: auto;
+        padding: 1.25rem 1.5rem;
+        background: none;
+        border: none;
+        z-index: 30;
+    }
+
+    .sidebar .site-nav,
+    .site-footer {
+        display: none;
+    }
+
+    .wordmark img {
+        height: 96px;
+    }
+
+    .main-content {
+        margin-left: 0;
+        height: 100vh;
+        height: 100dvh;
+        display: flex;
+        align-items: center;
+        overflow-x: auto;
+        overflow-y: hidden;
+        overscroll-behavior-x: contain;
+        position: relative; /* measures the stops (offsetLeft) from the strip */
+    }
+
+    /* 1. The introduction: one full screen, no scrolling needed */
+    .hscroll-intro {
+        display: flex;
+        flex: 0 0 100vw;
+        height: 100%;
+        align-items: center;
+        justify-content: center;
+        padding: 6rem 6vw 3rem;
+        overflow: hidden;
+    }
+
+    .hscroll-intro .intro-text {
+        font-size: clamp(0.95rem, 2.4vh, 1.45rem); /* sized to the window's height, so it always fits */
+    }
+
+    .hscroll-intro .intro-enter {
+        display: inline-block;
+        text-decoration: none;
+    }
+
+    /* 2. The work: a carousel row. Each card is as big as fits (at most 70% of the
+       height and 56% of the width) in its picture's own shape (--ar, set by the script) */
+    .gallery {
+        display: flex;
+        flex: 0 0 auto;
+        align-items: center;
+        max-width: none;
+        margin: 0;
+        padding: 0;
+        gap: 0;
+    }
+
+    .gallery-item {
+        flex: 0 0 auto;
+        transition: border-color 0.15s ease, scale 0.5s cubic-bezier(0.22, 1, 0.36, 1), filter 0.5s ease;
+    }
+
+    .gallery-item-media img,
+    .gallery-item-media video {
+        width: min(56vw, min(70vh, 720px) * var(--ar, 1));
+        height: auto;
+    }
+
+    /* Spotlight: everything but the current stop is smaller and dimmer */
+    .gallery-item:not(.is-current) {
+        scale: 0.78;
+        filter: brightness(0.4) saturate(0.6);
+    }
+
+    .gallery-item:not(.is-current):hover {
+        filter: brightness(0.6) saturate(0.8);
+    }
+
+    /* Depth: neighbours turn inward like a cover-flow, the centred card leans toward
+       the mouse (--tilt-x/y from the script) and casts a deep shadow */
+    .gallery-item,
+    .gallery-item:hover {
+        transform: perspective(1400px) rotateY(calc(var(--turn, 0deg) + var(--tilt-y, 0deg))) rotateX(var(--tilt-x, 0deg));
+    }
+
+    .gallery-item {
+        transition: border-color 0.15s ease, scale 0.5s cubic-bezier(0.22, 1, 0.36, 1), filter 0.5s ease,
+            transform 0.6s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.5s ease;
+    }
+
+    .gallery-item.is-before { --turn: 38deg; }
+    .gallery-item.is-after { --turn: -38deg; }
+
+    .gallery-item {
+        box-shadow: 0 30px 60px -25px rgba(0, 0, 0, 0.8);
+    }
+
+    .gallery-item.is-current {
+        box-shadow: 0 50px 90px -30px rgba(0, 0, 0, 0.9), 0 20px 40px -20px rgba(0, 0, 0, 0.7);
+    }
+
+    /* Floating: every card bobs gently, each out of step with the others */
+    @media (prefers-reduced-motion: no-preference) {
+        .gallery-item {
+            animation: card-float 6s ease-in-out var(--float-delay, 0s) infinite alternate;
+        }
+
+        .gallery-item.is-revealed {
+            animation: card-slide-in 0.7s cubic-bezier(0.22, 1, 0.36, 1) var(--reveal-delay, 0s) backwards,
+                card-float 6s ease-in-out var(--float-delay, 0s) infinite alternate;
+        }
+
+        .gallery-item:nth-child(2) { --float-delay: -2.1s; }
+        .gallery-item:nth-child(3) { --float-delay: -4.3s; }
+        .gallery-item:nth-child(4) { --float-delay: -1.2s; }
+        .gallery-item:nth-child(5) { --float-delay: -5.1s; }
+        .gallery-item:nth-child(6) { --float-delay: -3.2s; }
+        .gallery-item:nth-child(7) { --float-delay: -0.6s; }
+    }
+
+    @keyframes card-float {
+        from { translate: 0 -9px; }
+        to { translate: 0 9px; }
+    }
+
+    .gallery-item.is-tilting {
+        transition-duration: 0.15s, 0.5s, 0.5s, 0.12s, 0.5s; /* follows the mouse closely */
+    }
+
+    /* The Instagram card on the contact screen leans toward the mouse too */
+    .hscroll-contact .contact-social--primary {
+        position: relative;
+        transform: perspective(1000px) rotateY(var(--tilt-y, 0deg)) rotateX(var(--tilt-x, 0deg));
+        transition: border-color 0.2s ease, background-color 0.2s ease, transform 0.6s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.4s ease;
+    }
+
+    .hscroll-contact .contact-social--primary.is-tilting {
+        transition-duration: 0.2s, 0.2s, 0.12s, 0.4s; /* follows the mouse closely */
+        box-shadow: 0 40px 70px -30px rgba(0, 0, 0, 0.9);
+    }
+
+    /* The project name sits on a fade from the bottom, instead of a wash over the whole card */
+    .gallery-item-caption {
+        top: auto;
+        padding-top: 4rem;
+        background: linear-gradient(transparent, color-mix(in srgb, var(--black) 80%, transparent));
+    }
+
+    .hscroll-intro,
+    .hscroll-contact {
+        transition: opacity 0.5s ease;
+    }
+
+    .hscroll-intro:not(.is-current),
+    .hscroll-contact:not(.is-current) {
+        opacity: 0.25;
+    }
+
+    /* 3. The contact details: one full screen at the end */
+    .hscroll-contact {
+        display: flex;
+        flex: 0 0 100vw;
+        height: 100%;
+        align-items: safe center;
+        justify-content: center;
+        padding: 2rem 6vw;
+        overflow: hidden; /* never taller than the strip, or the whole row shifts up when it scrolls */
+    }
+
+    .hscroll-contact .contact { padding: 0; }
+    .hscroll-contact .contact-featured { margin-bottom: 1.5rem; }
+    .hscroll-contact .contact-group-title { margin-top: 1.5rem; }
+    .hscroll-contact .contact-social--primary { padding: 1.5rem 2.5rem; }
+    .hscroll-contact .contact-social--primary .contact-icon { width: min(180px, 18vh); height: min(180px, 18vh); }
+    .hscroll-contact .contact-row { padding: 0.9rem 0; }
+
+    .hscroll-copyright {
+        margin-top: 1.5rem;
+        text-align: center;
+    }
+}
+
+/* Light effects on a tilting card (desktop: they follow the mouse; phones: the gyro).
+   A soft light where it points... */
+.gallery-item::after,
+.hscroll-contact .contact-social--primary::after,
+.panel-media::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    pointer-events: none;
+    background: radial-gradient(circle at var(--glare-x, 50%) var(--glare-y, 50%), rgba(255, 240, 220, 0.1), transparent 35%);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.gallery-item.is-tilting::after,
+.hscroll-contact .contact-social--primary.is-tilting::after,
+.panel-media.is-lit::after {
+    opacity: 1;
+}
+
+/* ...and a light running along the border, brightest nearest the mouse */
+.gallery-item::before,
+.hscroll-contact .contact-social--primary::before,
+.panel-media::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: 3;
+    padding: 2px; /* the ring's thickness */
+    border-radius: inherit;
+    background: radial-gradient(280px circle at var(--glare-x, 50%) var(--glare-y, 50%), rgba(255, 236, 205, 0.95), transparent 70%);
+    -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+    mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0);
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.gallery-item.is-tilting::before,
+.hscroll-contact .contact-social--primary.is-tilting::before,
+.panel-media.is-lit::before {
+    opacity: 1;
+}
+
+/* =========================================================
+   Phones: the home page is one sideways strip too, like desktop —
+   the introduction, then each project, then the contact details,
+   swiped one at a time (the strip follows the finger, then glides to the
+   next stop). Everything fits one screen height, so nothing scrolls up
+   and down. The centred card is full size, its neighbours smaller and
+   turned inward, and it leans as the phone tilts (all in index.html).
+   ========================================================= */
+@media (max-width: 860px) {
+    /* The page is exactly one screen: a slim top bar, then the strip */
+    body:has(.hscroll-intro) #siteContent {
+        display: flex;
+        flex-direction: column;
+        height: 100svh;
+    }
+
+    body:has(.hscroll-intro) .sidebar {
+        flex: none;
+        padding: 0.75rem 1.25rem;
+    }
+
+    body:has(.hscroll-intro) .wordmark img {
+        height: 56px;
+    }
+
+    body:has(.hscroll-intro) .site-footer {
+        display: none; /* the copyright is on the contact screen instead */
+    }
+
+    .main-content:has(.hscroll-intro) {
+        position: relative; /* measures the stops (offsetLeft) from the strip */
+        flex: 1;
+        min-height: 0;
+        display: flex;
+        align-items: center;
+        overflow-x: auto;
+        overflow-y: hidden;
+        overscroll-behavior-x: contain;
+        touch-action: pan-y pinch-zoom; /* sideways swipes are handled by the script */
+        scrollbar-width: none;
+    }
+
+    .main-content:has(.hscroll-intro)::-webkit-scrollbar {
+        display: none;
+    }
+
+    /* 1 and 3: the introduction and the contact details, a full screen each */
+    .hscroll-intro,
+    .hscroll-contact {
+        display: flex;
+        flex: 0 0 100vw;
+        height: 100%;
+        align-items: safe center;
+        justify-content: center;
+        overflow-y: auto; /* (only on very short screens) */
+    }
+
+    /* The introduction: all of it, scrolling up and down within its screen when it's
+       taller (sideways swipes still move the strip; "See my work" glides to the work) */
+    .hscroll-intro {
+        padding: 1.5rem 1.5rem 2.5rem;
+    }
+
+    .hscroll-intro .intro-about {
+        gap: 1rem;
+    }
+
+    .hscroll-intro .intro-photo {
+        width: calc(50vw - 1.5rem); /* from the left margin to the middle of the screen */
+    }
+
+    .hscroll-intro .intro-enter {
+        display: inline-block;
+        text-decoration: none;
+    }
+
+    /* The contact details, fitted to the screen: a big Instagram card in the middle,
+       the Behance / LinkedIn icons in a row under it, then the Direct list */
+    .hscroll-contact {
+        padding: 1rem 1.25rem;
+    }
+
+    .hscroll-contact .contact {
+        width: 100%;
+        padding: 0;
+    }
+
+    .hscroll-contact .contact-featured {
+        grid-template-columns: minmax(0, 1fr);
+        justify-items: center;
+        gap: 0.75rem;
+        margin-bottom: 0.5rem;
+    }
+
+    .hscroll-contact .contact-social--primary {
+        grid-column: 1;
+        justify-self: center;
+        width: min(100%, 320px);
+        padding: 1.25rem 1rem;
+    }
+
+    .hscroll-contact .contact-social--primary .contact-icon {
+        width: min(120px, 16svh);
+        height: min(120px, 16svh);
+        margin-bottom: 0.5rem;
+    }
+
+    .hscroll-contact .contact-social--primary .contact-social-handle {
+        font-size: 1.5rem;
+    }
+
+    .hscroll-contact .contact-icon-links {
+        grid-column: 1;
+        justify-self: center;
+        flex-direction: row;
+        gap: 0.75rem;
+    }
+
+    .hscroll-contact .contact-icon-link {
+        width: 64px;
+        height: 64px;
+        border-radius: 18px;
+    }
+
+    .hscroll-contact .contact-icon-link img {
+        width: 32px;
+        height: 32px;
+    }
+
+    .hscroll-contact .contact-group-title {
+        margin: 1rem 0 0.25rem;
+    }
+
+    .hscroll-contact .contact-row {
+        padding: 0.6rem 0;
+    }
+
+    .hscroll-contact .contact-row dd {
+        font-size: 1.1rem;
+    }
+
+    .hscroll-copyright {
+        margin-top: 1rem;
+        text-align: center;
+    }
+
+    /* 2: the projects, one row of cards between them */
+    .gallery,
+    .gallery.is-masonry {
+        display: flex;
+        flex: 0 0 auto;
+        align-items: center;
+        gap: 0;
+        max-width: none;
+        margin: 0;
+        padding: 0 26vw; /* a clear gap between the work and the introduction / contact screens */
+    }
+
+    .gallery-item,
+    .gallery-item:hover {
+        transform: perspective(900px) rotateY(calc(var(--turn, 0deg) + var(--tilt-y, 0deg))) rotateX(var(--tilt-x, 0deg));
+    }
+
+    .gallery-item {
+        flex: 0 0 auto;
+        margin-inline: -7vw; /* tucks the (much smaller) neighbours in, so they peek past the edges */
+        box-shadow: 0 24px 40px -20px rgba(0, 0, 0, 0.8);
+        transition: scale 0.4s cubic-bezier(0.22, 1, 0.36, 1), transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    .gallery-item.is-tilting {
+        transition: scale 0.4s cubic-bezier(0.22, 1, 0.36, 1); /* the script already smooths the gyro */
+    }
+
+    .gallery-item:not(.is-current) {
+        scale: 0.7;
+    }
+
+    .gallery > .is-before { --turn: 25deg; }
+    .gallery > .is-after { --turn: -25deg; }
+
+    /* As big as fits: at most 82% of the width and 64% of the height, in the picture's own shape */
+    .gallery-item-media img,
+    .gallery-item-media video {
+        width: min(82vw, 64svh * var(--ar, 1));
+        height: auto;
+    }
+}

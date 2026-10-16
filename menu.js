@@ -26,8 +26,10 @@
   // Choosing a link:
   //  - another page: the menu stays up and the next page simply replaces it
   //    (closing it first flashed the old page for a moment — a jitter)
-  //  - the page you're already on (e.g. Work while on Work): the menu closes and
-  //    the page glides back to its top, instead of jumping to an anchor part-way down
+  //  - a part of this page (e.g. Introduction / Work / Contact on the home page):
+  //    the menu closes and the page glides to that part
+  //  - the page you're already on: the menu closes and the page glides back to
+  //    its top, instead of jumping to an anchor part-way down
   const samePath = (p) => p.replace(/\/index\.html$/, '/');
   nav.addEventListener('click', (e) => {
     const link = e.target.closest('a');
@@ -39,7 +41,9 @@
       e.preventDefault();
       setOpen(false);
       const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-      window.scrollTo({ top: 0, behavior: reduce ? 'auto' : 'smooth' });
+      const part = link.hash && document.querySelector(link.hash);
+      if (part) part.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'start', inline: 'start' }); // (works for a sideways page too)
+      else window.scrollTo({ top: 0, behavior: reduce ? 'auto' : 'smooth' });
     }
   });
 

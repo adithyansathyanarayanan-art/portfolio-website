@@ -10,13 +10,13 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link
-    href="https://fonts.googleapis.com/css2?family=Newsreader:ital,wght@0,400;0,500;0,600;1,400&family=Work+Sans:wght@400;500;600&display=swap"
+    href="https://fonts.googleapis.com/css2?family=Newsreader:ital,wght@0,400;0,500;0,600;1,400&family=Work+Sans:wght@400;500;600&family=Inter:wght@900&display=swap"
     rel="stylesheet">
 
   <link rel="stylesheet" href="style.css">
 
-  <!-- Intro: shown on a fresh visit (once per browser tab), so going to About and
-       back to Work doesn't replay it — and again whenever the logo is clicked
+  <!-- Intro: shown on a fresh visit (once per browser tab), so coming back from
+       the Contact page doesn't replay it — and again whenever the logo is clicked
        (it links to index.html#intro). Decided here, before the page is drawn, so
        the site never flashes up first. Without JS there's no intro. -->
   <script>
@@ -34,33 +34,15 @@
 <body>
 
   <!-- ============ INTRO ============ -->
-  <!-- Two full-screen cards over the site: the logo animation (plays once), then,
-       on their own once it finishes, the introduction. "See my work" or Esc
-       slides the intro up and away to reveal the site, and it's removed. -->
+  <!-- A full-screen cover over the site: the logo animation plays once, then
+       (or on Esc) the cover slides up and away to reveal the page — which
+       starts with the introduction — and it's removed. -->
   <div class="intro" id="intro" role="region" aria-label="Introduction" tabindex="-1">
     <section class="intro-card intro-card--logo" id="introLogoCard">
       <!-- The logo animation always plays here, on every device — even with
            Reduce Motion on: it's the intro's centrepiece, short and gentle -->
       <img class="intro-logo" id="introLogo" src="assets/images/web/logo-intro.webp" width="420" height="420"
         alt="Adithyan S. logo">
-    </section>
-    <!-- Same photo and text as the About page, side by side (stacked on phones).
-         Inert (can't be reached) until it's shown. -->
-    <section class="intro-card intro-card--text" id="introTextCard" inert>
-      <div class="intro-about">
-        <img class="intro-photo" src="assets/images/about-photo.jpg" width="1000" height="1000"
-          alt="Portrait of Adithyan S. smiling, seated at a table in a white T-shirt.">
-        <div class="intro-text">
-          <p class="intro-hello">Hi, I'm Adithyan.</p>
-          <p>I'm a Design student, illustrator and an aspiring visual story teller who wants to work with illustration
-            and design to tell stories with the worlds and characters I create.</p>
-          <p>I am a Communication Design Student, so I am always finding and learning new ways to create work that
-            engages the viewer, making them put a piece of themselves in my work whenever they interact with it.</p>
-          <p>I am constantly looking to improving my approach and work in design, through experimentation, consuming
-            new human made media that inspire me and doing work that challenge my current status as a designer.</p>
-          <button class="intro-enter" id="introEnter" type="button">See my work <span aria-hidden="true">&rarr;</span></button>
-        </div>
-      </div>
     </section>
   </div>
 
@@ -80,13 +62,33 @@
         <span class="menu-toggle-icon" aria-hidden="true"></span>
       </button>
       <nav class="site-nav" id="siteNav" aria-label="Primary">
-        <a href="#work" aria-current="page">Work</a>
-        <a href="about.html">About</a>
-        <a href="contact.html">Contact</a>
+        <!-- All on this page: the menu (phones) just takes you to each part -->
+        <a href="#about">Introduction</a>
+        <a href="#work">Work</a>
+        <a href="#contact">Contact</a>
       </nav>
     </aside>
 
     <main class="main-content" id="top">
+
+      <!-- One page: this introduction, then the work, then the contact details —
+           a sideways strip on desktop, stacked top to bottom on phones. -->
+      <section class="hscroll-intro" id="about" aria-label="About me">
+        <div class="intro-about">
+          <img class="intro-photo" src="assets/images/about-photo.jpg" width="1000" height="1000" loading="lazy"
+            alt="Portrait of Adithyan S. smiling, seated at a table in a white T-shirt.">
+          <div class="intro-text">
+            <p class="intro-hello">Hi<span class="intro-hello-comma">,</span> I'm Adithyan.</p>
+            <p>I'm a Design student, illustrator and an aspiring visual story teller who wants to work with illustration
+              and design to tell stories with the worlds and characters I create.</p>
+            <p>I am a Communication Design Student, so I am always finding and learning new ways to create work that
+              engages the viewer, making them put a piece of themselves in my work whenever they interact with it.</p>
+            <p>I am constantly looking to improving my approach and work in design, through experimentation, consuming
+              new human made media that inspire me and doing work that challenge my current status as a designer.</p>
+            <a class="intro-enter" href="#work">See my work <span aria-hidden="true">&rarr;</span></a>
+          </div>
+        </div>
+      </section>
 
       <section class="gallery" id="work" aria-label="Selected work">
         <button class="gallery-item" type="button" data-index="1" aria-label="Open Son of Sparda">
@@ -115,25 +117,6 @@
           </span>
           <span class="gallery-item-caption">Hopeless Romantic</span>
         </button>
-        <button class="gallery-item" type="button" data-index="4" aria-label="Open Young">
-          <span class="gallery-item-media gallery-item-media--video">
-            <img src="assets/images/web/young-800.webp"
-              srcset="assets/images/web/young-400.webp 400w, assets/images/web/young-800.webp 800w"
-              sizes="(max-width: 860px) 50vw, 500px" width="800" height="450" loading="lazy" decoding="async"
-              alt="Painted landscape of a large leafy tree on a green hillside, with rolling hills and a small village under a bright blue sky.">
-            <!-- Play badge marks this project as a video -->
-            <span class="gallery-item-play" aria-hidden="true"></span>
-          </span>
-          <span class="gallery-item-caption">Young</span>
-        </button>
-        <button class="gallery-item" type="button" data-index="5" aria-label="Open Doraemon Finds a Mouse">
-          <span class="gallery-item-media">
-            <video src="assets/videos/web/doraemon-final.mp4" poster="assets/images/web/doraemon-final-poster.webp"
-              width="576" height="576" muted loop playsinline preload="none" data-autoplay
-              aria-label="Animation of Doraemon swaying and dancing against a light blue sky, then sitting dizzy with spiral eyes beside a mouse."></video>
-          </span>
-          <span class="gallery-item-caption">Doraemon Finds a Mouse</span>
-        </button>
         <button class="gallery-item" type="button" data-index="6" aria-label="Open Shepard Boy">
           <span class="gallery-item-media">
             <img src="assets/images/web/shepard-boy-800.webp"
@@ -152,6 +135,51 @@
           </span>
           <span class="gallery-item-caption">Sticker Designs</span>
         </button>
+      </section>
+
+      <!-- Desktop: the end of the strip — the same contact details as the Contact page -->
+      <section class="hscroll-contact" id="contact" aria-label="Contact details">
+        <div class="contact">
+          <div class="contact-featured">
+            <a class="contact-social contact-social--primary" href="https://www.instagram.com/artus_mushroomus/"
+              rel="noopener noreferrer" target="_blank">
+              <img class="contact-icon contact-icon--avatar" src="assets/images/instagram-avatar.png" alt="" width="180"
+                height="180" loading="lazy">
+              <span class="contact-social-label">Instagram</span>
+              <span class="contact-social-handle">@artus_mushroomus</span>
+              <span class="contact-social-note">Most active &middot; quickest reply</span>
+            </a>
+            <div class="contact-icon-links">
+              <a class="contact-icon-link" href="https://www.behance.net/adithyasathyan" rel="noopener noreferrer"
+                target="_blank" aria-label="Behance: adithyasathyan" title="Behance">
+                <img src="assets/images/behance.png" alt="" width="32" height="32" loading="lazy">
+              </a>
+              <a class="contact-icon-link" href="https://www.linkedin.com/in/adithyan-sathyanarayanan-072b5b22b"
+                rel="noopener noreferrer" target="_blank" aria-label="LinkedIn: Adithyan Sathyanarayanan"
+                title="LinkedIn">
+                <img src="assets/images/linkedin.png" alt="" width="32" height="32" loading="lazy">
+              </a>
+            </div>
+          </div>
+
+          <h2 class="contact-group-title">Direct</h2>
+          <dl class="contact-list">
+            <div class="contact-row">
+              <dt>Phone</dt>
+              <dd>+91 94968 03379</dd>
+            </div>
+            <div class="contact-row">
+              <dt>Whatsapp</dt>
+              <dd>+971 52 639 1071</dd>
+            </div>
+            <div class="contact-row">
+              <dt>Email</dt>
+              <dd><a href="mailto:adithyansathyanarayanan@gmail.com">adithyansathyanarayanan@gmail.com</a></dd>
+            </div>
+          </dl>
+
+          <p class="footer-note hscroll-copyright">&copy; <span class="year"></span> Adithyan Sathyanarayanan</p>
+        </div>
       </section>
 
     </main>
@@ -185,14 +213,6 @@
         <button class="pv-tab" role="tab" id="pv-tab-3" aria-controls="panel-3" aria-selected="false" tabindex="-1"
           data-index="3">
           Hopeless Romantic
-        </button>
-        <button class="pv-tab" role="tab" id="pv-tab-4" aria-controls="panel-4" aria-selected="false" tabindex="-1"
-          data-index="4">
-          Young
-        </button>
-        <button class="pv-tab" role="tab" id="pv-tab-5" aria-controls="panel-5" aria-selected="false" tabindex="-1"
-          data-index="5">
-          Doraemon Finds a Mouse
         </button>
         <button class="pv-tab" role="tab" id="pv-tab-6" aria-controls="panel-6" aria-selected="false" tabindex="-1"
           data-index="6">
@@ -311,103 +331,7 @@
         </div>
       </article>
 
-      <article class="panel panel--stacked" id="panel-4" role="tabpanel" aria-labelledby="pv-tab-4" data-index="4" tabindex="0" style="--ratio: 1.778;" hidden>
-        <h3 class="panel-title">Young</h3>
-        <!-- Video project: a plain player instead of the zoomable .panel-media button,
-             so the controls work and the image lightbox doesn't hijack clicks -->
-        <div class="panel-gallery">
-          <div class="panel-video">
-            <video controls playsinline preload="none" poster="assets/images/web/young-poster.webp"
-              aria-label="Youth post — project video">
-              <source src="assets/videos/web/young-720.mp4" type="video/mp4" media="(max-width: 860px)">
-              <source src="assets/videos/web/young-1080.mp4" type="video/mp4">
-              Your browser can't play this video. <a href="assets/videos/web/young-1080.mp4">Download it instead</a>.
-            </video>
-          </div>
-        </div>
-        <div class="panel-body">
-          <div class="panel-meta">
-            <span>Role — [Your role]</span>
-            <span>Year — [20XX]</span>
-            <span>Tools — [Tool, Tool, Tool]</span>
-          </div>
-          <p>[Overview — describe the project in two or three sentences: what it is, who it's for, and why it exists.]
-          </p>
-          <h4>The problem</h4>
-          <p>[Placeholder — what challenge or need prompted this project?]</p>
-          <h4>The approach</h4>
-          <p>[Placeholder — what did you do, and why did you make the choices you made?]</p>
-          <h4>The outcome</h4>
-          <p>[Placeholder — what happened as a result? Metrics, feedback, or what you learned.]</p>
-        </div>
-      </article>
-
-      <!-- Doraemon: the finished animation, the write-up, then each stage of it as a looping clip.
-           Clips play only while on screen (see data-autoplay in the script); click one
-           to see it larger in the enlarged view, like a picture. -->
-      <article class="panel panel--stacked" id="panel-5" role="tabpanel" aria-labelledby="pv-tab-5" data-index="5"
-        tabindex="0" style="--ratio: 1;" hidden>
-        <h3 class="panel-title">Doraemon Finds a Mouse</h3>
-        <div class="panel-gallery">
-          <button class="panel-video panel-video--loop" type="button">
-            <video src="assets/videos/web/doraemon-final.mp4" poster="assets/images/web/doraemon-final-poster.webp"
-              width="576" height="576" muted loop playsinline preload="none" data-autoplay
-              aria-label="Animation of Doraemon swaying and dancing against a light blue sky, then sitting dizzy with spiral eyes beside a mouse."></video>
-          </button>
-        </div>
-        <div class="panel-body">
-          <div class="panel-meta">
-            <span>Role — [Your role]</span>
-            <span>Year — [20XX]</span>
-            <span>Tools — [Tool, Tool, Tool]</span>
-          </div>
-          <p>[Overview — describe the project in two or three sentences: what it is, who it's for, and why it exists.]
-          </p>
-          <h4>The problem</h4>
-          <p>[Placeholder — what challenge or need prompted this project?]</p>
-          <h4>The approach</h4>
-          <p>[Placeholder — what did you do, and why did you make the choices you made?]</p>
-          <h4>The outcome</h4>
-          <p>[Placeholder — what happened as a result? Metrics, feedback, or what you learned.]</p>
-        </div>
-        <h4 class="panel-subhead">Process</h4>
-        <div class="panel-gallery panel-gallery--grid panel-gallery--quad" data-autoplay-group>
-          <figure class="panel-clip">
-            <button class="panel-video panel-video--loop" type="button">
-              <video src="assets/videos/web/rough-draft.mp4" poster="assets/images/web/rough-draft-poster.webp"
-                width="576" height="576" muted loop playsinline preload="none" data-autoplay
-                aria-label="Rough draft: loose sketchy pencil lines of Doraemon dancing, then tumbling backwards."></video>
-            </button>
-            <figcaption>Rough draft</figcaption>
-          </figure>
-          <figure class="panel-clip">
-            <button class="panel-video panel-video--loop" type="button">
-              <video src="assets/videos/web/basic-pencil.mp4" poster="assets/images/web/basic-pencil-poster.webp"
-                width="576" height="576" muted loop playsinline preload="none" data-autoplay
-                aria-label="Basic pencil: lighter, simpler outlines of Doraemon dancing and sitting dizzy beside a mouse."></video>
-            </button>
-            <figcaption>Basic pencil</figcaption>
-          </figure>
-          <figure class="panel-clip">
-            <button class="panel-video panel-video--loop" type="button">
-              <video src="assets/videos/web/doraemon.mp4" poster="assets/images/web/doraemon-poster.webp"
-                width="576" height="576" muted loop playsinline preload="none" data-autoplay
-                aria-label="Clean line art of Doraemon dancing and sitting dizzy beside a mouse, before colouring."></video>
-            </button>
-            <figcaption>Line art</figcaption>
-          </figure>
-          <figure class="panel-clip">
-            <button class="panel-video panel-video--loop" type="button">
-              <video src="assets/videos/web/doraemon-final.mp4" poster="assets/images/web/doraemon-final-poster.webp"
-                width="576" height="576" muted loop playsinline preload="none" data-autoplay
-                aria-label="Final coloured animation of Doraemon dancing, then sitting dizzy with spiral eyes beside a mouse."></video>
-            </button>
-            <figcaption>Final</figcaption>
-          </figure>
-        </div>
-      </article>
-
-      <!-- Shepard Boy: final piece, then the write-up, then the process from sketch to inks.
+      <!-- Shepard Boy: final piece, then the process from sketch to inks, then the write-up.
            Web copies live in assets/images/shepard-boy/ (originals in "Shepard Boy/"). -->
       <article class="panel panel--stacked" id="panel-6" role="tabpanel" aria-labelledby="pv-tab-6" data-index="6"
         tabindex="0" style="--ratio: 1.333;" hidden>
@@ -419,21 +343,6 @@
               height="1200"
               alt="Illustration of a shepherd boy with small ram horns, resting against a flock of purple sheep in a yellow-green meadow, with farmhouses under a pink sky.">
           </button>
-        </div>
-        <div class="panel-body">
-          <div class="panel-meta">
-            <span>Role — [Your role]</span>
-            <span>Year — [20XX]</span>
-            <span>Tools — [Tool, Tool, Tool]</span>
-          </div>
-          <p>[Overview — describe the project in two or three sentences: what it is, who it's for, and why it exists.]
-          </p>
-          <h4>The problem</h4>
-          <p>[Placeholder — what challenge or need prompted this project?]</p>
-          <h4>The approach</h4>
-          <p>[Placeholder — what did you do, and why did you make the choices you made?]</p>
-          <h4>The outcome</h4>
-          <p>[Placeholder — what happened as a result? Metrics, feedback, or what you learned.]</p>
         </div>
         <h4 class="panel-subhead">Process</h4>
         <div class="panel-gallery panel-gallery--grid">
@@ -462,6 +371,21 @@
             <img class="panel-image" loading="lazy" decoding="async" src="assets/images/shepard-boy/process-5.jpg" width="1200" height="900"
               alt="Finished inked line art, with shading in the wool and grass, before colouring.">
           </button>
+        </div>
+        <div class="panel-body">
+          <div class="panel-meta">
+            <span>Role — [Your role]</span>
+            <span>Year — [20XX]</span>
+            <span>Tools — [Tool, Tool, Tool]</span>
+          </div>
+          <p>[Overview — describe the project in two or three sentences: what it is, who it's for, and why it exists.]
+          </p>
+          <h4>The problem</h4>
+          <p>[Placeholder — what challenge or need prompted this project?]</p>
+          <h4>The approach</h4>
+          <p>[Placeholder — what did you do, and why did you make the choices you made?]</p>
+          <h4>The outcome</h4>
+          <p>[Placeholder — what happened as a result? Metrics, feedback, or what you learned.]</p>
         </div>
       </article>
 
@@ -903,7 +827,197 @@
     projectSidePrev.addEventListener('click', () => goToProject(-1, false));
     projectSideNext.addEventListener('click', () => goToProject(1, false));
 
-    document.getElementById('year').textContent = new Date().getFullYear();
+    document.querySelectorAll('#year, .year').forEach(el => { el.textContent = new Date().getFullYear(); });
+
+    /* =========================================================
+       Desktop: the page is one sideways carousel (intro → each project →
+       contact). One scroll — mouse wheel or trackpad, either direction — or
+       one arrow / Page key moves exactly one stop. The stop in the middle is
+       "current": full size, while its neighbours are smaller and dimmer (CSS).
+       ========================================================= */
+    const desktopStrip = window.matchMedia('(min-width: 861px)');
+    const strip = document.querySelector('.main-content');
+    const stops = [document.querySelector('.hscroll-intro'), ...document.querySelectorAll('.gallery-item'), document.querySelector('.hscroll-contact')];
+    let current = 0;
+
+    // Each card's picture shape, so CSS can size cards to fit the screen without cropping
+    document.querySelectorAll('.gallery-item-media').forEach(m => {
+      const el = m.querySelector('img, video');
+      if (el) m.style.setProperty('--ar', el.getAttribute('width') / el.getAttribute('height'));
+    });
+
+    function markCurrent(i) {
+      current = Math.max(0, Math.min(stops.length - 1, i));
+      stops.forEach((s, n) => {
+        s.classList.toggle('is-current', n === current);
+        s.classList.toggle('is-before', n < current); // (turns them inward, CSS)
+        s.classList.toggle('is-after', n > current);
+        if (n !== current) untilt(s);
+      });
+    }
+
+    // Depth: the centred card leans toward the mouse, with a soft light where it points
+    function untilt(card) {
+      card.classList.remove('is-tilting');
+      card.style.removeProperty('--tilt-x');
+      card.style.removeProperty('--tilt-y');
+    }
+    if (!prefersReducedMotion) {
+      strip.addEventListener('pointermove', (e) => {
+        const card = e.target.closest('.gallery-item.is-current, .contact-social--primary');
+        if (!card || e.pointerType !== 'mouse' || !desktopStrip.matches) return;
+        const r = card.getBoundingClientRect();
+        const x = (e.clientX - r.left) / r.width, y = (e.clientY - r.top) / r.height;
+        card.classList.add('is-tilting');
+        card.style.setProperty('--tilt-y', (x - 0.5) * 12.6 + 'deg');
+        card.style.setProperty('--tilt-x', (0.5 - y) * 10.5 + 'deg');
+        card.style.setProperty('--glare-x', x * 100 + '%');
+        card.style.setProperty('--glare-y', y * 100 + '%');
+      });
+      strip.addEventListener('pointerout', (e) => {
+        const card = e.target.closest('.gallery-item, .contact-social--primary');
+        if (card && !card.contains(e.relatedTarget)) untilt(card);
+      });
+    }
+    // The strip position that puts a stop in the middle (from the layout, so the
+    // cards' turn and scale don't throw it off)
+    const centreOf = (s) => s.offsetLeft + s.offsetWidth / 2 - strip.clientWidth / 2;
+    // The stop nearest the middle when the strip is at x
+    function nearestStop(x = strip.scrollLeft) {
+      let best = 0, bestDist = Infinity;
+      stops.forEach((s, n) => {
+        const d = Math.abs(centreOf(s) - x);
+        if (d < bestDist) { best = n; bestDist = d; }
+      });
+      return best;
+    }
+
+    // The strip glides toward a target and eases to a stop (wheel, keys and clicks alike)
+    let glideTarget = 0, glidePos = 0, glideFrame = 0, glideTime = 0;
+    function glideTo(x) {
+      x = Math.max(0, Math.min(strip.scrollWidth - strip.clientWidth, x));
+      if (prefersReducedMotion) { strip.scrollLeft = x; return; }
+      glideTarget = x;
+      if (!glideFrame) { glidePos = strip.scrollLeft; glideTime = performance.now(); glideFrame = requestAnimationFrame(glide); }
+    }
+    function glide(now) {
+      // covers 12% of the remaining distance per 60 Hz frame, at any frame rate
+      glidePos += (glideTarget - glidePos) * (1 - Math.pow(0.88, (now - glideTime) / 16.7));
+      glideTime = now;
+      if (Math.abs(glideTarget - glidePos) < 0.5) glidePos = glideTarget;
+      strip.scrollLeft = glidePos;
+      glideFrame = glidePos === glideTarget ? 0 : requestAnimationFrame(glide);
+    }
+    function goToStop(i, smooth = true) {
+      markCurrent(i);
+      if (smooth) glideTo(centreOf(stops[current]));
+      else { cancelAnimationFrame(glideFrame); glideFrame = 0; strip.scrollLeft = centreOf(stops[current]); }
+    }
+    markCurrent(nearestStop());
+
+    // Scrolling glides freely through the lineup; once it stops, the nearest
+    // project eases into the middle. (A trackpad keeps sending wheel events
+    // while it coasts, so that only happens after the coasting ends.)
+    let snapTimer = 0, wheelFrom = 0;
+    strip.addEventListener('wheel', (e) => {
+      if (e.ctrlKey) return; // (ctrl + wheel is the browser's zoom)
+      // Phone layout: a screen taller than the window (the introduction) scrolls up
+      // and down first; at its top / bottom the wheel moves the strip again
+      const screen = e.target.closest('.hscroll-intro, .hscroll-contact');
+      if (screen && Math.abs(e.deltaY) > Math.abs(e.deltaX)) {
+        const more = e.deltaY > 0 ? screen.scrollTop + screen.clientHeight < screen.scrollHeight - 1 : screen.scrollTop > 0;
+        if (more) return;
+      }
+      e.preventDefault();
+      const d = (Math.abs(e.deltaY) >= Math.abs(e.deltaX) ? e.deltaY : e.deltaX) * (e.deltaMode === 1 ? 40 : 1); // (some mice count in lines)
+      if (!snapTimer) wheelFrom = current; // where this scroll started
+      glideTo((glideFrame ? glideTarget : strip.scrollLeft) + d * 2.5);
+      clearTimeout(snapTimer);
+      snapTimer = setTimeout(() => {
+        snapTimer = 0;
+        const x = glideFrame ? glideTarget : strip.scrollLeft;
+        let n = nearestStop(x);
+        // a short scroll that clearly left its stop still reaches the next one, rather than springing back
+        const moved = x - centreOf(stops[wheelFrom]);
+        if (n === wheelFrom && Math.abs(moved) > strip.clientWidth * 0.12) n = wheelFrom + Math.sign(moved);
+        goToStop(n);
+      }, 160);
+    }, { passive: false });
+
+    document.addEventListener('keydown', (e) => {
+      if (!desktopStrip.matches || !projectView.hidden || !lightbox.hidden || document.documentElement.classList.contains('show-intro')) return;
+      if (e.target.closest('input, textarea, select, video')) return;
+      const by = { ArrowRight: 1, ArrowDown: 1, PageDown: 1, ArrowLeft: -1, ArrowUp: -1, PageUp: -1 }[e.key];
+      if (by) { e.preventDefault(); goToStop(current + by); }
+      if (e.key === 'Home' || e.key === 'End') { e.preventDefault(); goToStop(e.key === 'Home' ? 0 : stops.length - 1); }
+    });
+
+    // Clicking (or tapping) a neighbour brings it to the middle; clicking the current one opens it
+    document.querySelector('.gallery').addEventListener('click', (e) => {
+      const item = e.target.closest('.gallery-item');
+      if (!item || item.classList.contains('is-current')) return;
+      e.stopPropagation();
+      goToStop(stops.indexOf(item));
+    }, true);
+    // Tabbing onto a card brings it to the middle too
+    strip.addEventListener('focusin', (e) => {
+      const i = stops.findIndex(s => s.contains(e.target));
+      if (desktopStrip.matches && i !== -1 && i !== current && e.target.matches(':focus-visible')) goToStop(i);
+    });
+    document.querySelector('.hscroll-intro .intro-enter').addEventListener('click', (e) => {
+      e.preventDefault();
+      goToStop(1);
+    });
+
+    // Phones: the strip follows the finger, and letting go glides to the next (or
+    // previous) stop — one per swipe. (Not the browser's own snapping: it measures
+    // the cards' turned / tilted shapes, which shift as the spotlight moves.)
+    let touch = null;
+    strip.addEventListener('touchstart', (e) => {
+      if (desktopStrip.matches || e.touches.length !== 1) { touch = null; return; }
+      cancelAnimationFrame(glideFrame); glideFrame = 0; // catch a stop mid-glide
+      touch = { x: e.touches[0].clientX, y: e.touches[0].clientY, left: strip.scrollLeft, t: e.timeStamp, from: current, axis: null };
+    }, { passive: true });
+    strip.addEventListener('touchmove', (e) => {
+      if (!touch) return;
+      const dx = e.touches[0].clientX - touch.x, dy = e.touches[0].clientY - touch.y;
+      if (!touch.axis) {
+        if (Math.abs(dx) < 8 && Math.abs(dy) < 8) return;
+        touch.axis = Math.abs(dx) > Math.abs(dy) ? 'x' : 'y'; // up / down is left to the page (a long screen can scroll)
+      }
+      if (touch.axis !== 'x') return;
+      e.preventDefault();
+      strip.scrollLeft = touch.left - dx;
+    }, { passive: false });
+    strip.addEventListener('touchend', (e) => {
+      if (!touch) return;
+      const t = touch;
+      touch = null;
+      if (t.axis !== 'x') return;
+      const dx = e.changedTouches[0].clientX - t.x;
+      // a fifth of the screen, or a quick flick, moves one stop
+      const far = Math.abs(dx) > strip.clientWidth * 0.2 || (e.timeStamp - t.t < 300 && Math.abs(dx) > 30);
+      goToStop(t.from + (far ? -Math.sign(dx) : 0));
+    });
+    strip.addEventListener('touchcancel', () => { if (touch) goToStop(touch.from); touch = null; });
+
+    // The spotlight follows whichever stop is passing the middle (desktop and phones).
+    // Phones: when the strip comes to rest off-centre (e.g. after the menu's jump to
+    // a part of the page), it settles on the nearest stop.
+    let settleTimer;
+    strip.addEventListener('scroll', () => {
+      const n = nearestStop();
+      if (n !== current) markCurrent(n);
+      clearTimeout(settleTimer);
+      settleTimer = setTimeout(() => {
+        if (desktopStrip.matches || touch || glideFrame) return;
+        const near = nearestStop();
+        if (Math.abs(centreOf(stops[near]) - strip.scrollLeft) > 2) goToStop(near);
+      }, 150);
+    }, { passive: true });
+    // Re-centre after the window changes width (not when a phone's address bar merely shows / hides)
+    let stripWidth = innerWidth;
+    window.addEventListener('resize', () => { if (innerWidth !== stripWidth) { stripWidth = innerWidth; goToStop(current, false); } });
 
     /* =========================================================
        Image lightbox — click a project photo to see it larger
@@ -1188,20 +1302,18 @@
       });
     }
 
-    // ---- Animation #7: tilt-on-hover for project media placeholders ----
-    if (!prefersReducedMotion) {
-      document.querySelectorAll('.panel-media').forEach(media => {
-        media.addEventListener('mousemove', (e) => {
-          const rect = media.getBoundingClientRect();
-          const x = (e.clientX - rect.left) / rect.width - 0.5;
-          const y = (e.clientY - rect.top) / rect.height - 0.5;
-          media.style.transform = `rotateY(${x * 8}deg) rotateX(${y * -8}deg)`;
-        });
-        media.addEventListener('mouseleave', () => {
-          media.style.transform = 'rotateY(0) rotateX(0)';
-        });
+    // ---- Animation #7: project images pop out on hover (CSS), with the light
+    // following the mouse — the same light as the gallery cards, without their tilt ----
+    document.querySelectorAll('.panel-media').forEach(media => {
+      media.addEventListener('pointermove', (e) => {
+        if (e.pointerType !== 'mouse') return;
+        const rect = media.getBoundingClientRect();
+        media.classList.add('is-lit');
+        media.style.setProperty('--glare-x', (e.clientX - rect.left) / rect.width * 100 + '%');
+        media.style.setProperty('--glare-y', (e.clientY - rect.top) / rect.height * 100 + '%');
       });
-    }
+      media.addEventListener('pointerleave', () => media.classList.remove('is-lit'));
+    });
 
     // ---- Animation #8: hidden Konami-code easter egg ----
     const konami = ['ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight', 'b', 'a'];
@@ -1256,12 +1368,62 @@
       const revealObserver = new IntersectionObserver((entries) => {
         // cards arriving together slide in in order, a beat apart
         entries.filter(e => e.isIntersecting).forEach((e, i) => {
-          e.target.style.animationDelay = (i * 90) + 'ms';
+          e.target.style.setProperty('--reveal-delay', (i * 90) + 'ms');
           e.target.classList.add('is-revealed');
           revealObserver.unobserve(e.target);
         });
       }, { rootMargin: '0px 0px -8% 0px' });
       galleryCards.forEach(card => revealObserver.observe(card));
+    }
+
+    /* =========================================================
+       Phones: the same strip, swiped (CSS scroll-snap) — the stop
+       spotlighting above works for both. The centred card leans as the
+       phone tilts.
+       ========================================================= */
+    // The gyro: the current card leans as the phone tilts, from however it's being
+    // held (which slowly becomes the new "level", so a change of posture settles).
+    // shortcut: assumes the phone is upright (portrait); in landscape the axes swap.
+    const gyro = { x: 0, y: 0, tx: 0, ty: 0, base: null, frame: 0 };
+    function onOrientation(e) {
+      if (desktopStrip.matches || e.beta == null || e.gamma == null) return;
+      if (!gyro.base) gyro.base = { b: e.beta, g: e.gamma };
+      gyro.base.b += (e.beta - gyro.base.b) * 0.01;
+      gyro.base.g += (e.gamma - gyro.base.g) * 0.01;
+      const lean = (d) => Math.max(-1, Math.min(1, d / 20)) * 8; // 20° of tilt = the full 8° lean
+      gyro.ty = lean(e.gamma - gyro.base.g);  // tip right: the right edge goes back
+      gyro.tx = -lean(e.beta - gyro.base.b);  // tip the top away: the top edge goes back
+      if (!gyro.frame) gyro.frame = requestAnimationFrame(applyGyro);
+    }
+    function applyGyro() {
+      gyro.x += (gyro.tx - gyro.x) * 0.2;
+      gyro.y += (gyro.ty - gyro.y) * 0.2;
+      const card = gallery && gallery.querySelector('.gallery > .is-current');
+      if (card && !desktopStrip.matches) {
+        card.classList.add('is-tilting');
+        card.style.setProperty('--tilt-x', gyro.x.toFixed(2) + 'deg');
+        card.style.setProperty('--tilt-y', gyro.y.toFixed(2) + 'deg');
+        card.style.setProperty('--glare-x', (50 + gyro.y * 6) + '%'); // the lights slide toward the low side
+        card.style.setProperty('--glare-y', (50 - gyro.x * 6) + '%');
+      }
+      const moving = Math.abs(gyro.tx - gyro.x) + Math.abs(gyro.ty - gyro.y) > 0.02;
+      gyro.frame = moving ? requestAnimationFrame(applyGyro) : 0;
+    }
+    if ('DeviceOrientationEvent' in window) {
+      if (typeof DeviceOrientationEvent.requestPermission === 'function') {
+        // iPhone: Safari only shares the tilt after a tap and a yes in its popup —
+        // asked on the first tap on a phone-sized screen
+        const askForGyro = () => {
+          if (desktopStrip.matches) return;
+          document.removeEventListener('click', askForGyro, true);
+          DeviceOrientationEvent.requestPermission()
+            .then((answer) => { if (answer === 'granted') window.addEventListener('deviceorientation', onOrientation); })
+            .catch(() => { /* declined or unavailable: the cards just stay level */ });
+        };
+        document.addEventListener('click', askForGyro, true);
+      } else {
+        window.addEventListener('deviceorientation', onOrientation); // Android: no popup needed
+      }
     }
 
     /* =========================================================
@@ -1276,15 +1438,11 @@
       history.replaceState(null, '', location.pathname + '#intro');
       location.reload();
     });
-
     const intro = document.getElementById('intro');
     if (document.documentElement.classList.contains('show-intro')) {
       const introLogo = document.getElementById('introLogo');
-      const introLogoCard = document.getElementById('introLogoCard');
-      const introTextCard = document.getElementById('introTextCard');
-      // How long the logo card stays before the introduction replaces it: the
-      // whole animation at its original speed (mushroom, the change, wordmark —
-      // about 3 s)
+      // How long the logo stays before the cover slides away: the whole
+      // animation at its original speed (mushroom, the change, wordmark — about 3 s)
       const LOGO_CARD_MS = 3100;
 
       // The site underneath can't be reached until the intro is done
@@ -1292,15 +1450,11 @@
       siteContent.setAttribute('aria-hidden', 'true');
       intro.focus({ preventScroll: true });
 
-      // Logo card → introduction card, on its own once the logo has played
+      // Once the logo has played, the cover slides away to reveal the page, which
+      // starts with the introduction (desktop: the start of the sideways strip;
+      // phones: the top of the page)
       let cardTimer = null;
-      const startCardTimer = () => {
-        cardTimer = setTimeout(() => {
-          intro.classList.add('show-text');
-          introLogoCard.inert = true;
-          introTextCard.inert = false;
-        }, LOGO_CARD_MS);
-      };
+      const startCardTimer = () => { cardTimer = setTimeout(leaveIntro, LOGO_CARD_MS); };
       if (introLogo.complete) startCardTimer(); else introLogo.addEventListener('load', startCardTimer, { once: true });
 
       let leaving = false;
@@ -1324,8 +1478,6 @@
       }
       function introKeydown(e) { if (e.key === 'Escape') leaveIntro(); }
       document.addEventListener('keydown', introKeydown);
-
-      document.getElementById('introEnter').addEventListener('click', leaveIntro);
     } else {
       if (intro) intro.remove();
       startGalleryReveal();
