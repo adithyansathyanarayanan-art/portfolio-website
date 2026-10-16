@@ -1412,7 +1412,7 @@ html:has(#lightbox:not([hidden])) {
     /* Room at the top for Close and at the bottom for the dots */
     .project-view .project-view-content .panel {
         padding-top: 4.75rem;
-        padding-bottom: 7rem;
+        padding-bottom: 8rem;
     }
 
     .project-dots {
@@ -1422,8 +1422,8 @@ html:has(#lightbox:not([hidden])) {
         display: flex;
         flex-direction: column;
         align-items: center;
-        gap: 0.2rem;
-        padding: 0.45rem 0.75rem 0.5rem;
+        gap: 0.15rem;
+        padding: 0.55rem 1rem 0.45rem;
         /* centred without a transform, and solid rather than a see-through
            blur: over a sliding project, Safari's blur leaves stale, half-drawn
            copies of the content behind (seen on iPhone) */
@@ -1451,8 +1451,8 @@ html:has(#lightbox:not([hidden])) {
         appearance: none;
         display: grid;
         place-items: center;
-        width: 26px;
-        height: 22px;
+        width: 34px;
+        height: 30px;
         padding: 0;
         background: none;
         border: none;
@@ -1462,24 +1462,63 @@ html:has(#lightbox:not([hidden])) {
 
     .project-dot::before {
         content: "";
-        width: 7px;
-        height: 7px;
-        border-radius: 4px;
+        width: 9px;
+        height: 9px;
+        border-radius: 5px;
         background: var(--ink-soft);
         opacity: 0.45;
     }
 
     .project-dot.is-current::before {
-        width: 18px;
+        width: 22px;
         background: var(--accent);
         opacity: 1;
     }
 
+    /* The name is a button: tap it for the list of all projects */
     .project-dots-name {
-        margin: 0;
-        font-size: 0.8rem;
+        appearance: none;
+        display: flex;
+        align-items: center;
+        gap: 0.4rem;
+        min-height: 36px;
+        padding: 0 0.75rem;
+        background: none;
+        border: none;
+        border-radius: 999px;
+        font: 500 0.95rem var(--font-body);
         color: var(--ink);
         white-space: nowrap;
+        cursor: pointer;
+        -webkit-tap-highlight-color: transparent;
+    }
+
+    .project-dots-name .project-picker-caret {
+        font-size: 0.7em;
+        transition: transform 0.18s ease;
+    }
+
+    .project-dots-name[aria-expanded="true"] .project-picker-caret {
+        transform: rotate(180deg);
+    }
+
+    /* The list opens upward, above the dots, centred on them */
+    .project-dots .project-dots-list {
+        top: auto;
+        bottom: calc(100% + 10px);
+        left: 50%;
+        min-width: 15rem;
+        translate: -50% 0;
+        transform: translateY(6px);
+    }
+
+    .project-dots .project-dots-list.is-open {
+        transform: none;
+    }
+
+    .project-dots-list .project-picker-item {
+        padding: 0.8rem 0.9rem; /* roomy rows for a thumb */
+        font-size: 1rem;
     }
 }
 
@@ -2581,8 +2620,13 @@ video.lightbox-image {
         gap: 1rem;
     }
 
+    /* The photo runs edge to edge (out through the section's side padding) */
     .hscroll-intro .intro-photo {
-        width: calc(50vw - 1.5rem); /* from the left margin to the middle of the screen */
+        width: calc(100% + 3rem);
+        max-width: none;
+        margin-inline: -1.5rem;
+        border-radius: 0;
+        border-inline: none;
     }
 
     .hscroll-intro .intro-enter {

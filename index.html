@@ -469,10 +469,14 @@
 
     <!-- Phones (instead of the top bar of titles): a dot per project along the
          bottom, the current one highlighted with its name underneath. Tap a dot
-         to jump to that project. The dots are built from the tabs in the script. -->
+         to jump to that project; tap the name for a list of all of them. The
+         dots and the list are built from the tabs in the script. -->
     <nav class="project-dots" aria-label="Projects">
+      <ul class="project-dots-list project-picker-list" id="projectDotsList" aria-label="All projects"></ul>
       <div class="project-dots-row" id="projectDotsRow"></div>
-      <p class="project-dots-name" id="projectDotsName" aria-hidden="true"></p>
+      <button class="project-dots-name" type="button" aria-haspopup="true" aria-expanded="false"
+        aria-controls="projectDotsList"><span id="projectDotsName"></span> <span class="project-picker-caret"
+          aria-hidden="true">&#9652;</span></button>
     </nav>
   </div>
 
@@ -524,6 +528,35 @@
       dot.addEventListener('click', () => showPanelByIndex(t.dataset.index));
       document.getElementById('projectDotsRow').appendChild(dot);
       return dot;
+    });
+
+    // Phone dots' name: tapping it opens a list of all the projects, above the dots
+    const projectDotsToggle = document.querySelector('.project-dots-name');
+    const projectDotsList = document.getElementById('projectDotsList');
+    const projectDotsItems = pvTabs.map(t => {
+      const li = document.createElement('li');
+      const item = document.createElement('button');
+      item.type = 'button';
+      item.className = 'project-picker-item';
+      item.dataset.index = t.dataset.index;
+      item.textContent = tabLabel(t);
+      item.addEventListener('click', () => {
+        setDotsListOpen(false);
+        showPanelByIndex(t.dataset.index);
+      });
+      li.appendChild(item);
+      projectDotsList.appendChild(li);
+      return item;
+    });
+    const dotsListIsOpen = () => projectDotsToggle.getAttribute('aria-expanded') === 'true';
+    function setDotsListOpen(open) {
+      projectDotsToggle.setAttribute('aria-expanded', String(open));
+      projectDotsList.classList.toggle('is-open', open);
+    }
+    projectDotsToggle.addEventListener('click', () => setDotsListOpen(!dotsListIsOpen()));
+    // tapping anywhere else closes it
+    document.addEventListener('click', (e) => {
+      if (dotsListIsOpen() && !e.target.closest('.project-dots-name, .project-dots-list')) setDotsListOpen(false);
     });
 
     // Desktop title dropdown: one entry per tab, in the same order
@@ -593,6 +626,7 @@
       }
 
       strip.addEventListener('pointerdown', (e) => {
+        if (e.target.closest('.project-dots-name, .project-dots-list')) return; // the name and its list are buttons, not dots
         scrubbing = true;
         strip.classList.add('is-scrubbing');
         showDotUnder(e.clientX);
@@ -667,7 +701,8 @@
 
       // desktop title dropdown: this project's name, and its place marked in the list
       projectPickerCurrent.textContent = label(pvTabs[pos]);
-      projectPickerItems.forEach(b => {
+      // (and in the phone dots' list)
+      [...projectPickerItems, ...projectDotsItems].forEach(b => {
         if (b.dataset.index === String(index)) b.setAttribute('aria-current', 'true');
         else b.removeAttribute('aria-current');
       });
@@ -711,6 +746,7 @@
       if (!lightbox.hidden) return; // the enlarged-image view handles its own keys
       if (e.key === 'Escape') {
         if (pickerIsOpen()) { setPickerOpen(false); projectPickerToggle.focus(); return; } // Esc closes the list first
+        if (dotsListIsOpen()) { setDotsListOpen(false); return; }
         closeProjectView();
         return;
       }
@@ -750,6 +786,7 @@
     function closeProjectView() {
       pauseVideos();
       setPickerOpen(false);
+      setDotsListOpen(false);
       projectView.classList.remove('is-open');
       document.body.classList.remove('view-locked');
       siteContent.removeAttribute('aria-hidden');
