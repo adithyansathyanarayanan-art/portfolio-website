@@ -882,7 +882,10 @@
        one arrow / Page key moves exactly one stop. The stop in the middle is
        "current": full size, while its neighbours are smaller and dimmer (CSS).
        ========================================================= */
-    const desktopStrip = window.matchMedia('(min-width: 861px)');
+    // the desktop strip: desktops, tablets and phones turned sideways (the same query as style.css)
+    const desktopStrip = window.matchMedia('(min-width: 601px), (orientation: landscape) and (max-height: 500px)');
+    // a touch screen swipes the strip with the browser's own scrolling and snapping
+    const touchStrip = window.matchMedia('(pointer: coarse)');
     const strip = document.querySelector('.main-content');
     const stops = [document.querySelector('.hscroll-intro'), ...document.querySelectorAll('.gallery-item'), document.querySelector('.hscroll-contact')];
     let current = 0;
@@ -965,8 +968,11 @@
     }
     function goToStop(i, smooth = true) {
       markCurrent(i);
-      if (!desktopStrip.matches) {
-        // phones: the browser's own smooth scroll, which lands on the snap point
+      if (!desktopStrip.matches || touchStrip.matches) {
+        // phones / touch screens: the browser's own smooth scroll. Snapping is paused
+        // on the way ("stop at every card" would halt a long jump at the first one)
+        // and comes back once the strip rests — exactly on a stop.
+        pauseSnap();
         strip.scrollTo({ left: centreOf(stops[current]), behavior: smooth && !prefersReducedMotion ? 'smooth' : 'instant' });
         return;
       }
@@ -1036,6 +1042,13 @@
       e.preventDefault();
       goToStop(1);
     });
+    // The phone menu's Introduction / Work / Contact (menu.js): glide to that part of the strip
+    strip.addEventListener('menu:go', (e) => {
+      const i = e.target.id === 'work' ? 1 : stops.indexOf(e.target);
+      if (i === -1) return;
+      e.preventDefault();
+      goToStop(i);
+    });
 
     // The spotlight follows whichever stop is passing the middle (desktop and phones).
     // (Phones swipe with the browser's own scrolling and snapping — see the CSS.)
@@ -1046,8 +1059,21 @@
       if (n !== current) markCurrent(n);
       stripMoving = true;
       clearTimeout(stripStill);
-      stripStill = setTimeout(() => { stripMoving = false; }, 120);
+      stripStill = setTimeout(() => { stripMoving = false; resumeSnap(); }, 120);
     }, { passive: true });
+
+    // (see goToStop) — the fallback timer covers a jump to where the strip already is
+    // (no scrolling happens, so the scroll listener above never brings snapping back)
+    let snapBack;
+    function pauseSnap() {
+      strip.style.scrollSnapType = 'none';
+      clearTimeout(snapBack);
+      snapBack = setTimeout(() => { if (!stripMoving) resumeSnap(); }, 400);
+    }
+    function resumeSnap() {
+      clearTimeout(snapBack);
+      strip.style.scrollSnapType = '';
+    }
     // Re-centre after the window changes width (not when a phone's address bar merely shows / hides)
     let stripWidth = innerWidth;
     window.addEventListener('resize', () => { if (innerWidth !== stripWidth) { stripWidth = innerWidth; goToStop(current, false); } });

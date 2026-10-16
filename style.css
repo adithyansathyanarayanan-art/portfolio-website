@@ -1520,6 +1520,26 @@ html:has(#lightbox:not([hidden])) {
         padding: 0.8rem 0.9rem; /* roomy rows for a thumb */
         font-size: 1rem;
     }
+
+    /* Turned sideways (a short screen): the dots and the name side by side in one
+       slim row, so the island covers less of the project */
+    @media (orientation: landscape) and (max-height: 500px) {
+        .project-dots {
+            flex-direction: row;
+            gap: 0.25rem;
+            bottom: 0.6rem;
+            padding: 0.25rem 0.4rem 0.25rem 0.75rem;
+        }
+
+        .project-view .project-view-content .panel {
+            padding-bottom: 5rem;
+        }
+
+        .project-dots .project-dots-list {
+            max-height: calc(100vh - 5rem);
+            overflow-y: auto;
+        }
+    }
 }
 
 .project-view-content .panel {
@@ -1837,7 +1857,7 @@ video[data-autoplay]::-webkit-media-controls {
     font-family: Inter, sans-serif; /* Inter Black, loaded in index.html */
     font-weight: 900;
     letter-spacing: -0.05em; /* tight tracking */
-    font-size: min(4.1rem, 12vw); /* about 30pt bigger than before; phones: limited by the width */
+    font-size: min(4.1rem, 12vw, 15vh); /* about 30pt bigger than before; phones: limited by the width (sideways: the height) */
     line-height: 1;
     margin: 0;
 }
@@ -2296,18 +2316,20 @@ video.lightbox-image {
 
 
 /* =========================================================
-   Desktop (wider than 860px): one sideways-scrolling strip —
-   introduction → work → contact. The sidebar shrinks to a small logo in
-   the top-left corner (click it to replay the intro). (Phones get their
-   own version of the strip, at the end of this file.) Without the strip
-   styles the introduction and contact sections stay hidden.
+   Desktop and tablets (wider than 600px) — and phones turned sideways
+   (landscape, under 500px tall): one sideways-scrolling strip — introduction → work →
+   contact. The sidebar shrinks to a small logo in the top-left corner
+   (click it to replay the intro). (Upright phones get their own version of
+   the strip, at the end of this file; index.html's desktopStrip uses the
+   same media query.) Without the strip styles the introduction and contact
+   sections stay hidden.
    ========================================================= */
 .hscroll-intro,
 .hscroll-contact {
     display: none;
 }
 
-@media (min-width: 861px) {
+@media (min-width: 601px), (orientation: landscape) and (max-height: 500px) {
 
     /* the strip does the scrolling, not the page */
     html,
@@ -2319,23 +2341,29 @@ video.lightbox-image {
         scrollbar-gutter: auto;
     }
 
-    /* the sidebar becomes just the logo, small, in the corner */
-    .sidebar {
+    /* the sidebar becomes just the logo, small, in the corner (and a sideways
+       phone drops its top bar and menu for it too) */
+    .sidebar,
+    .sidebar.has-menu {
+        position: fixed;
+        top: 0;
+        left: 0;
         bottom: auto;
         width: auto;
-        padding: 1.25rem 1.5rem;
+        padding: min(1.25rem, 3vh) 1.5rem;
         background: none;
         border: none;
         z-index: 30;
     }
 
     .sidebar .site-nav,
+    .sidebar .menu-toggle,
     .site-footer {
         display: none;
     }
 
     .wordmark img {
-        height: 96px;
+        height: min(96px, 16vh);
     }
 
     .main-content {
@@ -2350,19 +2378,31 @@ video.lightbox-image {
         position: relative; /* measures the stops (offsetLeft) from the strip */
     }
 
-    /* 1. The introduction: one full screen, no scrolling needed */
+    /* 1. The introduction: one full screen (on a short one — a sideways phone —
+       the text scrolls up and down within it) */
     .hscroll-intro {
         display: flex;
         flex: 0 0 100vw;
         height: 100%;
-        align-items: center;
+        align-items: safe center;
         justify-content: center;
-        padding: 6rem 6vw 3rem;
-        overflow: hidden;
+        padding: min(6rem, 18vh) 6vw min(3rem, 6vh);
+        overflow-x: hidden;
+        overflow-y: auto;
     }
 
     .hscroll-intro .intro-text {
         font-size: clamp(0.95rem, 2.4vh, 1.45rem); /* sized to the window's height, so it always fits */
+    }
+
+    /* photo beside the text, even on a narrow sideways phone */
+    .hscroll-intro .intro-about {
+        grid-template-columns: minmax(0, clamp(160px, 26vw, 360px)) minmax(0, 36rem);
+        gap: clamp(1.5rem, 4vw, 4rem);
+    }
+
+    .hscroll-intro .intro-photo {
+        width: 100%;
     }
 
     .hscroll-intro .intro-enter {
@@ -2391,6 +2431,19 @@ video.lightbox-image {
     .gallery-item-media video {
         width: min(56vw, min(70vh, 720px) * var(--ar, 1));
         height: auto;
+    }
+
+    /* A tall screen (a tablet held upright) has room for wider cards — with a gap
+       before and after the work, so the introduction / contact don't peek in */
+    @media (orientation: portrait) {
+        .gallery-item-media img,
+        .gallery-item-media video {
+            width: min(72vw, min(60vh, 900px) * var(--ar, 1));
+        }
+
+        .gallery {
+            padding-inline: 16vw;
+        }
     }
 
     /* Spotlight: everything but the current stop is smaller and dimmer */
@@ -2491,7 +2544,10 @@ video.lightbox-image {
         align-items: safe center;
         justify-content: center;
         padding: 2rem 6vw;
-        overflow: hidden; /* never taller than the strip, or the whole row shifts up when it scrolls */
+        /* never taller than the strip (or the whole row would shift up); on a short
+           screen — a sideways phone — it scrolls up and down within itself */
+        overflow-x: hidden;
+        overflow-y: auto;
     }
 
     .hscroll-contact .contact { padding: 0; }
@@ -2504,6 +2560,81 @@ video.lightbox-image {
     .hscroll-copyright {
         margin-top: 1.5rem;
         text-align: center;
+    }
+
+    /* A short screen (a phone turned sideways): the contact details in two
+       columns — Instagram and the icons on the left, the Direct list on the right */
+    @media (max-height: 500px) {
+        .hscroll-contact .contact {
+            display: grid;
+            grid-template-columns: auto minmax(0, 1fr);
+            column-gap: 2.5rem;
+            align-items: center;
+            max-width: 920px;
+        }
+
+        .hscroll-contact .contact-featured {
+            grid-row: 1 / span 2;
+            grid-template-columns: auto auto;
+            gap: 0.75rem;
+            margin: 0;
+        }
+
+        .hscroll-contact .contact-social--primary {
+            grid-column: 1;
+            padding: 1rem 1.25rem;
+        }
+
+        .hscroll-contact .contact-icon-links {
+            grid-column: 2;
+            gap: 0.75rem;
+        }
+
+        .hscroll-contact .contact-icon-link {
+            width: 64px;
+            height: 64px;
+            border-radius: 18px;
+        }
+
+        .hscroll-contact .contact-icon-link img {
+            width: 32px;
+            height: 32px;
+        }
+
+        .hscroll-contact .contact-social--primary .contact-social-handle {
+            font-size: 1.3rem;
+        }
+
+        .hscroll-contact .contact-group-title {
+            grid-column: 2;
+            align-self: end;
+            margin: 0 0 0.25rem;
+        }
+
+        .hscroll-contact .contact-list {
+            grid-column: 2;
+            align-self: start;
+            margin: 0;
+        }
+
+        .hscroll-contact .contact-row {
+            grid-template-columns: 5.5rem 1fr;
+            padding: 0.55rem 0;
+        }
+
+        .hscroll-contact .contact-row dd {
+            font-size: 1.1rem;
+        }
+
+        .hscroll-contact {
+            padding-top: 4.75rem; /* clear of the corner logo */
+            padding-bottom: 0.75rem;
+        }
+
+        .hscroll-copyright {
+            grid-column: 1 / -1;
+            margin-top: 0.75rem;
+        }
     }
 }
 
@@ -2553,15 +2684,33 @@ video.lightbox-image {
     opacity: 1;
 }
 
+/* The desktop strip on a touch screen (a sideways phone, a tablet): swipes stop
+   at each screen / card, one at a time, like the upright-phone strip below.
+   (The snapping lines up with the plain card slots, never the turned cards.) */
+@media (pointer: coarse) and (min-width: 601px), (pointer: coarse) and (orientation: landscape) and (max-height: 500px) {
+    .main-content:has(.hscroll-intro) {
+        scroll-snap-type: x mandatory;
+    }
+
+    .hscroll-intro,
+    .hscroll-contact,
+    .gallery-slot {
+        scroll-snap-align: center;
+        scroll-snap-stop: always;
+    }
+}
+
 /* =========================================================
    Phones: the home page is one sideways strip too, like desktop —
    the introduction, then each project, then the contact details,
    swiped one at a time with the phone's own scrolling and snapping.
    Everything fits one screen height, so nothing scrolls up and down. The
    centred card is full size, its neighbours smaller and turned inward,
-   and it leans as the phone tilts (index.html).
+   and it leans as the phone tilts (index.html). (Only upright phones —
+   600px wide or less: turned sideways, and on tablets, it's the desktop
+   strip instead — see above. The two media queries are exact opposites.)
    ========================================================= */
-@media (max-width: 860px) {
+@media (max-width: 600px) and (orientation: portrait), (max-width: 600px) and (min-height: 501px) {
     /* The page is exactly one screen: a slim top bar, then the strip */
     body:has(.hscroll-intro) #siteContent {
         display: flex;

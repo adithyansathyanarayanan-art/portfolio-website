@@ -11,7 +11,11 @@
   if (!toggle || !nav) return;
 
   const label = toggle.querySelector('.menu-toggle-label');
-  sidebar.classList.add('has-menu'); // switches on the drop-down styles
+  // switches on the menu styles — without the fade-out, so the links don't flash up on load
+  nav.style.transition = 'none';
+  sidebar.classList.add('has-menu');
+  void nav.offsetWidth;
+  nav.style.transition = '';
 
   const isOpen = () => sidebar.classList.contains('menu-open');
   function setOpen(open) {
@@ -42,7 +46,9 @@
       setOpen(false);
       const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
       const part = link.hash && document.querySelector(link.hash);
-      if (part) part.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'start', inline: 'start' }); // (works for a sideways page too)
+      // the home page's strip takes it from there (index.html); anywhere else, a plain scroll
+      const handled = part && !part.dispatchEvent(new CustomEvent('menu:go', { bubbles: true, cancelable: true }));
+      if (part && !handled) part.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'start', inline: 'start' });
       else window.scrollTo({ top: 0, behavior: reduce ? 'auto' : 'smooth' });
     }
   });
@@ -61,5 +67,5 @@
   });
 
   // Widening the window to the desktop sidebar closes it too
-  window.matchMedia('(min-width: 861px)').addEventListener('change', (e) => { if (e.matches) setOpen(false); });
+  window.matchMedia('(min-width: 601px), (orientation: landscape) and (max-height: 500px)').addEventListener('change', (e) => { if (e.matches) setOpen(false); });
 })();
