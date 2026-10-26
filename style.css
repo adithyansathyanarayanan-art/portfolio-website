@@ -1693,6 +1693,11 @@ html:has(#lightbox:not([hidden])) {
     aspect-ratio: 16 / 9;
 }
 
+.panel-video--artwork video {
+    aspect-ratio: 2000 / 1092;
+    object-fit: contain;
+}
+
 /* Short looping animations (no controls): square, light background like the clips */
 .panel-video--loop video {
     aspect-ratio: 1;
