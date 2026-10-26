@@ -120,6 +120,15 @@
           </button>
         </div>
         <div class="gallery-slot">
+          <button class="gallery-item" type="button" data-index="8" aria-label="Open Tintin and Snowy">
+            <span class="gallery-item-media">
+              <img src="assets/images/web/tintin.webp" width="800" height="1067" loading="lazy" decoding="async"
+                alt="Tintin and Snowy in a moonlit scene.">
+            </span>
+            <span class="gallery-item-caption">Tintin and Snowy</span>
+          </button>
+        </div>
+        <div class="gallery-slot">
           <button class="gallery-item" type="button" data-index="3" aria-label="Open Hopeless Romantic">
             <span class="gallery-item-media">
               <img src="assets/images/web/hopeless-romantic-800.webp"
@@ -212,7 +221,7 @@
 
   <!-- ============ FULL-SCREEN PROJECT VIEW ============ -->
   <!-- Hidden by default. Opening a project preview above fills the whole
-     viewport with this, with a top bar listing all five titles (so you can
+     viewport with this, with a top bar listing all six titles (so you can
      jump between projects without closing) and a Close button that returns
      you to the landing page. -->
   <div class="project-view" id="projectView" role="dialog" aria-modal="true" aria-label="Project details" hidden>
@@ -226,6 +235,10 @@
         <button class="pv-tab" role="tab" id="pv-tab-2" aria-controls="panel-2" aria-selected="false" tabindex="-1"
           data-index="2">
           Futility
+        </button>
+        <button class="pv-tab" role="tab" id="pv-tab-8" aria-controls="panel-8" aria-selected="false" tabindex="-1"
+          data-index="8">
+          Tintin and Snowy
         </button>
         <button class="pv-tab" role="tab" id="pv-tab-3" aria-controls="panel-3" aria-selected="false" tabindex="-1"
           data-index="3">
@@ -346,6 +359,32 @@
           <p>With the painting, i wanted to showcase a looming threat or a figurative showcase of death. I found it in
             the Swedish movie called "The Seventh Seal", in which death is a robed figure only with its face exposed,
             showing a pale almost ghostly face, with dark sunken eyes.</p>
+        </div>
+      </article>
+
+      <article class="panel panel--stacked" id="panel-8" role="tabpanel" aria-labelledby="pv-tab-8" data-index="8"
+        tabindex="0" style="--ratio: 1.5; --gaps: 1.25rem;" hidden>
+        <h3 class="panel-title">Tintin and Snowy</h3>
+        <div class="panel-gallery panel-gallery--row">
+          <button class="panel-media" type="button" data-index="8"
+            aria-label="View Tintin and Snowy (moonlit version)" style="--w: 1620; --h: 2160;">
+            <img class="panel-image" loading="lazy" decoding="async" src="assets/images/web/tintin.webp"
+              width="1620" height="2160" alt="Tintin and Snowy in a dark, moonlit scene.">
+          </button>
+          <button class="panel-media" type="button" data-index="8"
+            aria-label="View Tintin and Snowy (blue background version)" style="--w: 1620; --h: 2160;">
+            <img class="panel-image" loading="lazy" decoding="async" src="assets/images/web/Tintin blue.webp"
+              width="1620" height="2160" alt="Tintin and Snowy against a vivid blue background.">
+          </button>
+        </div>
+        <div class="panel-body">
+          <div class="panel-meta">
+            <span>Year — 2026</span>
+            <span>Tool — Procreate</span>
+          </div>
+          <h4>Overview</h4>
+          <p>A portrait of Tintin and Snowy presented in two color treatments: a dark, moonlit scene and a vivid blue
+            background.</p>
         </div>
       </article>
 
