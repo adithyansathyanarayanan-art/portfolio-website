@@ -71,14 +71,14 @@
         <!-- All on this page: the menu (phones) just takes you to each part -->
         <a href="#about">Introduction</a>
         <a href="#work">Work</a>
+        <a href="#design">Design</a>
         <a href="#contact">Contact</a>
       </nav>
     </aside>
 
     <main class="main-content" id="top">
 
-      <!-- One page: this introduction, then the work, then the contact details —
-           a sideways strip on desktop, stacked top to bottom on phones. -->
+      <!-- The introduction, project gallery, Design, and Contact form the horizontal work strip. -->
       <section class="hscroll-intro" id="about" aria-label="About me">
         <div class="intro-about">
           <img class="intro-photo" src="assets/images/about-photo.jpg" width="1000" height="1000" loading="lazy"
@@ -162,9 +162,19 @@
           </button>
         </div>
       </section>
+      <section class="hscroll-design design-section" id="design" aria-labelledby="designTitle">
+        <h2 class="design-heading" id="designTitle">Design</h2>
+        <button class="gallery-item design-frame" type="button" data-index="9"
+          aria-label="Open Mangao UI Design">
+          <span class="gallery-item-media">
+            <img src="assets/images/web/mangao.webp" width="900" height="600" loading="lazy" decoding="async"
+              alt="Mangao logo in blue and yellow.">
+          </span>
+          <span class="gallery-item-caption">Mangao UI Design</span>
+        </button>
+      </section>
 
-      <!-- Desktop: the end of the strip — the same contact details as the Contact page -->
-      <section class="hscroll-contact" id="contact" aria-label="Contact details">
+      <section class="hscroll-contact contact-section" id="contact" aria-label="Contact details">
         <div class="contact">
           <div class="contact-featured">
             <a class="contact-social contact-social--primary" href="https://www.instagram.com/artus_mushroomus/"
@@ -221,7 +231,7 @@
 
   <!-- ============ FULL-SCREEN PROJECT VIEW ============ -->
   <!-- Hidden by default. Opening a project preview above fills the whole
-     viewport with this, with a top bar listing all six titles (so you can
+     viewport with this, with a top bar listing every project title (so you can
      jump between projects without closing) and a Close button that returns
      you to the landing page. -->
   <div class="project-view" id="projectView" role="dialog" aria-modal="true" aria-label="Project details" hidden>
@@ -251,6 +261,10 @@
         <button class="pv-tab" role="tab" id="pv-tab-7" aria-controls="panel-7" aria-selected="false" tabindex="-1"
           data-index="7">
           Sticker Designs
+        </button>
+        <button class="pv-tab" role="tab" id="pv-tab-9" aria-controls="panel-9" aria-selected="false" tabindex="-1"
+          data-index="9">
+          Mangao UI Design
         </button>
       </div>
 
@@ -383,8 +397,18 @@
             <span>Tool — Procreate</span>
           </div>
           <h4>Overview</h4>
-          <p>A portrait of Tintin and Snowy presented in two color treatments: a dark, moonlit scene and a vivid blue
-            background.</p>
+          <p>In the Adventures of Tintin I always found the scenes with the docks at night very fascinating. There is
+            always something big in the plot that happens in the docks, he either gets kidnapped and taken there or he
+            finds something suspicious that becomes a major lead in the story. I wanted to depict the foreboding nature
+            of scenes like these with this piece.</p>
+          <h4>The Approach</h4>
+          <p>I feel nostalgic reading Tintin, so I went for a painterly wispy style, with rough textures to show the way
+            I would remember it in my head.</p>
+          <p>Now for the lighting, I wanted to depict the suspenseful emotion of the scene, so I kept harsh lights
+            hitting Tintin and snowy from the front, focusing on the emotions in the face, and have the moonlight hit
+            them from the side, acting as a rim light, showing the contours of their figures.</p>
+          <p>After finishing the piece I wanted to experiment a bit with the colors as well, so I ended up changing up
+            the hue and saturations of the painting and remove the background to have it as a single color.</p>
         </div>
       </article>
 
@@ -535,6 +559,30 @@
           <p>[Placeholder — what did you do, and why did you make the choices you made?]</p>
           <h4>The outcome</h4>
           <p>[Placeholder — what happened as a result? Metrics, feedback, or what you learned.]</p>
+        </div>
+      </article>
+
+      <article class="panel panel--stacked" id="panel-9" role="tabpanel" aria-labelledby="pv-tab-9" data-index="9"
+        tabindex="0" style="--ratio: 1.5;" hidden>
+        <h3 class="panel-title">Mangao UI Design</h3>
+        <div class="panel-gallery">
+          <button class="panel-media" type="button" data-index="9"
+            aria-label="View a larger image for Mangao UI Design">
+            <img class="panel-image" loading="lazy" decoding="async" src="assets/images/web/mangao.webp"
+              width="900" height="600" alt="Mangao logo in blue and yellow.">
+          </button>
+        </div>
+        <div class="panel-body">
+          <div class="panel-meta">
+            <span>Role — [Your role]</span>
+            <span>Year — [20XX]</span>
+            <span>Tools — [Tools used]</span>
+          </div>
+          <p>[Overview — describe the project, who it is for, and what it aims to achieve.]</p>
+          <h4>The concept</h4>
+          <p>[Placeholder — explain the idea behind the project and the choices that shaped it.]</p>
+          <h4>The outcome</h4>
+          <p>[Placeholder — describe the finished work, its impact, or what you learned.]</p>
         </div>
       </article>
 
@@ -957,8 +1005,8 @@
     document.querySelectorAll('#year, .year').forEach(el => { el.textContent = new Date().getFullYear(); });
 
     /* =========================================================
-       Desktop: the page is one sideways carousel (intro → each project →
-       contact). One scroll — mouse wheel or trackpad, either direction — or
+       Desktop: the introduction, projects, Design, and Contact form one sideways carousel. One
+       scroll — mouse wheel or trackpad, either direction — or
        one arrow / Page key moves exactly one stop. The stop in the middle is
        "current": full size, while its neighbours are smaller and dimmer (CSS).
        ========================================================= */
@@ -967,7 +1015,11 @@
     // a touch screen swipes the strip with the browser's own scrolling and snapping
     const touchStrip = window.matchMedia('(pointer: coarse)');
     const strip = document.querySelector('.main-content');
-    const stops = [document.querySelector('.hscroll-intro'), ...document.querySelectorAll('.gallery-item'), document.querySelector('.hscroll-contact')];
+    const stops = [
+      document.querySelector('.hscroll-intro'),
+      ...document.querySelectorAll('.gallery-item'),
+      document.querySelector('.hscroll-contact')
+    ];
     let current = 0;
 
     // Each card's picture shape, so CSS can size cards to fit the screen without cropping
@@ -1067,9 +1119,9 @@
     let snapTimer = 0, wheelFrom = 0, lastStepWheel = 0;
     strip.addEventListener('wheel', (e) => {
       if (e.ctrlKey) return; // (ctrl + wheel is the browser's zoom)
-      // Phone layout: a screen taller than the window (the introduction) scrolls up
-      // and down first; at its top / bottom the wheel moves the strip again
-      const screen = e.target.closest('.hscroll-intro, .hscroll-contact');
+      // On narrow screens, tall intro / Design / Contact slides can scroll vertically
+      // before the wheel advances the horizontal strip.
+      const screen = e.target.closest('.hscroll-intro, .hscroll-design, .hscroll-contact');
       if (screen && Math.abs(e.deltaY) > Math.abs(e.deltaX)) {
         const more = e.deltaY > 0 ? screen.scrollTop + screen.clientHeight < screen.scrollHeight - 1 : screen.scrollTop > 0;
         if (more) return;
@@ -1122,9 +1174,10 @@
       e.preventDefault();
       goToStop(1);
     });
-    // The phone menu's Introduction / Work / Contact (menu.js): glide to that part of the strip
+    // The phone menu's in-page links (menu.js): glide to the matching strip stop
     strip.addEventListener('menu:go', (e) => {
-      const i = e.target.id === 'work' ? 1 : stops.indexOf(e.target);
+      const i = e.target.id === 'work' ? 1
+        : stops.indexOf(e.target.id === 'design' ? document.querySelector('.design-frame') : e.target);
       if (i === -1) return;
       e.preventDefault();
       goToStop(i);
@@ -1541,7 +1594,7 @@
       if (stripMoving) { gyro.frame = 0; return; }
       gyro.x += (gyro.tx - gyro.x) * 0.2;
       gyro.y += (gyro.ty - gyro.y) * 0.2;
-      const card = gallery && gallery.querySelector('.gallery .is-current');
+      const card = stops[current] && stops[current].classList.contains('gallery-item') ? stops[current] : null;
       if (card && !desktopStrip.matches) {
         card.classList.add('is-tilting');
         card.style.setProperty('--tilt-x', gyro.x.toFixed(2) + 'deg');
