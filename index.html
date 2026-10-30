@@ -98,17 +98,6 @@
 
       <section class="gallery" id="work" aria-label="Selected work">
         <div class="gallery-slot">
-          <button class="gallery-item" type="button" data-index="1" aria-label="Open Son of Sparda">
-            <span class="gallery-item-media">
-              <img src="assets/images/web/son-of-sparda-800.webp"
-                srcset="assets/images/web/son-of-sparda-400.webp 400w, assets/images/web/son-of-sparda-800.webp 800w"
-                sizes="(max-width: 860px) 50vw, 500px" width="800" height="436" loading="lazy" decoding="async"
-                alt="Fan art of Dante from Devil May Cry.">
-            </span>
-            <span class="gallery-item-caption">Son of Sparda</span>
-          </button>
-        </div>
-        <div class="gallery-slot">
           <button class="gallery-item" type="button" data-index="2" aria-label="Open Futility">
             <span class="gallery-item-media">
               <img src="assets/images/web/futility-800.webp"
@@ -140,14 +129,25 @@
           </button>
         </div>
         <div class="gallery-slot">
-          <button class="gallery-item" type="button" data-index="6" aria-label="Open Shepard Boy">
+          <button class="gallery-item" type="button" data-index="6" aria-label="Open Lamb's Wool">
             <span class="gallery-item-media">
               <img src="assets/images/web/shepard-boy-800.webp"
                 srcset="assets/images/web/shepard-boy-400.webp 400w, assets/images/web/shepard-boy-800.webp 800w"
                 sizes="(max-width: 860px) 50vw, 500px" width="800" height="600" loading="lazy" decoding="async"
                 alt="Illustration of a shepherd boy with small ram horns, resting against a flock of purple sheep in a yellow-green meadow, with farmhouses under a pink sky.">
             </span>
-            <span class="gallery-item-caption">Shepard Boy</span>
+            <span class="gallery-item-caption">Lamb's Wool</span>
+          </button>
+        </div>
+        <div class="gallery-slot">
+          <button class="gallery-item" type="button" data-index="1" aria-label="Open Son of Sparda">
+            <span class="gallery-item-media">
+              <img src="assets/images/web/son-of-sparda-800.webp"
+                srcset="assets/images/web/son-of-sparda-400.webp 400w, assets/images/web/son-of-sparda-800.webp 800w"
+                sizes="(max-width: 860px) 50vw, 500px" width="800" height="436" loading="lazy" decoding="async"
+                alt="Fan art of Dante from Devil May Cry.">
+            </span>
+            <span class="gallery-item-caption">Son of Sparda</span>
           </button>
         </div>
         <div class="gallery-slot">
@@ -228,11 +228,7 @@
 
     <div class="project-view-bar">
       <div class="project-view-tabs" role="tablist" aria-label="Projects">
-        <button class="pv-tab" role="tab" id="pv-tab-1" aria-controls="panel-1" aria-selected="true" tabindex="0"
-          data-index="1">
-          Son of Sparda
-        </button>
-        <button class="pv-tab" role="tab" id="pv-tab-2" aria-controls="panel-2" aria-selected="false" tabindex="-1"
+        <button class="pv-tab" role="tab" id="pv-tab-2" aria-controls="panel-2" aria-selected="true" tabindex="0"
           data-index="2">
           Futility
         </button>
@@ -246,7 +242,11 @@
         </button>
         <button class="pv-tab" role="tab" id="pv-tab-6" aria-controls="panel-6" aria-selected="false" tabindex="-1"
           data-index="6">
-          Shepard Boy
+          Lamb's Wool
+        </button>
+        <button class="pv-tab" role="tab" id="pv-tab-1" aria-controls="panel-1" aria-selected="false" tabindex="-1"
+          data-index="1">
+          Son of Sparda
         </button>
         <button class="pv-tab" role="tab" id="pv-tab-7" aria-controls="panel-7" aria-selected="false" tabindex="-1"
           data-index="7">
@@ -275,7 +275,7 @@
     <div class="project-view-content">
 
       <article class="panel panel--stacked" id="panel-1" role="tabpanel" aria-labelledby="pv-tab-1" data-index="1"
-        tabindex="0" style="--ratio: 1.833;">
+        tabindex="0" style="--ratio: 1.833;" hidden>
         <h3 class="panel-title">Son of Sparda</h3>
         <div class="panel-gallery">
           <button class="panel-media" type="button" data-index="1" aria-label="View a larger image for Son of Sparda">
@@ -327,7 +327,7 @@
       </article>
 
       <article class="panel panel--stacked" id="panel-2" role="tabpanel" aria-labelledby="pv-tab-2" data-index="2"
-        tabindex="0" style="--ratio: 1.707; --gaps: 1.25rem;" hidden>
+        tabindex="0" style="--ratio: 1.707; --gaps: 1.25rem;">
         <h3 class="panel-title">Futility</h3>
         <div class="panel-gallery panel-gallery--row">
           <button class="panel-media" type="button" data-index="2"
@@ -411,29 +411,24 @@
         </div>
         <div class="panel-body">
           <div class="panel-meta">
-            <span>Role — [Your role]</span>
-            <span>Year — 2026s</span>
-            <span>Tools — [Tool, Tool, Tool]</span>
+            <span>Year — 2026</span>
+            <span>Tools — Procreate</span>
           </div>
-          <p>[Overview — describe the project in two or three sentences: what it is, who it's for, and why it exists.]
-          </p>
-          <h4>The problem</h4>
-          <p>[Placeholder — what challenge or need prompted this project?]</p>
-          <h4>The approach</h4>
-          <p>[Placeholder — what did you do, and why did you make the choices you made?]</p>
-          <h4>The outcome</h4>
-          <p>[Placeholder — what happened as a result? Metrics, feedback, or what you learned.]</p>
+          <h4>Overview</h4>
+          <p>This piece was made as an experiment. I wanted to capture the old print texture and style, and choose a unique subject for it, so I went for the Tragedy Queen of Bollywood herself, Meena Kumari.</p>
+          <h4>Approach</h4>
+          <p>I intended to make the piece feel hazy, so I went for simple, undetailed shadows and features, not focusing as much on anatomical correctness, but more on the wispiness it conveyed. Then I heavily used the Bloom effect and halftone effect, and added a paper texture to the piece, giving it this semi-realistic texture.</p>
         </div>
       </article>
 
-      <!-- Shepard Boy: final piece, then the process from sketch to inks, then the write-up.
+      <!-- Lamb's Wool: final piece, then the process from sketch to inks, then the write-up.
            Web copies live in assets/images/shepard-boy/ (originals in "Shepard Boy/"). -->
       <article class="panel panel--stacked" id="panel-6" role="tabpanel" aria-labelledby="pv-tab-6" data-index="6"
         tabindex="0" style="--ratio: 1.333;" hidden>
-        <h3 class="panel-title">Shepard Boy</h3>
+        <h3 class="panel-title">Lamb's Wool</h3>
         <div class="panel-gallery">
           <button class="panel-media" type="button" data-index="6"
-            aria-label="View a larger image for Shepard Boy (final illustration)">
+            aria-label="View a larger image for Lamb's Wool (final illustration)">
             <img class="panel-image" loading="lazy" decoding="async" src="assets/images/web/shepard-boy.webp"
               width="1600" height="1200"
               alt="Illustration of a shepherd boy with small ram horns, resting against a flock of purple sheep in a yellow-green meadow, with farmhouses under a pink sky.">
@@ -442,31 +437,31 @@
         <h4 class="panel-subhead">Process</h4>
         <div class="panel-gallery panel-gallery--grid">
           <button class="panel-media" type="button" data-index="6"
-            aria-label="View a larger image for Shepard Boy (process 1 of 5: rough sketch)">
+            aria-label="View a larger image for Lamb's Wool (process 1 of 5: rough sketch)">
             <img class="panel-image" loading="lazy" decoding="async" src="assets/images/shepard-boy/process-1.jpg"
               width="1200" height="900"
               alt="Rough pencil sketch of the composition: the shepherd boy among loosely scribbled sheep, with buildings behind.">
           </button>
           <button class="panel-media" type="button" data-index="6"
-            aria-label="View a larger image for Shepard Boy (process 2 of 5: pencils)">
+            aria-label="View a larger image for Lamb's Wool (process 2 of 5: pencils)">
             <img class="panel-image" loading="lazy" decoding="async" src="assets/images/shepard-boy/process-2.jpg"
               width="1200" height="900"
               alt="Cleaner pencil drawing on paper, with the boy, his staff and the sheep taking shape.">
           </button>
           <button class="panel-media" type="button" data-index="6"
-            aria-label="View a larger image for Shepard Boy (process 3 of 5: pencils)">
+            aria-label="View a larger image for Lamb's Wool (process 3 of 5: pencils)">
             <img class="panel-image" loading="lazy" decoding="async" src="assets/images/shepard-boy/process-3.jpg"
               width="1200" height="856"
               alt="Refined pencil drawing with more detail in the sheep, the boy's clothing and the farmhouses.">
           </button>
           <button class="panel-media" type="button" data-index="6"
-            aria-label="View a larger image for Shepard Boy (process 4 of 5: tight pencils)">
+            aria-label="View a larger image for Lamb's Wool (process 4 of 5: tight pencils)">
             <img class="panel-image" loading="lazy" decoding="async" src="assets/images/shepard-boy/process-4.jpg"
               width="1200" height="900"
               alt="Tight pencil drawing with the full scene, including grass and the stone chimney, ready for inking.">
           </button>
           <button class="panel-media" type="button" data-index="6"
-            aria-label="View a larger image for Shepard Boy (process 5 of 5: finished inks)">
+            aria-label="View a larger image for Lamb's Wool (process 5 of 5: finished inks)">
             <img class="panel-image" loading="lazy" decoding="async" src="assets/images/shepard-boy/process-5.jpg"
               width="1200" height="900"
               alt="Finished inked line art, with shading in the wool and grass, before colouring.">
@@ -474,18 +469,14 @@
         </div>
         <div class="panel-body">
           <div class="panel-meta">
-            <span>Role — [Your role]</span>
-            <span>Year — [20XX]</span>
-            <span>Tools — [Tool, Tool, Tool]</span>
+            <span>Year — 2026</span>
+            <span>Tool — Procreate</span>
           </div>
-          <p>[Overview — describe the project in two or three sentences: what it is, who it's for, and why it exists.]
-          </p>
-          <h4>The problem</h4>
-          <p>[Placeholder — what challenge or need prompted this project?]</p>
-          <h4>The approach</h4>
-          <p>[Placeholder — what did you do, and why did you make the choices you made?]</p>
-          <h4>The outcome</h4>
-          <p>[Placeholder — what happened as a result? Metrics, feedback, or what you learned.]</p>
+          <h4>Overview</h4>
+          <p>This came from an actual vision I had when I was sitting at my desk bored out of my mind. I envisioned this beautiful set of rolling hills, that were filled with sheep and barns, with their shepherd sitting among them.</p>
+          <h4>The Approach</h4>
+          <p>I wanted to immediately jot down the idea, so I drew a thumbnail sketch of it on a piece of paper, then I decided to draw it traditionally as well. So, I made the initial drawing and inking traditionally.</p>
+          <p>After the drawing and inking, I moved to digital, because I wanted to test out the colors for the piece and make sure it fit the vision I initially had. I went for warm or warm-adjacent colors, to show the calm, cozy atmosphere, but also to depict the golden hour.</p>
         </div>
       </article>
 
